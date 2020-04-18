@@ -36,16 +36,20 @@ write `man man3/car.3scheme`.
 
 Take a manpage from `templates/` and fill it in! Remove any sections
 that you feel are not needed. Do as many as you like and submit a PR
-through GitHub. Please use [errata-corrected versions of
+through GitHub. You can open an issue if you want to show others that
+you're working on something.
+
+Please use [errata-corrected versions of
 R6RS](https://weinholt.se/scheme/r6rs/) and R7RS as your references.
 
-Not everything has a template yet, so you might want to look further.
-Another way to help is to develop tools that work with the documents,
-e.g. checking their structure, searching for missed pages, etc.
+Not everything has a template yet and some do not have accurate
+synopses. Another way to help is to develop tools that work with the
+documents, e.g. checking their structure, searching for missed pages,
+etc.
 
 Sometimes it's appropriate to group together several procedures in the
 same page. See `man3/cdr.3scheme` for an example of how to
-link to the main page.
+link to another page.
 
 ## A short defense of the manpage language
 

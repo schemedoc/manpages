@@ -1,0 +1,86 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH car 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.SH NAME
+car, cdr \- the car or cdr field of a pair (head and tail)
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.SH SYNOPSIS
+.nf
+.BI "(car " pair ")"
+.BI "(cdr " pair ")"
+.
+.SH DESCRIPTION
+.
+Returns the contents of the car or cdr field of a pair.
+.PP
+These procedures can also be used with lists, which in Scheme are
+linked lists of pairs.
+The \fIcar\fP procedure returns the head of a list.
+The \fIcdr\fP procedure returns the tail of a list.
+.PP
+.
+.SH RETURN VALUES
+.
+Returns the contents of the car or cdr field of
+.IR pair .
+.
+.SH ERRORS
+.
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The argument is not a pair.
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
+.TP
+R7RS
+The situations described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH EXAMPLES
+.
+.EX
+(car '(a b c))      => a
+(car '((a) b c d))  => (a)
+(car '(1 . 2))      => 1
+(car '())           => &assertion exception
+
+(cdr '((a) b c d))  => (b c d)
+(cdr '(1 . 2))      => 2
+(cdr '())           => &assertion exception
+.EE
+.
+.SH SEE ALSO
+.
+.BR cons (3),
+.BR list-ref (3),
+.BR pairs (7),
+.BR set-car! (3)
+.
+.SH HISTORY
+.
+Present in MIT AI Memo No.\~1 (September 1958).
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/scheme-manpages/
+.UE .

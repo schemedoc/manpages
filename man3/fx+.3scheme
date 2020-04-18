@@ -1,0 +1,60 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH fx+ 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.SH NAME
+fx+, fx* \- fixnum addition and multiplication
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(fx+ " fx1 " " fx2 ")"
+.BI "(fx* " fx1 " " fx2 ")"
+.
+.SH DESCRIPTION
+.
+These procedures return the sum or product of
+their arguments, provided that sum or product
+is a fixnum.
+.
+.SH "RETURN VALUES"
+The sum or product of the arguments.
+.
+.SH EXAMPLES
+.
+.EX
+(fx+ 2 3)                  => 5
+(fx* 2 3)                  => 6
+(fx+ (greatest-fixnum) 1)  => &implementation-restriction exception
+(fx* (least-fixnum) -1)    => &implementation-restriction exception
+.EE
+.
+.SH ERRORS
+.
+This procedure can raise exceptions with the following condition types:
+.TP
+.B &implementation-restriction
+Raised when the sum or product is not a fixnum.
+.TP
+.B &assertion
+Raised when an argument is not a fixnum.
+.
+.SH STANDARDS
+R6RS
+.
+.SH "SEE ALSO"
+.
+.BR fixnums (7)
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/scheme-manpages/
+.UE .

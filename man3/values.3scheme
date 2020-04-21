@@ -1,0 +1,235 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH values 3scheme 2020-04-21 "" "Scheme Programmer's Manual"
+.SH NAME
+values \- return multiple values
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(values " obj " ...)"
+.
+.SH DESCRIPTION
+Delivers all of its arguments to its continuation. The
+.B values
+procedure might be defined as follows:
+.PP
+.EX
+(define (values . things)
+  (call-with-current-continuation
+    (lambda (cont) (apply cont things))))
+.EE
+.PP
+The continuations of all non-final expressions within a sequence of
+expressions, such as in
+.BR lambda ,
+.BR begin ,
+.BR let ,
+.BR let* ,
+.BR letrec ,
+.BR letrec* ,
+.BR let\-values ,
+.BR let*\-values,
+.BR case ", and"
+.BR cond
+forms,
+usually take an arbitrary number of values (but see the note on
+compatibility). Except for these and the continuations created by
+.BR call-with-values ,
+.BR let-values ", and"
+.BR let*-values ", and"
+.BR define-values ,
+continuations implicitly accepting a single value, such as the continuations
+of
+.IR operator " and " operands
+of procedure calls or the
+.I test
+expressions in conditionals, take exactly one value. The effect of
+passing an inappropriate number of values to such a continuation is
+undefined.
+.PP
+This feature implements true multiple return values. On the language
+level it works more in the way that Golang does it and less like how
+tuples or lists are used to simulate this feature in languages like
+Python and JavaScript.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+Implementations vary greatly in how they treat multiple values that
+are returned to single-value continuations. Portable programs should
+not rely on any of these behaviors.
+.
+.TP
+.B Chez Scheme
+Single-value continuations verify that they receive a single value and
+otherwise raise an exception.
+.IP
+Note however that the source optimizer utilizes the underspecification
+of what happens when multiple values are returned to single-value
+continuations. An example is that (let ((x (values 1 2))) x) is
+optimized to (values 1 2).
+.
+.TP
+.B Chibi Scheme
+Multiple values are represented as a list where the car is (values).
+.
+.TP
+.B GNU Guile
+Single-value continuations that receive multiple values use the first
+value. Single-value continuations that receive zero values raise
+an exception.
+.
+.TP
+.B Ikarus Scheme
+Single-value continuations verify that they receive a single value and
+otherwise raise an exception.
+.
+.TP
+.B IronScheme
+Single-value continuations that receive zero or multiple values receive
+an object that represents those values.
+.
+.TP
+.B Larceny Scheme
+Single-value continuations that receive multiple values use the first
+value. Single-value continuations that receive zero values receive
+the \fIunspecified\fP value.
+.
+.TP
+.B Loko Scheme
+Single-value continuations that receive multiple values use the first
+value. Single-value continuations that receive zero values receive
+a \fIvoid\fP value.
+.
+.TP
+.B Racket
+Single-value continuations verify that they receive a single value and
+otherwise raise an exception.
+.
+.TP
+.B Sagittarius
+Single-value continuations that receive multiple values use the first
+value. Single-value continuations that receive zero values receive
+the \fIunspecified\fP value.
+.
+.TP
+.B Vicare Scheme
+A type checker verifies that the right number of values are returned.
+In particular, it raises a
+.B &syntax
+error if two branches if an
+.B if
+return different numbers of values.
+.
+.SH "RETURN VALUES"
+.
+Returns the values given as arguments.
+.
+.SH EXAMPLES
+.
+.EX
+(let-values (((a b) (values 1 2))
+             ((c d) (values 3 4)))
+  (list a b c d))
+=> (1 2 3 4)
+
+(define (quotient+remainder n d)
+  (let ((q (quotient n d)))
+    (values q (- n (* q d)))))
+(quotient+remainder 10 3)
+=> 3
+=> 1
+
+((lambda (x) x) (values 1 2)) => unspecified
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is often combined with syntax to receive the values,
+such as
+.BR let-values (3).
+Another option is
+.B receive
+from SRFI-8, which only binds a single set of values.
+.SH RATIONALE
+.
+.TP
+R6RS Rationale
+Many computations conceptually return several results.
+Scheme expressions implementing such computations can return the
+results as several values using the values procedure. Of course, such
+expressions could alternatively return the results as a single
+compound value, such as a list, vector, or a record. However, values
+in programs usually represent conceptual wholes; in many cases,
+multiple results yielded by a computation lack this coherence.
+Moreover, this would be inefficient in many implementations, and a
+compiler would need to perform significant optimization to remove the
+boxing and unboxing inherent in packaging multiple results into a
+single values. Most importantly, the mechanism for multiple values in
+Scheme establishes a standard policy for returning several results
+from an expression, which makes constructing interfaces and using them
+easier.
+.IP
+[It then goes on to discuss the contentious issue of what should
+happen when the wrong number of values is passed to a continuation.]
+.
+.SH COMPATIBILITY
+.
+This procedure is compatible across all Schemes that support it as long
+as the continuation accepts the given number of values.
+.PP
+R5RS contains the following language, which is not in R6RS and R7RS:
+.IP
+Except for continuations created by the call-with-values procedure,
+all continuations take exactly one value.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of values was passed to a continuation set up with
+.BR call-with-values .
+.TP
+R7RS
+.\" Seen at the end of R5RS/R7RS 3.5
+Returning the wrong number of arguments to a continuation
+not created by
+.BR call-with-values ,
+and which is not the non-final expression of a sequence,
+is unspecified and implementation-dependent.
+.
+.SH "SEE ALSO"
+.
+.BR apply (3),
+.BR let-values (3),
+.BR call-with-values (3)
+.
+.SH STANDARDS
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+First appeared in R5RS. The R4RS formal semantics notes:
+.IP
+The reason that expression continuations take sequences
+of values instead of single values is to simplify the formal
+treatment of procedure calls and to make it easy to add
+multiple return values.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/scheme-manpages/
+.UE .

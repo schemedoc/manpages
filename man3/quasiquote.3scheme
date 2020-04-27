@@ -1,0 +1,280 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH quasiquote 3scheme 2020-04-27 "" "Scheme Programmer's Manual"
+.SH NAME
+quasiquote \- list and vector templates
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "`" template
+.BI "(quasiquote " template )
+
+.BI ,
+.BI unquote
+
+.BI ,@
+.BI unquote-splicing
+.
+.SH DESCRIPTION
+Quasiquote expressions are used to create pairs, lists and vectors
+where some parts are static and some are evaluated at runtime.
+.
+The usage is similar to string templates or string interpolation in
+other languages, except that quasiquote works on structures. The
+benefit is pretty much the same: the code closely resembles the
+desired result.
+.PP
+The backtick character is used to start a quasiquote expression. Comma
+is used before expressions that should be inserted in the structure.
+Comma at-sign is similar, but the result of the expression is a list
+that is spliced into the structure.
+.
+.SS Basic examples
+.
+The list '(Hello Simon) can be created with `(Hello ,name) if the
+variable \fIname\fP has the symbol \fISimon\fP.
+.
+The list '(Hello Simon & Garfunkel) can be created with `(Hello ,@names)
+if the variable \fInames\fP has the value '(Simon & Garfunkel).
+.
+.SS Nested quasiquote expressions
+Quasiquote forms may be nested. Substitutions are made only for
+unquoted components appearing at the same nesting level as the
+outermost quasiquote.
+.
+The nesting level increases by one inside each successive
+quasiquotation, and decreases by one inside each unquotation.
+.PP
+.EX
+`(a `(b ,(+ 1 2) ,(foo ,(+ 1 3) d) e) f)
+          =>  (a `(b ,(+ 1 2) ,(foo 4 d) e) f)
+
+(let ((name1 'x)
+      (name2 'y))
+  `(a `(b ,,name1 ,',name2 d) e))
+          =>  (a `(b ,x ,'y d) e)
+.EE
+.
+.SS Abbreviations
+`\fItemplate\fP is a reader abbreviation for (quasiquote \fItemplate\fP),
+\fIexpression\fP is an abbreviation for (unquote \fIexpression\fP), and
+\fI,@\fP is an abbreviation for (unquote-splicing \fIexpression\fP).
+.PP
+The reader recognizes the abbreviations. Similarly, writer
+implementations often recognize opportunities to use these
+abbreviations, though they are not required to do so.
+.PP
+Here is a way to see the abbreviation: (car '`()) => quasiquote.
+.
+.SS Multiple or zero unquoted expressions (R6RS)
+R6RS extends unquote and unquote-splicing to any number of
+expressions. The \fI,\fP and \fI,@\fP abbreviations cannot express
+this type of unquoting.
+.PP
+If an (unquote expression ...) form appears inside a template, the
+expressions are evaluated and their results are inserted into the
+structure instead of the unquote form.
+.PP
+If an (unquote-splicing expression ...) form appears inside a
+template, then the expressions must evaluate to lists; the opening and
+closing parentheses of the lists are then stripped away and the
+elements of the lists are inserted in place of the unquote-splicing
+form.
+.PP
+.EX
+(let ((name 'foo))
+  `((unquote name name name)))
+          => (foo foo foo)
+(let ((name '(foo)))
+  `((unquote-splicing name name name)))
+          =>  (foo foo foo)
+.EE
+.SS Literal parts of quasiquote expressions (R6RS & R7RS)
+A quasiquote expression may return either fresh, mutable objects or
+literal structure for any structure that is constructed at run time
+during the evaluation of the expression. Portions that do not need to
+be rebuilt are always literal.
+.PP
+Thus,
+.
+(let ((a 3)) `((1 2) ,a ,4 ,'five 6))
+.
+may be equivalent to either of the following expressions:
+.PP
+.EX
+\&'((1 2) 3 4 five 6)
+
+(let ((a 3))
+  (cons '(1 2)
+        (cons a (cons 4 (cons 'five '(6))))))
+.EE
+.PP
+However, it is not equivalent to this expression:
+.PP
+.EX
+(let ((a 3)) (list (list 1 2) a 4 'five 6))
+.EE
+.PP
+If no unquote or unquote-splicing forms appear within the template,
+the result of evaluating (quasiquote template) is equivalent to the
+result of evaluating (quote template).
+.
+.SS Grammar
+The following grammar for quasiquote expressions is not context-free.
+It is presented as a recipe for generating an infinite number of
+production rules. Imagine a copy of the following rules for \fID\fR =
+1, 2, 3, ..., where \fID\fR keeps track of the nesting depth.
+.PP
+.nf
+\[la]template\[ra] \[->]
+    \[la]template 1\[ra]
+\[la]template 0\[ra] \[->]
+    \[la]expression\[ra]
+\[la]quasiquotation \fID\fR\[ra] \[->]
+    (quasiquote \[la]template \fID\fR\[ra])
+\[la]template \fID\fR\[ra] \[->]
+    \[la]lexeme datum\[ra]
+  | \[la]list template \fID\fR\[ra]
+  | \[la]vector template \fID\fR\[ra]
+  | \[la]unquotation \fID\fR\[ra]
+\[la]list template \fID\fR\[ra] \[->]
+    (\[la]template or splice \fID\fR\[ra]*)
+  | (\[la]template or splice \fID\fR\[ra]+ . \[la]template \fID\fR\[ra])
+  | \[la]quasiquotation \fID\fR+1\[ra]
+\[la]vector template \fID\fR\[ra] \[->]
+    #(\[la]template or splice \fID\fR\[ra]*)
+\[la]unquotation \fID\fR\[ra] \[->]
+    (unquote \[la]template \fID\fR-1\[ra])
+\[la]template or splice \fID\fR\[ra] \[->]
+    \[la]template \fID\fR\[ra]
+  | \[la]splicing unquotation \fID\fR\[ra]
+\[la]splicing unquotation \fID\fR\[ra] \[->]
+    (unquote-splicing \[la]template \fID\fR-1\[ra]*)
+  | (unquote \[la]template \fID\fR-1\[ra]*)
+.fi
+.PP
+In \[la]quasiquotation\[ra]s, a \[la]list template \fID\fR\[ra] can
+sometimes be confused with either an \[la]unquotation \fID\fR\[ra] or
+a \[la]splicing unquotation \fID\fR\[ra]. The interpretation as an
+\[la]unquotation\[ra] or \[la]splicing unquotation \fID\fR\[ra] takes
+precedence.
+.PP
+Note that R6RS extends quasiquote to support any number of expressions
+inside the unquoting forms. To get the R5RS/R7RS grammar: remove the *
+in the unquote-splicing form; remove the unquote form in the last
+rule; and add the rule
+\&'\[la]template \fID\fR\[ra] to \[la]list template \fID\fR\[ra].
+.\" TODO: What is the point of the extra rule?
+.
+.SH "IMPLEMENTATION NOTES"
+.
+There are no specific notes on implementations yet. Implementations
+generally follow one of the RnRS specifications in how they implement
+quasiquote.
+.SH "RETURN VALUES"
+.
+The expression is evaluated as specified above and returned as a single value.
+.SH EXAMPLES
+.
+.EX
+`(list ,(+ 1 2) 4)
+             => (list 3 4)
+
+(let ((name 'a)) `(list ,name ',name))
+             => (list a (quote a))
+
+`(a ,(+ 1 2) ,@(map abs '(4 -5 6)) b)
+             => (a 3 4 5 6 b)
+
+`((foo ,(- 10 3)) ,@(cdr '(c)) . ,(car '(cons)))
+             => ((foo 7) . cons)
+
+`#(10 5 ,(- 4) ,@(map - '(16 9)) 8)
+             => #(10 5 -4 -16 -9 8)
+
+(let ((q '((append x y) (sqrt 9))))
+  ``(foo ,,@q))
+             => `(foo (unquote (append x y) (sqrt 9)))
+
+(let ((x '(2 3))
+      (y '(4 5)))
+  `(foo (unquote (append x y) (- 9))))
+             => (foo (2 3 4 5) -9)
+.EE
+.
+.SH "APPLICATION USAGE"
+Quasiquoting is commonly used instead of explicit list and vector
+calls, especially for larger structures.
+.
+HTML and XML in Scheme programs is often written as quasiquote
+expressions. Packages like htmlprag and SXML are used to serialize the
+structures to text. In the nanopass compiler framework it is used to
+create output.
+.
+String templates are not a standard part of Scheme, but can be
+added using macros. One such package is
+in the
+.UR https://github.com/gwatt/dollar-sign
+.UE .
+\" .SH RATIONALE
+.SH COMPATIBILITY
+Basic quasiquote expressions are widely portable between Scheme
+implementations and standards. Multiple expressions in unquote and
+unquote-splicing is an extension in R6RS, but is not forbidden by R7RS.
+The meaning of nested quasiquotation was corrected in R6RS.
+.
+.SH ERRORS
+This syntax can raise exceptions with the following condition types:
+.TP
+.BR &syntax-violation " (R6RS)"
+It is a syntax violation if any of the identifiers
+.IR quasiquote , unquote ", or" unquote-splicing
+appear in positions within a template
+otherwise than as described above.
+.TP
+.BR &assertion " (R6RS)"
+Raised if the unquoted expressions which must be lists do not evaluate
+to lists.
+.
+Any unquote-splicing or multi-operand unquote form
+must appear only within a list or vector template.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.TP
+R5RS
+As for R7RS, except unpredictable behavior is promised.
+.
+.SH "SEE ALSO"
+.
+.BR quote (3)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.\" .SH HISTORY
+.\" TODO
+.\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/scheme-manpages/
+.UE .

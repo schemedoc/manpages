@@ -199,7 +199,7 @@ The wrong number of values was passed to a continuation set up with
 .TP
 R7RS
 .\" Seen at the end of R5RS/R7RS 3.5
-Returning the wrong number of arguments to a continuation
+Returning the wrong number of values to a continuation
 not created by
 .BR call-with-values ,
 and which is not the non-final expression of a sequence,

@@ -12,7 +12,7 @@ make-custom-binary-input-port \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(make-custom-binary-input-port " id " " read! " " get-position " " set-position! )
+.BI "(make-custom-binary-input-port " id " " read! " " get-position " " set-position! " " close )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

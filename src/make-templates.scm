@@ -580,7 +580,7 @@ or fail catastrophically."
   (write-template 'magnitude '((number)) '((rnrs) (rnrs base) (scheme r5rs) (scheme complex)))
   (write-template 'make-assertion-violation '(()) '((rnrs) (rnrs conditions)))
   (write-template 'make-bytevector '((number) (number number)) '((rnrs) (rnrs bytevectors) (scheme base)))
-  (write-template 'make-custom-binary-input-port '((id read! get-position set-position!)) '((rnrs) (rnrs io ports)))
+  (write-template 'make-custom-binary-input-port '((id read! get-position set-position! close)) '((rnrs) (rnrs io ports)))
   (write-template 'make-custom-binary-input/output-port '((id read! write! get-position set-position! close)) '((rnrs) (rnrs io ports)))
   (write-template 'make-custom-binary-output-port '((id write! get-position set-position! close)) '((rnrs) (rnrs io ports)))
   (write-template 'make-custom-textual-input-port '((id read! get-position set-position! close)) '((rnrs) (rnrs io ports)))

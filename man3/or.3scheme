@@ -1,0 +1,110 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020
+.\" SPDX-License-Identifier: MIT
+.TH or 3scheme 2020-05-03 "" "Scheme Programmer's Manual"
+.SH NAME
+or \- short-circuiting conditional, return the first true value
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(or " test " ...)"
+.
+.SH DESCRIPTION
+The \fItest\fP expressions are evaluated from left to right
+until one returns a true value or the last test is reached.
+.
+In the former case, the \fBor\fP expression returns the value without
+evaluating the remaining expressions.
+.
+In the latter case, the last expression is evaluated and its
+values are returned.
+.PP
+If there are no tests, #f is returned.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Chez Scheme, Loko Scheme
+The source-level optimizer can rewrite code that uses multiple values
+in one of the test expressions in such a way that the values are no
+longer in a single-value context. This can mean that code which would
+otherwise raise an exception will run without error, but with possibly
+unexpected results. This is not a bug and is permitted by R6RS.
+.TP
+.B Vicare Scheme
+The test expressions are statically checked to see that they return a
+single value.
+.SH "RETURN VALUES"
+.
+Returns the value of the first true expression. In Scheme everything
+is true except for the false value (#f or #false in R7RS).
+.PP
+The last test expression is in tail context if the \fBor\fP expression
+itself is.
+.SH EXAMPLES
+.
+.EX
+(or (= 2 2) (> 2 1))  => #t
+(or (= 2 2) (< 2 1))  => #t
+(or #f #f #f)         => #f
+(or '(b c) (/ 3 0))   => (b c)
+(or)                  => #f
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+The \fBor\fP syntax is very common in almost all programming
+languages. It is sometimes called \fBor\fP and other times \fB&&\fP or
+something else. It is used when several expressions should be tested
+but evaluation should not continue past the first true value.
+.PP
+When expressions are more complicated it is better to use
+.BR cond (3).
+.SH COMPATIBILITY
+.
+The \fBor\fP syntax is widely compatible across Lisp systems.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+Zero or more than one value was returned by a non-tail test
+expression. Implementations may also handle this in another way, as
+long as the safety guarantees of R6RS \[sc] 5.6 are upheld.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR and (3),
+.BR cond (3),
+.BR if (3)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+Short-circuiting evaluation was invented in the 1950s by John
+McCarthy, the creator of Lisp.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/scheme-manpages/
+.UE .

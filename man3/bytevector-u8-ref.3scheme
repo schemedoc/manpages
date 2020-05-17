@@ -1,0 +1,132 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bytevector-u8-ref 3scheme 2020-05-17 "" "Scheme Programmer's Manual"
+.SH NAME
+bytevector-u8-ref, bytevector-s8-ref \- read a byte from a bytevector
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bytevector-u8-ref " bytevector " " k )
+.BI "(bytevector-s8-ref " bytevector " " k )
+.
+.SH DESCRIPTION
+.
+The
+.B bytevector-u8-ref
+procedure returns the byte at index
+.I k
+of
+.I bytevector
+as an unsigned byte ("octet").
+.PP
+The
+.B bytevector-s8-ref
+procedure returns the byte at index
+.I k
+of
+.I bytevector
+as a signed byte.
+.PP
+.SH "IMPLEMENTATION NOTES"
+.
+There are no notable variations between implementations of these
+procedures, apart from different levels of performance.
+.SH "RETURN VALUES"
+.
+Returns an integer in the range of 0\[em]255 (unsigned) or in the
+range -128\[em]127 (signed). In R6RS this number is guaranteed to
+be a fixnum.
+.SH EXAMPLES
+.
+.EX
+(let ((b1 (make-bytevector 16 -127))
+      (b2 (make-bytevector 16 255)))
+  (list
+    (bytevector-s8-ref b1 0)
+    (bytevector-u8-ref b1 0)
+    (bytevector-s8-ref b2 0)
+    (bytevector-u8-ref b2 0)))
+          => (-127 129 -1 255)
+
+;; R7RS syntax. For R6RS, use #vu8(...) instead.
+(bytevector-u8-ref '#u8(1 1 2 3 5 8 13 21)
+                   5)
+          => 8
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedure are commonly used when a program is dealing directly
+with data from disk, the network or some other hardware. For more
+advanced non-uniform structures, a helper is usually used instead.
+See
+.BR bytevector (7)
+for more information.
+.SH RATIONALE
+.
+The
+.B bytevector-u8-ref
+procedure is the fundamental procedure for reading from bytevectors
+from which all other bytevector read procedures can be built.
+.SH COMPATIBILITY
+.
+Bytevectors are absent from R5RS and earlier reports.
+.PP
+R7RS lacks
+.BR bytevector-s8-ref ,
+but it can be trivially implemented in terms of
+.BR bytevector-u8-ref :
+.PP
+.EX
+(define (bytevector-s8-ref bv k)
+  (let ((v (bytevector-u8-ref bv k)))
+    (if (< v 128) v (- v 256))))
+.EE
+.
+.SH ERRORS
+.
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular, the index \fIk\fP must be a valid index of \fIbytevector\fP.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR bytevectors (7),
+.BR fixnums (7)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS, but they previously existed
+in a slightly different form as u8vector-ref and s8vector-ref in
+SRFI-4. The difference was that they required a vector of the matching
+type (u8vector or s8vector).
+.PP
+Bytes themselves have a much longer history than Scheme but the number
+of bits depended on the machine. Today, 8-bit bytes are the industry
+standard.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/scheme-manpages/
+.UE .

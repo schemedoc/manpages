@@ -107,7 +107,7 @@ or fail catastrophically."
     "This page is part of the" (I "scheme-manpages") "project."
     "It includes materials from the RnRS documents."
     "More information can be found at"
-    (UR "https://github.com/schemedoc/scheme-manpages/") (UE ".")
+    (UR "https://github.com/schemedoc/manpages/") (UE ".")
     ()
     (SH "BUGS")
     ()))

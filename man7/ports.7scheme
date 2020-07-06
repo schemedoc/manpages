@@ -1,0 +1,185 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt <goran@weinholt.se>
+.\" SPDX-License-Identifier: MIT
+.TH ports 7scheme 2020-07-06 "" "Scheme Programmer's Manual"
+.SH NAME
+ports \- Port I/O
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io simple))" "           ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme file))" "              ;R7RS"
+.BR "(import (scheme read))" "              ;R7RS"
+.BR "(import (scheme write))" "             ;R7RS"
+.SH DESCRIPTION
+.
+Ports are the conventional way to get data in and out of a program.
+Files, terminals and many other devices are usually accessible as
+ports. Ports can also be completely internal to the program. Ports act
+as objects that consume and produce bytes or characters.
+.
+.SS Pre-R6RS ports
+.
+Port I/O in the Scheme reports that came before R6RS provide a current
+input port, a current output port, file input ports, and file output
+ports. There are procedures for reading and writing S-expressions,
+reading characters, peeking for the next character and for writing
+characters.
+.PP
+Standards before R6RS did not specify the encoding of characters.
+There are no binary I/O ports; everything goes through the ports as
+characters in an unspecified encoding, which is commonly ISO-8859-1,
+but that could be anything, even some variant of EBCDIC.
+.PP
+There is nothing to help the programmer write a portable program to
+manipulate binary files. In practice, programs that need to work with
+binary data assume the implementation uses a single byte encoding
+scheme with a one-to-one correspondence between character numbers and
+bytes.
+.
+.SS R6RS ports
+.\" Partly from r6rs-lib
+The
+.B (rnrs io ports)
+library defines an I/O layer for
+conventional, imperative buffered input and output. A port
+represents a buffered access object for a data sink or source
+or both simultaneously. The library allows ports to be
+created from arbitrary data sources and sinks.
+.PP
+The
+.B (rnrs io ports)
+library distinguishes between
+input ports and output ports. An input port is a source
+for data, whereas an output port is a sink for data. A port
+may be both an input port and an output port; such a port
+typically provides simultaneous read and write access to a
+file or other data.
+.PP
+The
+.B (rnrs io ports)
+library also distinguishes between binary ports,
+which are sources or sinks for uninterpreted bytes,
+and textual ports, which are sources or sinks
+for characters and strings.
+.
+.PP
+Files can be opened using a specified transcoder or binary ports can
+be turned into textual ports by using a transcoder. Transcoders
+specify a character encoding, an end of line convention and an error
+handling mode. ISO-8859-1, UTF-8 and UTF-16 are supported along with
+all Unicode characters. It is straightforward for portable code to
+work with binary files and textual files with a known encoding like
+UTF-8.
+.PP
+Custom binary and textual ports can be used to implement things like
+network ports, transparent compression, other encodings and arbitrary
+processing.
+.SS R7RS ports
+.
+The I/O port system is derived from the pre-R6RS system, with the
+addition of binary ports and specialized procedures for these ports.
+There are also bytevector and string ports based on the SRFI 6
+interface.
+.PP
+Portable R7RS code that attempts to use ports should be aware of these
+possible restrictions:
+.PP
+.IP \(bu
+Implementations do not need to make any distinctions between
+textual and binary ports.
+.IP \(bu
+Implementations do not need to support any characters outside the
+ASCII subset (U+0000\(emU+007F) of Unicode.
+.IP \(bu
+Implementations do not need to support the
+.B #\[rs]null
+(U+0000) character in strings.
+.IP \(bu
+It is an error to use forbidden characters in strings. 
+.IP \(bu
+It is an error for
+.B read-string
+to attempt to read a forbidden character.
+.IP \(bu
+These error situations allow implementations to signal an error,
+extend the domain of procedures to handle them or fail
+catastrophically.
+.IP \(bu
+There is no portable way to check programmatically which characters are
+forbidden.
+.IP \(bu
+Implementations do not need to use any particular encoding
+for textual files.
+.PP
+UTF-8 files can be read and written using binary ports together
+with
+.BR utf8->string " and " string->utf8 .
+It is an error to give invalid UTF-8 bytes to
+.BR utf8->string ,
+so this must be checked first.
+.SH IMPLEMENTATION NOTES
+.
+.TP
+.B GNU Guile
+There is no distinction between binary and textual ports.
+.
+The reader does not handle the
+.B #!/
+("shebang") syntax at the start of scripts. It is however interpreted
+as a comment, so you can put
+.B !#
+in a comment on the second line to "terminate" the first line.
+.
+The
+.B #!r6rs
+directive does not enable R6RS lexical syntax.
+.
+.TP
+.B Racket
+The reader does not handle the
+.B #!/
+("shebang") syntax at the start of scripts.
+.
+.TP
+.B Ikarus
+There is no support for input/output ports.
+.
+.SH "APPLICATION USAGE"
+.
+Ports are often the only way to access files and other file-like
+objects provided by the operating system.
+.PP
+In the 1990s it was still very common to have files in various local
+encodings, but Unicode has since then grown to become standard.
+Textual files created since the 2010s are usually encoded in UTF-8. A
+notable exception is files that come from Microsoft's Windows, which
+are sometimes encoded in UTF-16. But this is also becoming more rare
+with newer versions of that system.
+\" .SH RATIONALE
+\" .
+\" .SH COMPATIBILITY
+\" .
+.SH "SEE ALSO"
+.
+.BR stdio (3)
+\" .BR transcoders (7)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .

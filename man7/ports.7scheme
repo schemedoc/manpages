@@ -37,6 +37,27 @@ manipulate binary files. In practice, programs that need to work with
 binary data assume the implementation uses a single byte encoding
 scheme with a one-to-one correspondence between character numbers and
 bytes.
+.PP
+The process ports can be fetched by calling
+.BR current-input-port (3)
+and
+.BR current-output-port (3).
+Implementations can optionally provide
+.BR with-input-from-file (3)
+and
+.BR with-output-to-file (3),
+which dynamically rebind the input and output ports while a procedure
+is running. The procedures
+.BR open-input-file (3)
+and
+.BR open-output-file (3)
+open files for reading and for writing. They should be closed
+with
+.BR close-input-port (3)
+and
+.BR close-output-port (3)
+when the program is done with them, or there could be
+a resource leak.
 .
 .SS R6RS ports
 .\" Partly from r6rs-lib
@@ -75,7 +96,14 @@ UTF-8.
 .PP
 Custom binary and textual ports can be used to implement things like
 network ports, transparent compression, other encodings and arbitrary
-processing.
+processing. Custom ports are created with
+.BR make-custom-binary-input-port (3),
+.BR make-custom-textual-input-port (3),
+.BR make-custom-binary-output-port (3),
+.BR make-custom-textual-output-port (3),
+.BR make-custom-binary-input/output-port (3)
+and
+.BR make-custom-textual-input/output-port (3).
 .SS R7RS ports
 .
 The I/O port system is derived from the pre-R6RS system, with the
@@ -97,7 +125,7 @@ Implementations do not need to support the
 .B #\[rs]null
 (U+0000) character in strings.
 .IP \(bu
-It is an error to use forbidden characters in strings. 
+It is an error to use forbidden characters in strings.
 .IP \(bu
 It is an error for
 .B read-string

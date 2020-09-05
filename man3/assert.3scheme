@@ -1,0 +1,97 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH assert 3scheme 2020-09-05 "" "Scheme Programmer's Manual"
+.SH NAME
+assert \- raise an assertion violation if an expression is false
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(assert " expression )
+.
+.SH DESCRIPTION
+An
+.B assert
+form is evaluated by evaluating
+.IR expression .
+If
+.I expression
+returns #f, an exception with condition types &assertion and &message
+is raised. The message provided in the condition object is
+implementation-dependent.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Ikarus Scheme
+See "BUGS".
+.SH "RETURN VALUES"
+If
+.I expression
+returns a true value, that value is returned
+from the
+.B assert
+expression.
+.
+.SH EXAMPLES
+.
+.EX
+(define (integer-add x y)
+  (assert (and (integer? x) (integer? y)))
+  (+ x y))
+
+(integer-add 1 2)
+   => 3
+(integer-add 1 2.1)
+   => raises &assertion and &message
+.EE
+.
+.SH "APPLICATION USAGE"
+Applications can use this form to guard against invalid uses of
+procedures. It is often more convenient than manual use of
+.BR assertion-violation .
+.
+.SH RATIONALE
+Implementations can exploit the fact that
+.B assert
+is syntax to provide as much information as possible about the
+location of the assertion failure.
+.
+\" .SH COMPATIBILITY
+\" .
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+.BR &syntax " (R6RS)"
+More or fewer than one expression was passed.
+.
+.SH "SEE ALSO"
+.BR assertion-violation (3)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+The assert macro is new in R6RS, but has a long history in programming.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+The implementation in psyntax from the r6rs-libraries project is buggy
+and does not return the true value. This bug has spread into some
+Scheme compilers.

@@ -1,0 +1,245 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH assq 3scheme 2020-09-12 "" "Scheme Programmer's Manual"
+.SH NAME
+assq, assv, assoc, assp \- association list lookup
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs lists))" "               ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(assq " obj " " alist )
+.BI "(assv " obj " " alist )
+.BI "(assoc " obj " " alist )
+
+.BI "(assp " proc " " alist ) "\fR                   ;R6RS\fP"
+.BI "(assoc " obj " " alist " " compare ) "\fR           ;R7RS\fP"
+.
+.SH DESCRIPTION
+These procedures find the first pair in
+.I alist
+whose car field satisfies a given condition, and returns that pair
+without traversing
+.I alist
+further.
+.
+If no pair in
+.I alist
+satisfies the condition, then #f is returned.
+.
+.TP
+.BR assoc ", " assv ", and " assq
+These procedures look for a pair that has
+.I obj
+as its car. The
+.B assoc
+procedure uses
+.B equal?
+to compare
+.I obj
+with the car fields of the pairs in
+.IR alist ,
+while
+.B assv
+uses
+.B eqv?
+and
+.B assq
+uses
+.BR eq? .
+.
+.TP
+.BR assp " (R6RS)"
+The
+.B assp
+procedure successively applies
+.I proc
+to the car fields of alist and looks for a pair for which it returns a
+true value.
+.
+.I Proc
+is always
+called in the same dynamic environment as
+.B assp
+itself.
+.
+.I Proc
+should accept one argument and return a single value.
+.I Proc
+should not mutate
+.IR alist .
+.TP
+.BR assoc " (R7RS)"
+.
+.B Assoc
+uses
+.I compare
+if given and
+.B equal?
+otherwise. There is nothing said about the
+.I compare
+procedure in R7RS. Note in particular that its argument order is not
+specified; it might be called with the object as the first or second
+argument.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a pair from
+.I alist
+or #f.
+.SH EXAMPLES
+.
+.EX
+(define img '((src "lambda.png") (width "100") (height "120")))
+(assq 'src img)             => (src "lambda.png")
+(assq 'width img)           => (width "100")
+(assq 'alt img)             => #f
+
+; Newly allocated pairs are not eq? to other pairs
+(assq (list 'a) '(((a)) ((b)) ((c))))
+                            => #f
+; Instead use equal? to compare based on the structure
+(assoc (list 'a) '(((a)) ((b)) ((c))))
+                            => ((a))
+
+; Behavior of eq? and assq on numbers is not specified
+(assq 5 '((2 3) (5 7) (11 13)))
+                            => unspecified
+; So use eqv? and assv instead
+(assv 5 '((2 3) (5 7) (11 13)))
+                            => (5 7)
+
+; Custom tests can be done with assp in R6RS.
+(define d '((3 a) (1 b) (4 c)))
+(assp even? d)              => (4 c)
+(assp odd? d)               => (3 a)
+
+; Assp in R6RS provides a test and the optional compare
+; procedure in R7RS provides a comparison. Using it as
+; test is possible, but awkward.
+(define d '((3 a) (1 b) (4 c)))
+(assoc #f d (lambda (x y) (even? (or x y))))
+                            => (4 c)
+(assoc #f d (lambda (x y) (odd? (or x y))))
+                            => (3 a)
+
+; When a custom comparison is needed instead of a test,
+; R7RS/SRFI-1 is more elegant than in the above example:
+(define d '((1 1) (2 4) (3 9)))
+(assoc 2.0 d =)             => (2 4)
+(assoc 2.0 d <)             => unspecified in R7RS
+(assoc 2.0 d <)             => (3 9)     ; in SRFI-1
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Association lists are often used as a lightweight alternative to hash
+tables. They have the benefit of being printable as S-expressions. The
+linear cost of lookup is balanced by the lower constant cost when the
+number of keys is small.
+.PP
+The
+.B assq
+procedure is appropriate when keys are symbols (or when you would
+otherwise compare the keys with
+.BR eq? ).
+When the keys are characters or numbers, use
+.BR assv .
+When the keys are strings, pairs, vectors, bytevectors or a variation
+of types so far mentioned, use
+.BR assoc .
+When the keys are other types, use
+.B assp
+or
+.B assoc
+with a compare procedure.
+.SH RATIONALE
+.
+Although they are ordinarily used as predicates, these procedures do
+not have question marks in their names because they return useful
+values rather than just #t or #f.
+.
+.SH COMPATIBILITY
+.
+R4RS and R5RS have
+.BR assq ,
+.BR assv ,
+and the same
+.B assoc
+as R6RS. R7RS modified
+.B assoc
+to give it an optional comparison procedure in the SRFI-1 tradition.
+R6RS added the
+.B assv
+procedure instead.
+.
+R6RS specifies that these procedures do not traverse
+.I alist
+further once a matching pair has been found. In practice this is how it will
+be implemented in non-R6RS implementations as well.
+.PP
+Association lists are common in Lisp dialects.
+The
+.I assoc
+in Common Lisp returns NIL instead of #f when there is no matching
+pair.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain,
+i.e.
+.I alist
+was not a list of pairs, or
+.I proc
+was not a procedure that accepts one argument and returns one value.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR cons (3),
+.BR find (3)
+.BR make-hashtable (3),
+.BR memq (3)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS,
+SRFI-1
+.
+.SH HISTORY
+.
+A variant of
+.B assoc
+that returns the cadr of the matching pair appeared in
+.I Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I
+(McCarthy, 1960).
+It was used to represent environments in
+.BR eval .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.

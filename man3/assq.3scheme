@@ -103,6 +103,10 @@ or #f.
 (assq 'width img)           => (width "100")
 (assq 'alt img)             => #f
 
+; Common pattern to look up a value using a default
+(cond ((assq 'style img) => cadr)
+      (else ""))            => ""
+
 ; Newly allocated pairs are not eq? to other pairs
 (assq (list 'a) '(((a)) ((b)) ((c))))
                             => #f
@@ -240,6 +244,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

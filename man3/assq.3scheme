@@ -216,7 +216,7 @@ or fail catastrophically.
 .SH "SEE ALSO"
 .
 .BR cons (3),
-.BR find (3)
+.BR find (3),
 .BR make-hashtable (3),
 .BR memq (3)
 .SH STANDARDS

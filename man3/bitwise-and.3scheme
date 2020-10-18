@@ -1,0 +1,124 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bitwise-and 3scheme 2020-10-18 "" "Scheme Programmer's Manual"
+.SH NAME
+bitwise-and, bitwise-ior, bitwise-xor \- bitwise arithmetic
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bitwise-and " ei " ...)"
+.BI "(bitwise-ior " ei " ...)"
+.BI "(bitwise-xor " ei " ...)"
+.
+.SH DESCRIPTION
+These procedures return the exact integer object that is
+the bitwise "and", "inclusive or", or "exclusive or" of the
+two's complement representations of their arguments.
+.
+If they are passed only one argument, they return that argument. If
+they are passed no arguments, they return the integer object (either
+−1 or 0) that acts as identity for the operation.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+A single exact integer object as per the description.
+.
+.SH EXAMPLES
+.
+.EX
+;; These examples use binary notation for clarity.
+
+;; bitwise-and preserves the 1-bits that are in common,
+;; which is often called "masking".
+(bitwise-and #b10101010 #b00001111)  => #b1010
+
+;; bitwise-xor can be used to flip bits:
+(bitwise-xor #b10101010 #b11111111)  => #b01010101
+
+;; bitwise-ior can be used to set bits:
+(bitwise-ior #b10000000 #b00000011)  => #b10000011
+
+;; Negative numbers notionally have all bits set to the
+;; left of the most significant zero bit.
+(bitwise-and #b10101010 #b-10000)    => #b10100000
+.EE
+.PP
+The Scheme programmer who is interested in bitwise arithmetic should
+explore HAKMEM (AI Memo 239).
+.
+\" .SH "APPLICATION USAGE"
+\" .
+.SH RATIONALE
+.
+These procedures are efficiently implemented on binary computers and
+are useful in numerous applications, including: hashing, cryptography,
+error correcting codes, digital logic, binary data structures and
+network protocols.
+.
+.SH COMPATIBILITY
+These procedures are compatible with the equivalent bitwise operators
+for signed integers in other languages.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+An argument was outside its domain.
+.
+.SH "SEE ALSO"
+.BR bitwise-not (3)
+.
+.SH STANDARDS
+R6RS,
+SRFI-60,
+SRFI-151
+.
+.SH HISTORY
+.
+These procedures mirror the CPU instructions for bitwise arithmetic in
+binary computers, but they are extended to support arbitrarily large
+integers. They appear in the names
+.IR logand ,
+.IR logior ,
+and
+.I logxor
+in Maclisp.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+While there are no known bugs in the common implementations of these
+procedures, they are tricky to implement correctly with bignums, and
+bugs have shown up in the past. Established bignum libraries rarely
+provide them, so Scheme implementers are on their own. The difficult
+part is handling negative integers. The lazy implementer can use the
+following identities from "Hackers Delight".
+.PP
+.EX
+;; ~ is bitwise-not
+;; | is bitwise-ior
+;; & is bitwise-and
+;; ^ is bitwise-xor
+a & b == ~(~a | ~b)
+a & b == a - (a & ~b)
+a ^ b == ~a ^ ~b
+a ^ b == ~(a & ~b)
+a | b == ~(~a & ~b)
+a | b == (a & ~b) + b
+.EE

@@ -1,0 +1,90 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH length 3scheme 2020-12-31 "" "Scheme Programmer's Manual"
+.SH NAME
+length \- length of a list
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(length " list )
+.
+.SH DESCRIPTION
+Returns the length of \fIlist\fP.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+Implementations commonly use something like Floyd's cycle-finding
+algorithm to verify that the argument is truly a proper list.
+.SH "RETURN VALUES"
+.
+Returns a single exact integer which is the number of pairs that make
+up the list.
+.SH EXAMPLES
+.
+.EX
+(length '(a b c))          => 3
+(length '(a (b) (c d e)))  => 3
+(length '())               => 0
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+The \fBlength\fP procedure often appears in code that deals with an
+arbitrary number of objects stored in a list, and where the length
+of the list is needed during serialization. It also tends to appear
+in code that destructures lists, but in such cases it may be better
+to use a pattern matching library such as \fB(chibi match)\fP.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+R6RS requires implementations to verify that the argument is a proper
+list. R7RS does not require this and as a consequence implementations
+may misbehave if the argument is not a proper list, or go into a
+non-terminating loop if the argument is a cyclical list.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR cons (3),
+.BR make-list (3),
+.BR list-ref (3),
+.BR vector-length (3).
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

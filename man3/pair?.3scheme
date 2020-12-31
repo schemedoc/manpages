@@ -67,7 +67,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR car (3)
+.BR car (3),
+.BR cons (3)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

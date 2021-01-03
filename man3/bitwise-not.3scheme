@@ -1,5 +1,5 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020 Göran Weinholt
+.\" Copyright © 2020, 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
 .TH bitwise-not 3scheme 2020-10-07 "" "Scheme Programmer's Manual"
 .SH NAME
@@ -9,10 +9,12 @@ bitwise-not \- bitwise negation, one's complement
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
 .BI "(bitwise-not " ei )
+.BI "(fxnot " fx )
 .
 .SH DESCRIPTION
 Returns the bitwise negation of the exact integer
@@ -22,6 +24,9 @@ If Scheme integers were unsigned (i.e. only positive) then this could
 be thought of as negating every bit in the integer. There is however a
 subtle difference, having to do with the sign of the returned integer,
 that makes such a description not quite accurate.
+.PP
+The \fBfxnot\fP procedure takes a fixnum as an argument and always
+returns a fixnum (but see the ERRORS section below).
 .
 .SH "IMPLEMENTATION NOTES"
 .TP
@@ -75,6 +80,10 @@ This procedure can raise exceptions with the following condition types:
 .TP
 .BR &assertion " (R6RS)"
 The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+.BR &implementation-restriction " (R6RS)"
+The result is not representable as a fixnum. Raised for
+\fB(fxnot (least-fixnum))\fP.
 .
 .SH "SEE ALSO"
 .BR fxnot (3)

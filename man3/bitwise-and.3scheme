@@ -1,20 +1,24 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020 Göran Weinholt
+.\" Copyright © 2020, 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
 .TH bitwise-and 3scheme 2020-10-18 "" "Scheme Programmer's Manual"
 .SH NAME
-bitwise-and, bitwise-ior, bitwise-xor \- bitwise arithmetic
+bitwise-and, bitwise-ior, bitwise-xor, fxand, fxior, fxxor \- bitwise arithmetic
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
 .BI "(bitwise-and " ei " ...)"
 .BI "(bitwise-ior " ei " ...)"
 .BI "(bitwise-xor " ei " ...)"
+.BI "(fxand " fx " ...)"
+.BI "(fxior " fx " ...)"
+.BI "(fxxor " fx " ...)"
 .
 .SH DESCRIPTION
 These procedures return the exact integer object that is
@@ -25,6 +29,10 @@ If they are passed only one argument, they return that argument. If
 they are passed no arguments, they return the integer object (either
 −1 or 0) that acts as identity for the operation.
 .
+.PP
+The procedures whose names begin with \fBfx\fP take
+.BR fixnums (7)
+as arguments and only return fixnums.
 \" .SH "IMPLEMENTATION NOTES"
 \" .
 .SH "RETURN VALUES"
@@ -68,7 +76,7 @@ These procedures are compatible with the equivalent bitwise operators
 for signed integers in other languages.
 .
 .SH ERRORS
-This procedure can raise exceptions with the following condition types:
+These procedures can raise exceptions with the following condition types:
 .TP
 .BR &assertion " (R6RS)"
 An argument was outside its domain.

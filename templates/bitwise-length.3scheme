@@ -3,16 +3,18 @@
 .\" SPDX-License-Identifier: MIT
 .TH bitwise-length 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-bitwise-length \-
+bitwise-length, fxlength \- bitwise length of an integer
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
 .BI "(bitwise-length " number )
+.BI "(fxlength " number )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

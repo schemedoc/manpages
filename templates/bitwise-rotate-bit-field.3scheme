@@ -3,16 +3,18 @@
 .\" SPDX-License-Identifier: MIT
 .TH bitwise-rotate-bit-field 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-bitwise-rotate-bit-field \-
+bitwise-rotate-bit-field, fxrotate-bit-field \- bitwise rotate left
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(bitwise-rotate-bit-field " number " " number " " number " " number )
+.BI "(bitwise-rotate-bit-field " n " " start " " end " " count )
+.BI "(fxrotate-bit-field " n " " start " " end " " count )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
@@ -38,21 +40,14 @@ This procedure can raise exceptions with the following condition types:
 .TP
 .BR &assertion " (R6RS)"
 The wrong number of arguments was passed or an argument was outside its domain.
-.TP
-R7RS
-The assertions described above are errors.
-Implementations may signal an error, extend the procedure's
-domain of definition to include such arguments,
-or fail catastrophically.
+Raised by \fBfxrotate-bit-field\fP when \fIstart\fP, \fIend\fP and \fIcount\fP
+are non-negative fixnums less than the fixnum width, or when the number of bits
+to rotate would be negative.
 .
 .SH "SEE ALSO"
 .
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
-R6RS,
-R7RS
+R6RS.
 .
 .SH HISTORY
 .

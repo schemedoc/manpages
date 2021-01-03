@@ -3,16 +3,18 @@
 .\" SPDX-License-Identifier: MIT
 .TH bitwise-if 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-bitwise-if \-
+bitwise-if, fxif \- bitwise if
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(bitwise-if " number " " number " " number )
+.BI "(bitwise-if " ei1 " " ei2 " " ei3 )
+.BI "(fxif " fx1 " " fx2 " " fx3 )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

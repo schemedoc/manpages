@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH zero? 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH zero? 3scheme 2021-01-06 "" "Scheme Programmer's Manual"
 .SH NAME
-zero? \-
+zero? \- test if a number is zero
 .
 .SH LIBRARY
 .nf
@@ -14,27 +14,40 @@ zero? \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(zero? " number )
+.BI "(zero? " z )
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+Test whether the number object \fIz\fP is zero. This procedure works
+on all number objects, up to and including complex numbers.
 .
-.SH "IMPLEMENTATION NOTES"
-.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
 .SH "RETURN VALUES"
 .
+Returns \fB#t\fP if the number is zero, otherwise \fB#f\fP.
 .SH EXAMPLES
 .
 .EX
+(zero? 0)         => #t
+(zero? 0.0)       => #t
+(zero? 0.0+0.0i)  => #t
+
+(zero? -1)        => #f
+(zero? 1/2)       => #f
 .EE
 .
 .SH "APPLICATION USAGE"
 .
-.SH RATIONALE
-.
+Used as a shorthand for \fB(= x 0)\fP. Use with higher-order functions
+is rare.
+\" .SH RATIONALE
+\" .
 .SH COMPATIBILITY
 .
+The description is the same in all Scheme reports. Compatibility will
+depend on general factors that affect the number system, such as
+implementation support for complex numbers and IEEE 754 floating
+point.
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP
@@ -49,6 +62,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
+.BR = (3),
+.BR > (3).
 .SH STANDARDS
 R4RS,
 IEEE Scheme,
@@ -69,3 +84,5 @@ More information can be found at
 .
 .SH BUGS
 .
+This procedure should normally not be used on inexact numbers since
+inaccuracies in computations makes its use unreliable.

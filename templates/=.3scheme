@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH = 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-= \-
+=, <, >, <=, >= \- compare numbers
 .
 .SH LIBRARY
 .nf
@@ -11,10 +11,26 @@
 .BR "(import (rnrs base))" "                ;R6RS"
 .BR "(import (scheme r5rs))" "              ;R7RS"
 .BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(= " number " " number " " number " ...)"
+.BI "(= " x " " x " " x " ...)"
+.BI "(< " x " " x " " x " ...)"
+.BI "(> " x " " x " " x " ...)"
+.BI "(<= " x " " x " " x " ...)"
+.BI "(>= " x " " x " " x " ...)"
+.BI "(fl=? " fl " " fl " " fl " ...)"
+.BI "(fl<? " fl " " fl " " fl " ...)"
+.BI "(fl>? " fl " " fl " " fl " ...)"
+.BI "(fl<=? " fl " " fl " " fl " ...)"
+.BI "(fl>=? " fl " " fl " " fl " ...)"
+.BI "(fx=? " fx " " fx " " fx " ...)"
+.BI "(fx<? " fx " " fx " " fx " ...)"
+.BI "(fx>? " fx " " fx " " fx " ...)"
+.BI "(fx<=? " fx " " fx " " fx " ...)"
+.BI "(fx>=? " fx " " fx " " fx " ...)"
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

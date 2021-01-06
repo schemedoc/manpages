@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH zero? 3scheme 2021-01-06 "" "Scheme Programmer's Manual"
 .SH NAME
-zero? \- test if a number is zero
+zero?, flzero?, fxzero? \- test if a number is zero
 .
 .SH LIBRARY
 .nf
@@ -11,15 +11,21 @@ zero? \- test if a number is zero
 .BR "(import (rnrs base))" "                ;R6RS"
 .BR "(import (scheme r5rs))" "              ;R7RS"
 .BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
 .BI "(zero? " z )
+.BI "(flzero? " fl )
+.BI "(fxzero? " fx )
 .
 .SH DESCRIPTION
 Test whether the number object \fIz\fP is zero. This procedure works
 on all number objects, up to and including complex numbers.
-.
+.PP
+The \fBflzero?\fP variant is restricted to flonums and the
+\fBfxzero?\fP variant is restricted to fixnums.
 \" .SH "IMPLEMENTATION NOTES"
 \" .
 .SH "RETURN VALUES"
@@ -34,6 +40,12 @@ Returns \fB#t\fP if the number is zero, otherwise \fB#f\fP.
 
 (zero? -1)        => #f
 (zero? 1/2)       => #f
+
+(fxzero? 0)       => #t
+(flzero? 0.0)     => #t
+
+(fxzero? 1/2)     => &assertion
+(flzero? 1/2)     => &assertion
 .EE
 .
 .SH "APPLICATION USAGE"
@@ -48,6 +60,8 @@ The description is the same in all Scheme reports. Compatibility will
 depend on general factors that affect the number system, such as
 implementation support for complex numbers and IEEE 754 floating
 point.
+.PP
+The restricted procedures are only specified in R6RS.
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP
@@ -71,8 +85,8 @@ R5RS,
 R6RS,
 R7RS
 .
-.SH HISTORY
-.
+\" .SH HISTORY
+\" .
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages

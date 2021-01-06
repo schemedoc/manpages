@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH negative? 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-negative? \-
+negative?, positive?, odd?, even? \- numerical predicates
 .
 .SH LIBRARY
 .nf
@@ -11,10 +11,23 @@ negative? \-
 .BR "(import (rnrs base))" "                ;R6RS"
 .BR "(import (scheme r5rs))" "              ;R7RS"
 .BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(negative? " number )
+.BI "(negative? " x )
+.BI "(positive? " x )
+.BI "(odd? " n )
+.BI "(even? " n )
+.BI "(flnegative? " fl )
+.BI "(flpositive? " fl )
+.BI "(flodd? " fl )
+.BI "(fleven? " fl )
+.BI "(fxnegative? " fx )
+.BI "(fxpositive? " fx )
+.BI "(fxodd? " fx )
+.BI "(fxeven? " fx )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

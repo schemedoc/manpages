@@ -1,43 +1,48 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH fixnum? 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH string? 3scheme 2021-01-17 "" "Scheme Programmer's Manual"
 .SH NAME
-fixnum? \-
+string? \- test if an object is a string
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
-.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(fixnum? " obj )
+.BI "(string? " obj )
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+Returns \fB#t\fP if \fIobj\fP is a string, otherwise returns \fB#f\fP.
 .
-.SH "IMPLEMENTATION NOTES"
-.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
 .SH "RETURN VALUES"
 .
+Returns a single boolean object as per the description.
 .SH EXAMPLES
 .
 .EX
+(string? "123")        => #t
+(string? '#(1 2 3))    => #f
+(string? '(1 2 3))     => #f
 .EE
 .
-.SH "APPLICATION USAGE"
-.
-.SH RATIONALE
-.
-.SH COMPATIBILITY
-.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+\" .SH COMPATIBILITY
+\" .
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP
 .BR &assertion " (R6RS)"
-The wrong number of arguments was passed or an argument was outside its domain.
+The wrong number of arguments was passed.
 .TP
 R7RS
 The assertions described above are errors.
@@ -47,6 +52,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
+.BR make-string (3)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,
@@ -54,8 +60,8 @@ R5RS,
 R6RS,
 R7RS
 .
-.SH HISTORY
-.
+\" .SH HISTORY
+\" .
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages
@@ -64,6 +70,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

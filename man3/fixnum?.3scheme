@@ -1,40 +1,46 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH symbol? 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH fixnum? 3scheme 2021-01-17 "" "Scheme Programmer's Manual"
 .SH NAME
-symbol? \-
+fixnum? \- test if an object is a fixnum
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
-.BR "(import (rnrs base))" "                ;R6RS"
-.BR "(import (scheme r5rs))" "              ;R7RS"
-.BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(symbol? " obj )
+.BI "(fixnum? " obj )
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
-.
+Returns \fB#t\fP if \fIobj\fP is an exact integer object within the
+fixnum range, \fB#f\fP otherwise.
 .SH "IMPLEMENTATION NOTES"
 .
+The fixnum range is implementation-dependent, see
+.BR fixnum-width (3).
 .SH "RETURN VALUES"
 .
+Returns a single boolean object as per the description.
 .SH EXAMPLES
 .
 .EX
+(fixnum? 0)            => #t
+(fixnum? (expt 2 20))  => #t
+(fixnum? #f)           => #f
+(fixnum? "123")        => #f
+(fixnum? (fx+ a 1))
+    => #t or &implementation-restriction
 .EE
 .
-.SH "APPLICATION USAGE"
-.
-.SH RATIONALE
-.
-.SH COMPATIBILITY
-.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+\" .SH COMPATIBILITY
+\" .
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP
@@ -49,15 +55,12 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
+.BR fixnum-width (3)
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
-R6RS,
-R7RS
+R6RS
 .
-.SH HISTORY
-.
+\" .SH HISTORY
+\" .
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages
@@ -66,6 +69,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

@@ -11,10 +11,17 @@
 .BR "(import (rnrs base))" "                ;R6RS"
 .BR "(import (scheme r5rs))" "              ;R7RS"
 .BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(- " number " ...)"
+.BI "(- " z ")"
+.BI "(- " z1 " " z2 " " z3 " ...)"
+.BI "(fl- " fl1 " " fl2 " ...)"
+.BI "(fl- " fl ")"
+.BI "(fx- " fx1 " " fx2 ")"
+.BI "(fx- " fx )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

@@ -13,7 +13,8 @@ nan? \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(nan? " number )
+.BI "(nan? " x )
+.BI "(flnan? " fl )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

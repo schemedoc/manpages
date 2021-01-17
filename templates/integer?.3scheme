@@ -11,10 +11,12 @@ integer? \-
 .BR "(import (rnrs base))" "                ;R6RS"
 .BR "(import (scheme r5rs))" "              ;R7RS"
 .BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
 .BI "(integer? " obj )
+.BI "(flinteger? " number )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

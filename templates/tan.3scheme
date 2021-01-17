@@ -11,10 +11,30 @@ tan \-
 .BR "(import (rnrs base))" "                ;R6RS"
 .BR "(import (scheme r5rs))" "              ;R7RS"
 .BR "(import (scheme inexact))" "           ;R7RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(tan " number )
+.BI "(exp " z )
+.BI "(log " z )
+.BI "(log " z1 " " z2 )
+.BI "(sin " z )
+.BI "(cos " z )
+.BI "(tan " z )
+.BI "(asin " z )
+.BI "(acos " z )
+.BI "(atan " z )
+.BI "(atan " x1 " " x2 )
+.BI "(flexp " fl )
+.BI "(fllog " fl )
+.BI "(fllog " fl1 " " fl2 )
+.BI "(flsin " fl )
+.BI "(flcos " fl )
+.BI "(fltan " fl )
+.BI "(flasin " fl )
+.BI "(flacos " fl )
+.BI "(flatan " fl )
+.BI "(flatan " fl1 " " fl2 )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

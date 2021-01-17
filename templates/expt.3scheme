@@ -11,10 +11,12 @@ expt \-
 .BR "(import (rnrs base))" "                ;R6RS"
 .BR "(import (scheme r5rs))" "              ;R7RS"
 .BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
 .BI "(expt " number " " number )
+.BI "(flexpt " number " " number )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

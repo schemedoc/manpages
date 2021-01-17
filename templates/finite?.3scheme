@@ -10,10 +10,14 @@ finite? \-
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs base))" "                ;R6RS"
 .BR "(import (scheme inexact))" "           ;R7RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(finite? " number )
+.BI "(finite? " x )
+.BI "(infinite? " x )
+.BI "(flfinite? " fl )
+.BI "(flinfinite? " fl )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

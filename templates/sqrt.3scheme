@@ -14,7 +14,8 @@ sqrt \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(sqrt " number )
+.BI "(sqrt " z )
+.BI "(flsqrt " fl )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

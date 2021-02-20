@@ -1,0 +1,101 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020
+.\" SPDX-License-Identifier: MIT
+.TH bytevector-copy! 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.SH NAME
+bytevector-copy! \- copy bytes between bytevectors
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bytevector-copy! " source " " source-start " " target " " target-start " " k ) "  \fR;R6RS\fP"
+.BI "(bytevector-copy! " to " " at " " from " " start " " end ) "                       \fR;R7RS\fP"
+.
+.SH DESCRIPTION
+.TP
+.B R6RS
+Copies the bytes from
+\fIsource\fP at indices
+\fIsource-start\fP, …, \fIsource-start\fP + \fIk\fP − 1
+to consecutive indices in target starting at \fItarget-index\fP.
+.TP
+.B R7RS
+Copies the bytes of bytevector \fIfrom\fP between \fIstart\fP and \fIend\fP
+to bytevector \fIto\fP, starting at \fIat\fP.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns unspecified values.
+.SH EXAMPLES
+.
+.EX
+;; R6RS
+(let ((b (u8-list->bytevector '(1 2 3 4 5 6 7 8))))
+  (bytevector-copy! b 0 b 3 4)
+  (bytevector->u8-list b))
+   => (1 2 3 1 2 3 4 8)
+
+;; R7RS
+(define a (bytevector 1 2 3 4 5))
+(define b (bytevector 10 20 30 40 50))
+(bytevector-copy! b 1 a 0 2)
+   => #u8(10 1 2 40 50)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is common in (de)serialization and processing of binary
+data. In some situations it becomes cumbersome to maintain the indices
+and bytevector ports are more suitable.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+R6RS and R7RS specify very different arguments for these procedures.
+Note in particular that it's not just a different argument order, the
+last argument is also different.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed, an argument was outside its
+domain or the byte ranges were not valid with regard to the bytevector
+lengths.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR bytevector-copy (3)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The arguments used by R7RS are consistent with SRFI-43 whereas R6RS is
+consistent with SRFI-66.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+Implementations need to be careful to handle the case where the source
+and target bytevector ranges overlap in memory.

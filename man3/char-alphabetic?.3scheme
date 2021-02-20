@@ -1,0 +1,104 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH char-alphabetic? 3scheme 2021-02-20 "" "Scheme Programmer's Manual"
+.SH NAME
+char-alphabetic?, char-numeric?, etc \- test character properties
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs unicode))" "             ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme char))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(char-alphabetic? " char )
+.BI "(char-numeric? " char )
+.BI "(char-whitespace? " char )
+.BI "(char-upper-case? " char )
+.BI "(char-lower-case? " char )
+.BI "(char-title-case? " char ) "             \fR;R6RS\fP"
+.
+.SH DESCRIPTION
+These procedures return \fB#t\fP if their arguments are alphabetic,
+numeric, whitespace, upper-case, lower-case, or title-case characters,
+respectively; otherwise they return \fB#f\fP.
+.PP
+A character is alphabetic if it has the Unicode "Alphabetic" property.
+A character is numeric if it has the Unicode "Numeric" property. A
+character is whitespace if has the Unicode "White_Space" property. A
+character is upper case if it has the Unicode "Uppercase" property,
+lower case if it has the "Lowercase" property, and title case if it is
+in the Lt general category.
+.PP
+R7RS notes that \fBchar-numeric?\fP tests for "Numeric_Type=Decimal".
+Either way, it checks if the character is a decimal number.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single boolean value.
+.SH EXAMPLES
+.
+.EX
+(char-alphabetic? #\\a)      =>  #t
+(char-numeric? #\\1)         =>  #t
+(char-whitespace? #\\space)  =>  #t
+
+;; The following are not required to be supported in R7RS.
+(char-numeric? #\\x096A)     =>  #t
+(char-whitespace? #\\x00A0)  =>  #t
+(char-upper-case? #\\Σ)      =>  #t
+(char-lower-case? #\\σ)      =>  #t
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Compatibility in R7RS systems depends on the implementation's
+supported character set. In systems that support Unicode, these
+procedures return different results depending on the supported Unicode
+version.
+.PP
+R5RS and earlier reports mention the proper semantics for ASCII, but
+implementations are free to use e.g. EBCDIC instead.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR char->integer (3)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

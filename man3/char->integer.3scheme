@@ -1,0 +1,108 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH char->integer 3scheme 2021-02-21 "" "Scheme Programmer's Manual"
+.SH NAME
+char->integer, integer->char \- conversion between characters and integers
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(char->integer " char )
+.BI "(integer->char " sv )
+.
+.SH DESCRIPTION
+Given a Unicode character,
+.B char->integer
+returns an exact integer between \fB0\fP and \fB#xD7FF\fP or between
+\fB#xE000\fP and \fB#x10FFFF\fP which is equal to the Unicode scalar
+value of that character.
+.TP
+R6RS
+.I Sv
+must be a Unicode scalar value, i.e., a non-negative exact integer
+object in [0, #xD7FF] ∪ [#xE000, #x10FFFF]. For a Unicode scalar value
+.IR sv ,
+.B integer->char
+returns its associated character.
+.TP
+R7RS
+Given an exact integer that is the value
+returned by a character when
+.B char->integer
+is applied to it,
+.B integer->char
+returns that character.
+.IP
+Given a non-Unicode character, it returns an exact integer greater
+than \fB#x10FFFF\fP. This is true independent of whether the
+implementation uses the Unicode representation internally.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single integer and character object, respectively.
+.SH EXAMPLES
+.
+.EX
+(integer->char 32)
+   => #\\space
+(char->integer (integer->char 5000))
+   => 5000
+(integer->char #\\xD800)
+   => &assertion exception     ;R6RS
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+R6RS defines these procedures in terms of Unicode scalar values. R7RS
+allows an implementation to support additional characters, and to omit
+support for some Unicode characters. R5RS defines these procedures so
+that \fBchar<=?\fP on characters matches \fB<=\fP on the corresponding
+scalar values.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR char<=? (3)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

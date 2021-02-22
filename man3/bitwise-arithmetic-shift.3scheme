@@ -1,0 +1,180 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bitwise-arithmetic-shift 3scheme 2021-02-22 "" "Scheme Programmer's Manual"
+.SH NAME
+bitwise-arithmetic-shift, bitwise-arithmetic-shift-left, bitwise-arithmetic-shift-right, fxarithmetic-shift, fxarithmetic-shift-left, fxarithmetic-shift-right \- arithmetic shift
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bitwise-arithmetic-shift " n " " amount )
+.BI "(bitwise-arithmetic-shift-left " n " " amount )
+.BI "(bitwise-arithmetic-shift-right " n " " amount )
+.BI "(fxarithmetic-shift " n " " amount )
+.BI "(fxarithmetic-shift-left " n " " amount )
+.BI "(fxarithmetic-shift-right " n " " amount )
+.
+.SH DESCRIPTION
+Performs a bitwise arithmetic shift on
+.I n
+by
+.I amount
+bit positions.
+.PP
+More precisely, these procedures compute the result of the following
+expression. The -right variants first negate
+.IR amount .
+.EX
+    (floor (* n (expt 2 amount)))
+.EE
+.PP
+The variants with -left or -right require a non-negative
+.IR amount .
+The fixnum variants raise an exception if the result would not be a
+fixnum. They also restrict
+.IR amount ,
+see below.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single exact integer object. The fixnum variants are further
+restricted to return a fixnum object.
+.SH EXAMPLES
+.
+.EX
+(fxarithmetic-shift-left #b110011 1)
+   => #b1100110
+
+(bitwise-arithmetic-shift -6 -1)
+   => -3
+(bitwise-arithmetic-shift -5 -1)
+   => -3
+(bitwise-arithmetic-shift -4 -1)
+   => -2
+(bitwise-arithmetic-shift -3 -1)
+   => -2
+(bitwise-arithmetic-shift -2 -1)
+   => -1
+(bitwise-arithmetic-shift -1 -1)
+   => -1
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Bitwise arithmetic shift is common in cryptography, (de)serialization,
+pseudo-random functions, compression, error-detecting and correcting
+codes and more.
+.PP
+Truncating left shift can be achieved by masking the input so that
+only the remaining bits are kept, before calling the left shift
+procedure.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This is the same as the logical shift operations on signed (two's
+complement) integers available in most languages and machines,
+commonly called such things as
+.BR >> ,
+.BR << ,
+.BR ASL ,
+and
+.BR SAL .
+The fixnum variant can be seen as a subset of the machine instruction
+whereas the generic one switches to bignums when necessary. (Other
+implementation strategies are possible).
+.PP
+Fixnums are only guaranteed to have 24-bit precision, so code dealing
+with e.g. 32-bit integers should be prepared to use the generic
+variants.
+.PP
+These procedures are not available in R7RS-small. See SRFI-60 and SRFI-151.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion
+The wrong number of arguments was passed or an argument was outside
+its domain. For the fixnum variants, this is raised if the absolute
+shift amount is not less than the fixnum width.
+.TP
+.BR &implementation-restriction
+The fixnum variants of the procedures raise this if the result is not
+representable as a fixnum.
+.
+.SH "SEE ALSO"
+.
+.BR fixnum-width (3),
+.BR expt (3)
+.SH STANDARDS
+R6RS
+.
+\" .SH HISTORY
+\" .
+\" SRFI-60
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+Some implementations take a short-cut to handle right shifting with
+huge shift amounts. Given a shift amount that is larger then the
+number of bits in the number, the result can only ever be 0 or -1.
+This is not guaranteed to be fast, so don't rely on it in your code.
+.PP
+These procedures have been known to give bad results for unusual
+combinations of inputs. Here is a list of some of them so that you may
+compare with your own implementation.
+.TP
+Guile 2.0.9
+.EX
+(bitwise-arithmetic-shift-right -2 (+ (greatest-fixnum) 1))
+   => -2                      ;WRONG
+.EE
+.TP
+Chez Scheme 8.4
+.EX
+(fxarithmetic-shift-left #xB00000000000000 2)
+   => #xC00000000000000       ;WRONG
+
+(fxarithmetic-shift-left #x-500000000000000 3)
+   => #x-800000000000000      ;WRONG
+.EE
+.TP
+Racket 5.3.5
+.EX
+(bitwise-arithmetic-shift-right 42 (+ 1 (greatest-fixnum)))
+   => 42                      ;WRONG
+.EE
+.TP
+Vicare Scheme 0.3d1
+.EX
+(bitwise-arithmetic-shift-right -1 (+ (greatest-fixnum) 1))
+   => an exception is raised  ;WRONG
+.EE
+.TP
+IronScheme TFS:101169
+.EX
+(fxarithmetic-shift-right 42 (fixnum-width))
+   => 42                      ;WRONG
+.EE
+.TP
+Sagittarius 0.4.9
+.EX
+(bitwise-arithmetic-shift 0 65)
+   => 0                       ;WRONG: a bignum zero
+.EE

@@ -1,0 +1,91 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH close-port 3scheme 2021-02-28 "" "Scheme Programmer's Manual"
+.SH NAME
+close-port \- close a port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(close-port " port )
+.
+.SH DESCRIPTION
+Closes the port, rendering the port incapable of delivering
+or accepting data. If
+.I port
+is an output port, it is flushed before being closed. This has no
+effect if the port has already been closed. A closed port is still a
+port.
+.TP
+.B R6RS
+If
+.I port
+is a custom port then the closer procedure is called before the
+port is really closed.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns unspecified values.
+.SH EXAMPLES
+.
+.EX
+(define p (open-output-file "hello.txt"))
+(display "Hello, world\\n" p)
+(close-port p)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Ports are often connected to some limited resource, such as a file
+descriptor. Closing ports is important to avoid resource leaks. Some
+implementations will garbage collect ports, but this is not required.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is new in R6RS and R7RS.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR close-input-port (3),
+.BR call-with-port (3)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+It is often better to use
+.BR call-with-port (3)
+or one of the related procedures. They make it easier to ensure that a
+port is closed when an exception is raised.

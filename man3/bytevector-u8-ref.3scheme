@@ -1,5 +1,5 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020 Göran Weinholt
+.\" Copyright © 2020, 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
 .TH bytevector-u8-ref 3scheme 2020-05-17 "" "Scheme Programmer's Manual"
 .SH NAME
@@ -107,7 +107,8 @@ or fail catastrophically.
 .SH "SEE ALSO"
 .
 .BR bytevectors (7),
-.BR fixnums (7)
+.BR fixnums (7),
+.BR bytevector-u16-ref (3)
 .SH STANDARDS
 R6RS,
 R7RS

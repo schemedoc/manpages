@@ -1,0 +1,221 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bytevector-u16-ref 3scheme 2021-02-27 "" "Scheme Programmer's Manual"
+.SH NAME
+bytevector-s16-ref, bytevector-s32-ref, bytevector-s64-ref, bytevector-u16-ref, bytevector-u32-ref, bytevector-u64-ref, bytevector-ieee-double-ref, bytevector-ieee-single-ref,bytevector-s16-native-ref, bytevector-s32-native-ref, bytevector-s64-native-ref, bytevector-u16-native-ref, bytevector-u32-native-ref, bytevector-u64-native-ref, bytevector-ieee-single-native-ref, bytevector-ieee-double-native-ref \- read from a bytevector
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bytevector-s16-ref " bytevector " " k " " endianness )
+.BI "(bytevector-s32-ref " bytevector " " k " " endianness )
+.BI "(bytevector-s64-ref " bytevector " " k " " endianness )
+
+.BI "(bytevector-u16-ref " bytevector " " k " " endianness )
+.BI "(bytevector-u32-ref " bytevector " " k " " endianness )
+.BI "(bytevector-u64-ref " bytevector " " k " " endianness )
+
+.BI "(bytevector-ieee-double-ref " bytevector " " k " " endianness )
+.BI "(bytevector-ieee-single-ref " bytevector " " k " " endianness )
+
+.BI "(bytevector-s16-native-ref " bytevector " " k )
+.BI "(bytevector-s32-native-ref " bytevector " " k )
+.BI "(bytevector-s64-native-ref " bytevector " " k )
+
+.BI "(bytevector-u16-native-ref " bytevector " " k )
+.BI "(bytevector-u32-native-ref " bytevector " " k )
+.BI "(bytevector-u64-native-ref " bytevector " " k )
+
+.BI "(bytevector-ieee-single-native-ref " bytevector " " k )
+.BI "(bytevector-ieee-double-native-ref " bytevector " " k )
+.
+.SH DESCRIPTION
+These procedures read two or more bytes from
+.IR bytevector ,
+starting from the index
+.IR k ,
+and return them as an exact integer object.
+.
+The bytes are interpreted according to a data type and endianness. The
+data type is one of the following:
+.TP
+.B s16
+signed 16-bit integer
+.TP
+.B s32
+signed 32-bit integer
+.TP
+.B s64
+signed 64-bit integer
+.TP
+.B u16
+unsigned 16-bit integer
+.TP
+.B u32
+unsigned 32-bit integer
+.TP
+.B u64
+unsigned 64-bit integer
+.TP
+.B ieee-double
+IEEE-754 double-precision float (binary64)
+.TP
+.B ieee-single
+IEEE-754 single-precision float (binary32)
+.PP
+The signed variants always use two's complement arithmetic.
+.PP
+The
+.I endianness
+is normally one of the following symbols:
+.TP
+.B big
+Big endian. The more significant bytes come before the less significant bytes.
+.TP
+.B little
+Little endian. The less significant bytes come before the more significant bytes.
+.PP
+The
+.B -native
+variants use the machine's native endianness and furthermore impose an
+alignment requirement: the index
+.I k
+must be evenly divisible by the data type size (2, 4 or 8). Such an
+access is said to be aligned, as opposed to an unaligned access.
+.PP
+The number of bytes \fIn\fP used depends on the data type and is
+either two, four or eight (corresponding to 16, 32 or 64 bits). The
+bytevector must be at least \fIk+n\fP bytes in length.
+.PP
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Loko Scheme
+Hardware alignment checking is used to speed up the native procedures.
+.SH "RETURN VALUES"
+.
+Returns a single exact integer object.
+.SH EXAMPLES
+.
+.EX
+(define b
+  #vu8(#xFF #xFF #xFF #xFF #xFF #xFF #xFF #xFF
+       #xFF #xFF #xFF #xFF #xFF #xFF #xFF #xFD))
+
+(bytevector-u16-ref b 14 (endianness little))
+          => 65023          ;#xFDFF
+
+(bytevector-s16-ref b 14 (endianness little))
+          => -513           ;#x-201
+
+(bytevector-u16-ref b 14 (endianness big))
+          => 65533          ;#xFFFD
+
+(bytevector-s16-ref b 14 (endianness big))
+          => -3
+
+(bytevector-u32-ref b 12 (endianness little))
+          => 4261412863     ;#xFDFFFFFF
+
+(bytevector-s32-ref b 12 (endianness little))
+          => -33554433      ;#x-2000001
+
+(bytevector-u32-ref b 12 (endianness big))
+          => 4294967293     ;#xFFFFFFFD
+
+(bytevector-s32-ref b 12 (endianness big))
+          => -3
+
+(bytevector-u64-ref b 8 (endianness little))
+          => 18302628885633695743    ;#xFDFFFFFFFFFFFFFF
+
+(bytevector-s64-ref b 8 (endianness little))
+          => -144115188075855873     ;#x-200000000000001
+
+(bytevector-u64-ref b 8 (endianness big))
+          => 18446744073709551613    ;#xFFFFFFFFFFFFFFFD
+
+(bytevector-s64-ref b 8 (endianness big))
+          => -3
+
+;; Native endianness can be little, big or something else.
+;; R6RS leaves room for other native endianness choices.
+(bytevector-u32-native-ref b 12)
+          => unspecified
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Applications use these procedures when parsing data structures or when
+storing data in bytevectors as backing for custom data types. In some
+cases these procedures are cumbersome and packages like
+.B struct-pack
+or
+.B scheme-bytestructures
+can help reduce the amount of written code and help to automatically
+manage indices.
+.SH RATIONALE
+.
+These procedures provide accessors for the most common scalar data
+types (larger than a byte) that can be stored in bytevectors. The
+native procedures match what is provided by modern hardware, so they
+are potentially more efficient than the other procedures.
+.PP
+The native procedures check that the index is aligned. This is because
+hardware generally does not handle unaligned accesses the same way as
+aligned accesses. An unaligned access is slower and more complicated
+than an aligned access for several reasons that are outside the scope
+of this document to explain.
+.SH COMPATIBILITY
+.
+Except for the native variants, and differences in performance, these
+procedures work the same on all machines and in all implementations.
+.PP
+Careless use of the native procedures can make a program unportable,
+because the program's handling of bytes will depend on the particular
+machine it is running on. Most computers today are little-endian, but
+some big-endian machines are still being made. Except for this
+difference, any portability concerns at lower machine layers are
+abstracted away.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+An out-of-range access was attempted.
+The index
+.I k
+was not a multiple of the access size (in the case of the native variants).
+.
+.SH "SEE ALSO"
+.
+.BR make-bytevector (3),
+.BR bytevector-u8-ref (3),
+.BR native-endianness (3)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures are based on SRFI-74.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+An implementation written in C should not perform unaligned accesses
+towards the underlying memory, because the behavior is undefined. It
+will probably work on x86(-64), but it is still undefined and will
+break on other machines.

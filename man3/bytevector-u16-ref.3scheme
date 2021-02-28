@@ -68,7 +68,7 @@ IEEE-754 double-precision float (binary64)
 .B ieee-single
 IEEE-754 single-precision float (binary32)
 .PP
-The signed variants always use two's complement arithmetic.
+The signed variants use the two's complement representation.
 .PP
 The
 .I endianness
@@ -92,6 +92,8 @@ The number of bytes \fIn\fP used depends on the data type and is
 either two, four or eight (corresponding to 16, 32 or 64 bits). The
 bytevector must be at least \fIk+n\fP bytes in length.
 .PP
+Unlike the equivalent operation in e.g. C, the index is not multiplied
+by the element size.
 .
 .SH "IMPLEMENTATION NOTES"
 .

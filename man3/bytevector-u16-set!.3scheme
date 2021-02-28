@@ -1,0 +1,172 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bytevector-u16-set! 3scheme 2021-02-28 "" "Scheme Programmer's Manual"
+.SH NAME
+bytevector-s16-set!, bytevector-s32-set!, bytevector-s64-set!, bytevector-u16-set!, bytevector-u32-set!, bytevector-u64-set!, bytevector-ieee-double-set!, bytevector-ieee-single-set!, bytevector-s16-native-set!, bytevector-s32-native-set!, bytevector-s64-native-set!, bytevector-u16-native-set!, bytevector-u32-native-set!, bytevector-u64-native-set!, bytevector-ieee-double-native-set!, bytevector-ieee-single-native-set! - store a number in a bytevector
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bytevector-s16-set! " bytevector " " k " " n " " endianness )
+.BI "(bytevector-s32-set! " bytevector " " k " " n " " endianness )
+.BI "(bytevector-s64-set! " bytevector " " k " " n " " endianness )
+
+.BI "(bytevector-u16-set! " bytevector " " k " " n " " endianness )
+.BI "(bytevector-u32-set! " bytevector " " k " " n " " endianness )
+.BI "(bytevector-u64-set! " bytevector " " k " " n " " endianness )
+
+.BI "(bytevector-ieee-double-set! " bytevector " " k " " x " " endianness )
+.BI "(bytevector-ieee-single-set! " bytevector " " k " " x " " endianness )
+
+.BI "(bytevector-s16-native-set! " bytevector " " k " " n )
+.BI "(bytevector-s32-native-set! " bytevector " " k " " n )
+.BI "(bytevector-s64-native-set! " bytevector " " k " " n )
+
+.BI "(bytevector-u16-native-set! " bytevector " " k " " n )
+.BI "(bytevector-u32-native-set! " bytevector " " k " " n )
+.BI "(bytevector-u64-native-set! " bytevector " " k " " n )
+
+.BI "(bytevector-ieee-double-native-set! " bytevector " " k " " x )
+.BI "(bytevector-ieee-single-native-set! " bytevector " " k " " x )
+.
+.SH DESCRIPTION
+Store the integer
+.I n
+or the real
+.I x
+in
+.IR bytevector ,
+starting from the index
+.IR k .
+.
+The byte representation is created according to a data type and
+endianness. The data type is one of the following:
+.TP
+.B s16
+signed 16-bit integer
+.TP
+.B s32
+signed 32-bit integer
+.TP
+.B s64
+signed 64-bit integer
+.TP
+.B u16
+unsigned 16-bit integer
+.TP
+.B u32
+unsigned 32-bit integer
+.TP
+.B u64
+unsigned 64-bit integer
+.TP
+.B ieee-double
+IEEE-754 double-precision float (binary64)
+.TP
+.B ieee-single
+IEEE-754 single-precision float (binary32)
+.PP
+The signed variants use the two's complement representation.
+.PP
+The
+.I endianness
+is normally one of the following symbols:
+.TP
+.B big
+Big endian. The more significant bytes come before the less significant bytes.
+.TP
+.B little
+Little endian. The less significant bytes come before the more significant bytes.
+.PP
+The
+.B -native
+variants use the machine's native endianness and furthermore impose an
+alignment requirement: the index
+.I k
+must be evenly divisible by the data type size (2, 4 or 8). Such an
+access is said to be aligned, as opposed to an unaligned access.
+.PP
+The number of bytes \fIm\fP used depends on the data type and is
+either two, four or eight (corresponding to 16, 32 or 64 bits). The
+bytevector must be at least \fIk+m\fP bytes in length.
+.PP
+The integer
+.I n
+must be in the range [0, (2^\fIw\fP)-1] for the unsigned operations and
+in the range [-(2^(\fIw\fP-1)), (2^(\fIw\fP-1))-1] for the signed operations,
+where \fIw\fP is the size of the data type in bits. For the
+floating point operations, \fIx\fP must be a real number object.
+.PP
+Unlike the equivalent operation in e.g. C, the index is not multiplied
+by the element size.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns unspecified values.
+.SH EXAMPLES
+.
+.EX
+(define b
+  (u8-list->bytevector
+    '(255 255 255 255 255 255 255 255
+      255 255 255 255 255 255 255 253)))
+
+(bytevector-u16-set! b 0 12345 (endianness little))
+(bytevector-u16-ref b 0 (endianness little))
+          => 12345
+
+(bytevector-u16-native-set! b 0 12345)
+(bytevector-u16-native-ref b 0)
+          => 12345
+(bytevector-u16-ref b 0 (endianness little))
+          => unspecified
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+See the notes in
+.BR bytevector-u16-ref (3).
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR bytevector-u8-set! (3)
+.SH STANDARDS
+R6RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+See the notes in
+.BR bytevector-u16-ref (3).

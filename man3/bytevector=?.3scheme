@@ -1,0 +1,79 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bytevector=? 3scheme 2021-02-28 "" "Scheme Programmer's Manual"
+.SH NAME
+bytevector=? \- compare two bytevectors
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bytevector=? " bytevector1 " " bytevector2 )
+.
+.SH DESCRIPTION
+Returns
+.B #t
+if
+.I bytevector1
+and
+.I bytevector2
+are equal. They are equal
+if they have the same length and equal bytes at all valid
+indices. It returns
+.B #f
+otherwise.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single boolean object.
+.SH EXAMPLES
+.
+.EX
+(bytevector=? #vu8(1 2 3) #vu8(1 2 3))  =>  #t
+(bytevector=? #vu8(1 2 3) #vu8(0 1 2))  =>  #f
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Programs that work with sensitive data such as passwords and message
+digests must never use this procedure with attacker-controlled data.
+It may leak information through the time it takes to execute, leading
+to the movie trope where a password is cracked one letter at a time.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is absent from R7RS. Use
+.BR equal? (3)
+instead.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.
+.SH "SEE ALSO"
+.
+.BR equal? (3)
+.SH STANDARDS
+R6RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

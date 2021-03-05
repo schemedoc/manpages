@@ -1,0 +1,132 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH eof-object? 3scheme 2021-03-05 "" "Scheme Programmer's Manual"
+.SH NAME
+eof-object? \- test if an object is the end-of-file object
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (rnrs io simple))" "           ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(eof-object? " obj )
+.
+.SH DESCRIPTION
+Returns
+.B #t
+if
+.I obj
+is an end-of-file object, otherwise returns
+.BR #f .
+.PP
+The end-of-file object is returned by various I/O procedures
+when they reach end of file.
+\" .
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single boolean object.
+.SH EXAMPLES
+.
+.EX
+(eof-object? (eof-object))
+          => #t
+
+(eof-object? #\\space)
+          => #f
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used on the result of I/O read operations, such as
+.BR read (3),
+to see if the port has an end-of-file condition. It also appears in
+the context of generators (e.g. SRFI 158).
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+There is a slight difference between R6RS and the other reports.
+.TP
+.B R4RS, IEEE Scheme, R5RS, R7RS
+The precise set of end-of-file objects will vary among
+implementations, but in any case no end-of-file object will
+ever be an object that can be read in using
+.BR read .
+.IP
+No object which satisfies this predicate satisfies any of
+these predicates:
+.BR boolean? ,
+.BR bytevector? ,
+.BR char? ,
+.BR null? ,
+.BR number? ,
+.BR pair? ,
+.BR port? ,
+.BR procedure? ,
+.BR string? ,
+.BR symbol? ,
+.BR vector? ,
+or any record type predicate.
+.TP
+.B R6RS
+There is a unique end-of-file object. (This also satisfies the R7RS
+requirements).
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR eof-object (3)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+This procedure was unchanged in Scheme from R2RS (AI Memo No.\~848,
+1985) until R6RS, which is when the end-of-file object become a unique
+object for the first item. R7RS branched off from R5RS and did not
+adopt the R6RS semantics for this object.
+.PP
+.\" LISP 1.5 reference manual
+LISP 1.5 had an end-of-file character that printed as
+.B $EOF$
+and an end-of-record character that printed as
+.BR $EOR$ .
+.\" https://www.saildart.org/MACLSP.DBA[UP,DOC]
+PDP-10 MacLISP had an optional other argument to
+.B read
+that let the program specify its own end-of-file object. Scheme before
+R2RS would have used this implementation of
+.BR read .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,218 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH memq 3scheme 2021-03-06 "" "Scheme Programmer's Manual"
+.SH NAME
+memq, memv, member, memp \- list lookup
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs lists))" "               ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(memq " obj " " list )
+.BI "(member " obj " " list )
+.BI "(memv " obj " " list )
+
+.BI "(memp " proc " " list ) "\fR                    ;R6RS\fP"
+.BI "(member " obj " " list " " compare ) "\fR           ;R7RS\fP"
+.
+.SH DESCRIPTION
+These procedures return the first sublist of
+.I list
+whose car
+satisfies a given condition, where the sublists of lists are
+the lists returned by
+.BI "(list-tail " list " " k )
+for
+.I k
+less than the length of
+.IR list .
+.PP
+The
+.BR member ,
+.BR memv ,
+and
+.B memq
+procedures look for the first occurrence
+of
+.IR obj .
+If
+.I list
+does not contain an element satisfying the
+condition, then
+.B #f
+is returned.
+.PP
+The
+.B member
+procedure uses
+.B equal?
+to compare
+.I obj
+with the elements of
+.IR list ,
+while
+.B memv
+uses
+.B eqv?
+and
+.B memq
+uses
+.BR eq? .
+.
+.TP
+.BR memp " (R6RS)"
+The
+.B memp
+procedure applies
+.I proc
+to the cars of the sublists of
+.I list
+until it finds one for which
+.I proc
+returns a true value.
+.I Proc
+is always called in the
+same dynamic environment as
+.B memp
+itself.
+.I Proc
+should accept one argument and return a single value.
+.I Proc
+should not mutate list.
+.TP
+.BR member " (R7RS)"
+The
+.B member
+procedure uses
+.I compare
+to compare
+.I obj
+with the elements of
+.IR list ,
+if given, and
+.B equal?
+otherwise.
+\" .
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value which is either
+.IR list ,
+a tail of
+.IR list ,
+or
+.BR #f .
+.SH EXAMPLES
+.
+.EX
+(memq 'a '(a b c))
+          =>  (a b c)
+
+(memq 'b '(a b c))
+          => (b c)
+
+(memq 'a '(b c d))
+          => #f
+
+(memq (list 'a) '(b (a) c))
+          => #f
+
+(member (list 'a) '(b (a) c))
+          => ((a) c)
+
+(memq 101 '(100 101 102))   => unspecified
+(memv 101 '(100 101 102))   => (101 102)
+
+;; R7RS
+(member "B" '("a" "b" "c") string-ci=?)
+          => ("b" "c")
+
+;; R6RS
+(memp even? '(3 1 4 1 5 9 2 6 5))
+          => (4 1 5 9 2 6 5)
+
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures are used to search for an object in a list. It can be
+used as a simple way to implement sets and it's commonly used to look
+up data in property lists.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+R6RS imposes the following responsibly on implementations:
+.IP
+The implementation must check that
+.I list
+is a chain of pairs up to the found element, or that it is indeed a
+list if no element is found. It should not check that it is a chain of
+pairs beyond the found element. The implementation must check the
+restrictions on proc to the extent performed by applying it as
+described. An implementation may check whether proc is an appropriate
+argument before applying it.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR eq? (3),
+.BR assq (3),
+.BR find (3),
+.BR exists (3)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The
+.B member
+and
+.B memq
+procedures appear in MacLISP, so they would have been available in the
+first Scheme implementation.
+LISP 1.5 had a
+.B member
+procedure that returned true of the element was in the list.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+Programs should not use the more discriminating
+.B memq
+and
+.B memv
+when the object is not comparable with
+.BR eq? (3)
+and
+.BR eqv? (3),
+respectively.

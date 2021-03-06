@@ -88,7 +88,8 @@ The wrong number of arguments was passed or an argument was outside its domain.
 .
 .BR make-bytevector (3),
 .BR bytevector->u8-list (3),
-.BR bytevector (3)
+.BR bytevector (3),
+.BR endianness (7)
 .SH STANDARDS
 R6RS
 .

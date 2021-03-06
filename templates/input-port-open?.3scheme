@@ -12,6 +12,7 @@ input-port-open? \-
 .SH SYNOPSIS
 .nf
 .BI "(input-port-open? " ? )
+.BI "(output-port-open? " ? )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

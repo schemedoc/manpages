@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH string-upcase 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-string-upcase \-
+string-upcase, string-downcase, string-titlecase, string-foldcase \-
 .
 .SH LIBRARY
 .nf
@@ -14,6 +14,9 @@ string-upcase \-
 .SH SYNOPSIS
 .nf
 .BI "(string-upcase " string )
+.BI "(string-downcase " string )
+.BI "(string-titlecase " string ) "\fR           ;R6RS"
+.BI "(string-foldcase " string )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

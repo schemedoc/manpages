@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH string=? 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-string=? \-
+string=?, string<?, string>?, string<=?, string>=?  \-
 .
 .SH LIBRARY
 .nf
@@ -15,6 +15,10 @@ string=? \-
 .SH SYNOPSIS
 .nf
 .BI "(string=? " string " " string " " string " ...)"
+.BI "(string<? " string " " string " " string " ...)"
+.BI "(string>? " string " " string " " string " ...)"
+.BI "(string<=? " string " " string " " string " ...)"
+.BI "(string>=? " string " " string " " string " ...)"
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

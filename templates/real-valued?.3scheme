@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH real-valued? 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-real-valued? \-
+real-valued?, rational-valued?, integer-valued? \-
 .
 .SH LIBRARY
 .nf
@@ -13,6 +13,8 @@ real-valued? \-
 .SH SYNOPSIS
 .nf
 .BI "(real-valued? " obj )
+.BI "(rational-valued? " obj )
+.BI "(integer-valued? " obj )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

@@ -16,6 +16,7 @@ input-port? \-
 .SH SYNOPSIS
 .nf
 .BI "(input-port? " obj )
+.BI "(output-port? " obj )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

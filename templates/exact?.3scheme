@@ -15,6 +15,7 @@ exact? \-
 .SH SYNOPSIS
 .nf
 .BI "(exact? " number )
+.BI "(inexact? " number )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

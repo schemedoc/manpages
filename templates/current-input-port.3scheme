@@ -16,6 +16,8 @@ current-input-port \-
 .SH SYNOPSIS
 .nf
 .BI (current-input-port)
+.BI (current-output-port)
+.BI (current-error-port)
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
@@ -36,6 +38,9 @@ ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
 .
 .SH COMPATIBILITY
 .
+The
+.B current-output-port
+procedure is absent from R5RS and earlier reports.
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP

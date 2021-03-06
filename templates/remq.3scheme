@@ -13,6 +13,9 @@ remq \-
 .SH SYNOPSIS
 .nf
 .BI "(remq " obj " " list )
+.BI "(remv " obj " " list )
+.BI "(remove " obj " " list )
+.BI "(remp " proc " " list )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

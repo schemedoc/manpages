@@ -1,7 +1,7 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020 Göran Weinholt
+.\" Copyright © 2020, 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH quasiquote 3scheme 2020-04-27 "" "Scheme Programmer's Manual"
+.TH quasiquote 7scheme 2020-04-27 "" "Scheme Programmer's Manual"
 .SH NAME
 quasiquote \- list and vector templates
 .
@@ -179,7 +179,7 @@ rule; and add the rule
 There are no specific notes on implementations yet. Implementations
 generally follow one of the RnRS specifications in how they implement
 quasiquote.
-.SH "RETURN VALUES"
+.SH EVALUATION
 .
 The expression is evaluated as specified above and returned as a single value.
 .SH EXAMPLES

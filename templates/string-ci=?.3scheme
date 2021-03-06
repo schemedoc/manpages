@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH string-ci=? 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-string-ci=? \-
+string-ci=?, string-ci<?, string-ci>?, string-ci<=?, string-ci>=?  \-
 .
 .SH LIBRARY
 .nf
@@ -15,6 +15,10 @@ string-ci=? \-
 .SH SYNOPSIS
 .nf
 .BI "(string-ci=? " string " " string " " string " ...)"
+.BI "(string-ci<? " string " " string " " string " ...)"
+.BI "(string-ci>? " string " " string " " string " ...)"
+.BI "(string-ci<=? " string " " string " " string " ...)"
+.BI "(string-ci>=? " string " " string " " string " ...)"
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

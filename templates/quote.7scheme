@@ -1,7 +1,7 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
 .\" Copyright © 2020
 .\" SPDX-License-Identifier: MIT
-.TH quote 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH quote 7scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
 quote \-
 .
@@ -22,7 +22,7 @@ ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
 .
 .SH "IMPLEMENTATION NOTES"
 .
-.SH "RETURN VALUES"
+.SH EVALUATION
 .
 .SH EXAMPLES
 .

@@ -84,8 +84,11 @@ The file does not exist or cannot be deleted.
 R6RS,
 R7RS
 .
-\" .SH HISTORY
-\" .
+.SH HISTORY
+.
+This procedure is new to R6RS and R7RS, but it existed previously in
+early Scheme running on MacLISP as
+.BR deletef .
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages

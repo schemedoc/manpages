@@ -1,0 +1,110 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH delete-file 3scheme 2021-03-07 "" "Scheme Programmer's Manual"
+.SH NAME
+delete-file \- delete a file
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs files))" "               ;R6RS"
+.BR "(import (scheme file))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(delete-file " filename )
+.
+.SH DESCRIPTION
+Deletes the named file if it exists and can be deleted.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns an unspecified value.
+.SH EXAMPLES
+.
+.EX
+(call-with-output-file "temp.txt"
+  (lambda (p)
+    (display "Hello, temporary world!\\n" p)))
+
+(delete-file "temp.txt")
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used to delete files. It is commonly used to remove
+existing output files before writing new output files. In R6RS systems
+this is handled without race conditions with (file-options no-fail),
+see
+.BR file-options (7scheme).
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+.TP
+.B R6RS
+Valid values for a file name include strings that name a file using
+the native notation of filesystem paths on an implementation’s
+underlying operating system, and may include implementation-dependent
+values as well.
+.TP
+.B R7RS
+It is an error if filename is not a string. See the next section.
+.PP
+This procedure is absent from R5RS and earlier reports.
+.
+.SH ERRORS
+This procedure can raise exceptions that satisfy the following predicates.
+.TP
+.BR assertion-violation? " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.TP
+.BR i/o-filename-error? " (R6RS), " file-error? " (R7RS)"
+The file does not exist or cannot be deleted.
+.
+.SH "SEE ALSO"
+.
+.BR file-exists? (3scheme),
+.BR file-options (7scheme)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+If a program checks if a file exists using
+.BR file-exists? (3)
+before calling
+.B delete-file
+then another program may still have deleted the file before the second
+call. It is better to wrap
+.B delete-file
+in
+.BR guard (7scheme).
+Another approach is to use (file-options no-fail), see
+.BR file-options (7scheme).

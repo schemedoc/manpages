@@ -1,0 +1,92 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bitwise-bit-count 3scheme 2021-03-08 "" "Scheme Programmer's Manual"
+.SH NAME
+bitwise-bit-count \- population count
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bitwise-bit-count " ei )
+.BI "(fxbit-count " fx )
+.
+.SH DESCRIPTION
+If the argument is non-negative, this procedure returns the number
+of 1 bits in its two's complement representation.
+Otherwise it returns the result of the following computation:
+.EX
+(bitwise-not (bitwise-bit-count (bitwise-not ei)))
+.EE
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single exact integer object.
+.SH EXAMPLES
+.
+.EX
+(bitwise-bit-count #b1)
+          => 1
+
+(bitwise-bit-count #b1000)
+          => 1
+
+(bitwise-bit-count #b1001)
+          => 2
+
+(bitwise-bit-count #b-1001)
+          => -2
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used to compute the Hamming distance. It's also used
+in Hash Array Mapped Tries and other applications.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is new in R6RS. SRFI-151 has the similar
+procedure
+.BR bit-count .
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+For
+.B fxbit-count
+the argument must be a fixnum.
+.
+.SH "SEE ALSO"
+.
+.BR bitwise-first-bit-set (3scheme),
+.BR bitwise-length (3scheme)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure can be implemented with the
+.B popcount
+procedure in x86-64 processors. This instruction appeared even in some
+early computers like the IBM Stretch (1961).
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,83 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH native-endianness 3scheme 2021-03-09 "" "Scheme Programmer's Manual"
+.SH NAME
+native-endianness \- return the native endianness
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI (native-endianness)
+.
+.SH DESCRIPTION
+This procedure returns the native endianness of the system as a
+symbol. The symbol is normally one of these:
+.TP
+.B big
+Big endian. The more significant bytes come before the less significant bytes.
+.TP
+.B little
+Little endian. The less significant bytes come before the more significant bytes.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single symbol.
+.SH EXAMPLES
+.
+.EX
+(native-endianness)
+          => little
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is sometimes used when interfacing with external
+systems that use the native endianness to pass data.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure exists in R6RS and is absent from R7RS-small. SRFI-74
+has the native endianness as part of the
+.BR endianness (7scheme)
+syntax.
+.PP
+Other endianness values may exist and they are in that case valid
+arguments to the system's bytevector procedures.
+.PP
+Most systems today are little endian, but big endian hardware also
+exists. Other endianness variants have died out.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
+.
+.SH "SEE ALSO"
+.
+.BR endianness (7scheme),
+.BR bytevector-u16-native-ref (3scheme)
+.SH STANDARDS
+R6RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

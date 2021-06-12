@@ -1,0 +1,112 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bitwise-length 3scheme 2021-06-12 "" "Scheme Programmer's Manual"
+.SH NAME
+bitwise-length, fxlength \- bitwise length of an integer
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bitwise-length " ei )
+.BI "(fxlength " fx )
+.
+.SH DESCRIPTION
+Returns the number of bits needed to represent
+.I ei
+if it is positive, and the number of bits needed to represent
+(bitwise-not \fIei\fP) if it is negative.
+.PP
+.
+The
+.B fxlength
+variant constrains the argument and return value to the
+fixnum range.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+There are no noteworthy differences between implementations of
+these procedures, apart from performance differences. R6RS gives
+this standard definition:
+.PP
+.EX
+(do ((result 0 (+ result 1))
+     (bits (if (negative? ei)
+               (bitwise-not ei)
+               ei)
+           (bitwise-arithmetic-shift bits -1)))
+    ((zero? bits)
+     result))
+.EE
+.PP
+This implementation runs in O(n) where n is the bitwise length of the
+input. An implementation which is O(1) is possible if the implementer
+has access to the internal structure of bignums. Furthermore, CPUs
+often provide instructions that speed up the fixnum case.
+.SH "RETURN VALUES"
+.
+Returns a single exact integer object.
+.SH EXAMPLES
+.
+.EX
+(bitwise-length #b1000)
+  => 4
+
+(fxlength #xff)
+  => 8
+
+(fxlength -1)
+  => 0
+
+(fxlength #b-1000)
+  => 3
+
+(bitwise-length #x-70)
+  => 7
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is commonly used to compute the number bytes needed to
+represent an integer during serialization to an external format.
+.SH RATIONALE
+.
+This procedure can be implemented more efficiently by the Scheme
+runtime than by portable code, and it has some use in applications.
+.SH COMPATIBILITY
+.
+These procedures are specified by R6RS. The generic variant is
+called
+.B integer-length
+in Common Lisp, SRFI 33, SRFI 60 and SRFI 151.
+.PP
+The usual compatibility concerns surrounding fixnums apply to the
+fixnum variant.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.
+.SH "SEE ALSO"
+.
+.BR bitwise-first-bit-set (3),
+.BR log (3)
+.SH STANDARDS
+R6RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .

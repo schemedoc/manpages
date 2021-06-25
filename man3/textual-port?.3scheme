@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH binary-port? 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH textual-port? 3scheme 2021-06-25 "" "Scheme Programmer's Manual"
 .SH NAME
-binary-port? \-
+textual-port?, binary-port? \- test if ports are textual or binary
 .
 .SH LIBRARY
 .nf
@@ -14,26 +14,55 @@ binary-port? \-
 .SH SYNOPSIS
 .nf
 .BI "(binary-port? " port )
+.BI "(textual-port? " port )
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+The
+.B textual-port?
+procedure returns
+.B #t
+if
+.I port
+is textual,
+and returns
+.B #f
+otherwise.
+The
+.B binary-port?
+procedure
+returns
+.B #t if
+.I port
+is binary, and returns
+.B #f
+otherwise.
+.TP
+.B R7RS
+These procedures accept any kind of object.
 .
-.SH "IMPLEMENTATION NOTES"
-.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
 .SH "RETURN VALUES"
 .
+Returns a single boolean object.
 .SH EXAMPLES
 .
 .EX
+(call-with-input-file "/dev/null" textual-port?)
+   => #t
+
+(binary-port? (open-bytevector-input-port #vu8(1 2 3)))
+   => #t
 .EE
 .
-.SH "APPLICATION USAGE"
-.
-.SH RATIONALE
-.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
 .SH COMPATIBILITY
 .
+Some R7RS implementations may allow both
+binary and textual operations on ports.
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP
@@ -41,22 +70,22 @@ This procedure can raise exceptions with the following condition types:
 The wrong number of arguments was passed or an argument was outside its domain.
 .TP
 R7RS
-The assertions described above are errors.
+Passing the wrong number of arguments is an error.
 Implementations may signal an error, extend the procedure's
 domain of definition to include such arguments,
 or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
+.BR input-port? (3).
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
 R6RS,
 R7RS
 .
 .SH HISTORY
 .
+New in R6RS and new in R7RS. In R5RS and earlier reports, ports were
+conceptually textual.
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages
@@ -65,6 +94,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

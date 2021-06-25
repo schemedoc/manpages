@@ -1,7 +1,7 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
 .\" Copyright © 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH exact 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH exact 3scheme 2021-06-25 "" "Scheme Programmer's Manual"
 .SH NAME
 exact, inexact \- conversion between exact and inexact numbers
 .
@@ -120,7 +120,7 @@ procedure when its argument is an inexact non-integral real.
 .
 .SH "SEE ALSO"
 .
-.BR fixnum->flonum (3),
+.BR fixnum->flonum (3).
 .SH STANDARDS
 R4RS,
 IEEE Scheme,
@@ -143,6 +143,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

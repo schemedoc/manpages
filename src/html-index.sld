@@ -35,4 +35,8 @@
             ,@(map section->html (list-sections)))))))
 
     (define (gen-html-index)
-      (with-output-to-file "html/index.html" write-html-index))))
+      (with-output-to-file "html/index.html" write-html-index))
+
+    (define (main args)
+      (gen-html-index)
+      0)))

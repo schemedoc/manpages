@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eu -o pipefail
+cd "$(dirname "$0")"
 mkdir -p html
 find html -mindepth 1 -delete
 section() {
@@ -20,3 +21,5 @@ section() {
 }
 section 3
 section 7
+test -L manpages || ln -s src manpages
+gosh -r 7 -I . -m manpages.html-index src/html-index.sld

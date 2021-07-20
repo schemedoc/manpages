@@ -13,7 +13,7 @@
   (begin
 
     (define (section-page-url section page)
-      (string-append section "/" page "/" "index.html"))
+      (string-append section "/" page "/"))
 
     (define (section->html section)
       `(section

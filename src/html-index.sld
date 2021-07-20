@@ -17,7 +17,7 @@
 
     (define (section->html section)
       `(section
-        (h2 ,(string-append (section-title section) " (section " section ")"))
+        (h2 ,(section-title section))
         (ul
          ,@(map (lambda (page)
                   `(li (a (@ (href ,(section-page-url section page)))
@@ -25,7 +25,7 @@
                 (list-section-pages section)))))
 
     (define (write-html-index)
-      (let ((title "Scheme manual pages")
+      (let ((title "Scheme Programmer's Manual")
             (description
              "Unix manual pages for the Scheme programming language."))
         (write-html
@@ -41,7 +41,27 @@
                      (content ,description))))
            (body
             (h1 ,title)
-            ,@(map section->html (list-sections)))))))
+            (p "This is a working programmer's reference to"
+               " writing standard Scheme code."
+               " It is a collection of"
+               " " (a (@ (href "https://en.wikipedia.org/wiki/Man_page"))
+                      "Unix-like manual pages")
+               " that can be downloaded or browsed online.")
+            (h2 "Download the manual")
+            (p "The pages are compatible with the " (kbd "man")
+               " program that comes with Unix-like operating systems"
+               " (Linux, BSD, MacOS, Cygwin, etc.)")
+            (p "Download "
+               ,(let ((archive "scheme-manpages-latest.tar.gz"))
+                  `(a (@ (href ,archive))
+                      (kbd ,archive))))
+            ,@(map section->html (list-sections))
+            (hr)
+            (p "Source code "
+               (a (@ (href "https://github.com/schemedoc/manpages"))
+                  "at GitHub"))
+            (p (a (@ (href "https://www.scheme.org/"))
+                  "Back to Scheme.org")))))))
 
     (define (gen-html-index)
       (with-output-to-file "html/index.html" write-html-index))

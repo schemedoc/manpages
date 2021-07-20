@@ -4,7 +4,8 @@
 
 (define-library (manpages list)
   (export list-sections
-          list-section-pages)
+          list-section-pages
+          section-title)
   (import (scheme base)
           (srfi 1)
           (srfi 13))
@@ -19,8 +20,22 @@
                 (import (only (gambit) directory-files))))
   (begin
 
+    (define section-entries
+      '(("3" "Library functions")
+        ("7" "Miscellaneous information")))
+
+    (define section-entry.id car)
+    (define section-entry.title cadr)
+
+    (define (section-entry section)
+      (or (assoc section section-entries)
+          (error "No such section:" section)))
+
+    (define (section-title section)
+      (section-entry.title (section-entry section)))
+
     (define (list-sections)
-      '("3" "7"))
+      (map section-entry.id section-entries))
 
     (define (list-section-pages section)
       (let* ((dir (string-append "man" section))

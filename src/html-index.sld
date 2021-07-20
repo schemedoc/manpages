@@ -17,7 +17,7 @@
 
     (define (section->html section)
       `(section
-        (h2 ,(string-append "Section " section))
+        (h2 ,(string-append (section-title section) " (section " section ")"))
         (ul
          ,@(map (lambda (page)
                   `(li (a (@ (href ,(section-page-url section page)))

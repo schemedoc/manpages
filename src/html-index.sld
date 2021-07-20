@@ -2,7 +2,7 @@
 ;; Copyright © 2021 Lassi Kortela
 ;; SPDX-License-Identifier: MIT
 
-;;; Generate the HTML page listing all the manpages on doc.scheme.org.
+;;; Generate the HTML page listing all the manpages on man.scheme.org.
 
 (define-library (manpages html-index)
   (export gen-html-index)

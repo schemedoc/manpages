@@ -25,11 +25,20 @@
                 (list-section-pages section)))))
 
     (define (write-html-index)
-      (let ((title "Scheme manual pages"))
+      (let ((title "Scheme manual pages")
+            (description
+             "Unix manual pages for the Scheme programming language."))
         (write-html
          `(html
+           (@ (lang "en"))
            (head
-            (title ,title))
+            (meta (@ (charset "UTF-8")))
+            (title ,title)
+            (link (@ (rel "stylesheet") (href "/style.css")))
+            (meta (@ (name "viewport")
+                     (content "width=device-width, initial-scale=1")))
+            (meta (@ (name "description")
+                     (content ,description))))
            (body
             (h1 ,title)
             ,@(map section->html (list-sections)))))))

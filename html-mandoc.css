@@ -1,0 +1,11 @@
+/* Extra styles for mandoc HTML output: */
+
+.head-vol {
+  font-weight: bold;
+}
+.head-ltitle {
+  display: none;
+}
+.head-rtitle {
+  display: none;
+}

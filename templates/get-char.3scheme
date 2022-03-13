@@ -3,16 +3,21 @@
 .\" SPDX-License-Identifier: MIT
 .TH get-char 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-get-char \-
+get-char, read-char \-
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (rnrs io simple))" "           ;R6RS, read-char"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(get-char " ? )
+.BI "(get-char " textual-input-port )
+.BI (read-char) "                         \fR;R7RS"
+.BI "(read-char " textual-input-port )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

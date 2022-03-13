@@ -3,16 +3,19 @@
 .\" SPDX-License-Identifier: MIT
 .TH get-u8 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-get-u8 \-
+get-u8, read-u8 \-
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(get-u8 " ? )
+.BI "(get-u8 " binary-input-port )
+.BI (read-u8) "                           \fR;R7RS"
+.BI "(read-u8 " binary-input-port )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

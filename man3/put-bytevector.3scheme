@@ -1,0 +1,185 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH put-bytevector 3scheme 2022-03-12 "" "Scheme Programmer's Manual"
+.SH NAME
+put-bytevector, write-bytevector \- write a bytevector to a port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(put-bytevector " binary-port " " bytevector ) "              \fR;R6RS"
+.BI "(put-bytevector " binary-port " " bytevector " " start ) "        \fR;R6RS"
+.BI "(put-bytevector " binary-port " " bytevector " " start " " count ) "  \fR;R6RS"
+.BI "(write-bytevector " bytevector )  "                        \fR;R7RS"
+.BI "(write-bytevector " bytevector " " port ) "                   \fR;R7RS"
+.BI "(write-bytevector " bytevector " " port " " start ) "             \fR;R7RS"
+.BI "(write-bytevector " bytevector " " port " " start " " end ) "         \fR;R7RS"
+.
+.SH DESCRIPTION
+Writes the selected bytes from
+.I bytevector
+to
+.IR binary-port
+(or
+.IR port ).
+.PP
+.TP
+.B R6RS
+The default value for
+.I start
+is
+.BR 0 .
+The default value for
+.I count
+is
+.B (bytevector-length
+.IB bytevector )
+−
+.IR start .
+.TP
+.B R7RS
+.\" R7RS remembered to specify "left-to-right order", but this
+.\" is not worth mentioning.
+R7RS does not specify any default values, so an implementation can
+presumably treat any such calls as errors, but some reasonable
+assumptions can be made. The default value for
+.I port
+is
+.BR (current-output-port) .
+Normally the current output port is textual and using it here would be an error.
+The default value for
+.I start
+is
+.BR 0 .
+The default value for
+.I end
+is
+.B (bytevector-length
+.IB bytevector )\fR.\fP
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Chibi Scheme, GNU Guile
+Ports can be both binary and textual. It is possible to write bytes
+to the default value of
+.BR current-output-port (3scheme).
+This is not portable.
+.BR standard-output-port (3scheme)
+should be used to get a fresh binary port.
+.SH "RETURN VALUES"
+.
+These procedures return unspecified values.
+.SH EXAMPLES
+.
+.EX
+(import (rnrs))
+
+;; Write a TARGA header followed by pixels
+(define (put-tga p width height bits/pixel pixel-data)
+  (let ((hdr (make-bytevector 18 0)))
+    (bytevector-u8-set! hdr 2 2)
+    (bytevector-u16-set! hdr 12 width (endianness little))
+    (bytevector-u16-set! hdr 14 height (endianness little))
+    (bytevector-u8-set! hdr 16 bits/pixel)
+    (put-bytevector p hdr)
+    (put-bytevector p pixel-data)))
+
+(let ((pixel-data (make-bytevector (* 320 240 4))))
+  ;; Generate some image data
+  (do ((y 0 (+ y 1)))
+      ((= y 240))
+    (do ((x 0 (+ x 1)))
+        ((= x 320))
+      (bytevector-u32-set! pixel-data (* 4 (+ x (* y 320)))
+                           (+ #xff
+                              (* (round (* y 255/240)) 256)
+                              (* (round (* x 255/320)) 256 256))
+                           (endianness big))))
+  ;; Create an image file
+  (call-with-port (open-file-output-port "image.tga")
+    (lambda (p)
+      (put-tga p 320 240 32 pixel-data))))
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+The
+.B put-bytevector
+procedure is used in applications that write bulk data to binary
+output ports. This can, for example, be code that works with binary
+files or network streams.
+.PP
+It is sometimes used in conjunction with a port created by
+.BR open-bytevector-output-port (3scheme),
+as a different method of constructing a bytevector. The benefit is that
+the port will keep track of the current byte position, and the size of
+the data does not need to be known in advance.
+.SH RATIONALE
+.
+If one were forced to remove either
+.BR put-bytevector (3scheme)
+or
+.BR put-u8 (3scheme)
+from the language, then the latter should be removed. The first one
+is more general, more efficient and supports the writing of bulk data
+to non-buffered ports.
+.SH COMPATIBILITY
+.
+There are trivial differences in the signatures from R6RS and R7RS.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+This is also raised if
+.I start
+or
+.I count
+are negative, or if the length of
+.I bytevector
+is not at least
+.IR start+count .
+This is also raised if the port is not an open binary port.
+.TP
+.BR &i/o-write " (R6RS)"
+There was a write error during an I/O operation.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR put-u8 (3)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+This procedure was not present in R5RS and earlier reports. It can
+be seen as analogous to to the
+.BR fwrite (3)
+function from the C language, or similar to the
+.BR write (2)
+function from POSIX in the case of non-buffered ports.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.

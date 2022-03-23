@@ -1,0 +1,115 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH list? 3scheme 2022-03-23 "" "Scheme Programmer's Manual"
+.SH NAME
+list? \- check if an object is a list
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(list? " obj )
+.
+.SH DESCRIPTION
+Returns
+.B #t
+if
+.I obj
+is a list,
+.B #f
+otherwise. By definition, all lists are chains of pairs that have
+finite length and are terminated by the empty list.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+This procedure is expected to run in time linear to the number of
+elements in the list. Implementations can be expected to use an
+algorithm like Floyd's cycle-finding algorithm ("tortoise and hare"),
+which handles the case of circular lists created with
+.BR set-cdr! (3).
+.SH "RETURN VALUES"
+.
+Returns a boolean object.
+.SH EXAMPLES
+.
+.EX
+(list? '(a b c))  => #t
+
+(list? '())       => #t
+
+(list? '(a . b))  => #f
+
+(let ((x (list 'a)))
+  (set-cdr! x x)
+  (list? x))      => #f
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The
+.B list?
+procedure is identical in all revisions of the Scheme reports. IEEE
+Scheme explicitly mentions the case of circular structures.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR pair? (3scheme)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The
+.B list?
+procedure first appeared in R4RS.
+\" .PP
+\" The LISP 1.5 Programmers's Manual (ISBN 0 262 13011 4) notes that
+\" "[c]ircular lists are ordinarily not permitted". A
+\" .B listp
+\" predicate is given in the definition of lists, and it arguably does
+\" not terminate when the input is a circular list.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+A fairly common mistake is to call
+.B list?
+when destructuring an object, e.g. immediately before using
+.BR car (3scheme)
+or
+.BR cdr (3scheme).
+Use
+.BR pair? (3scheme)
+instead.

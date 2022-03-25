@@ -1,7 +1,7 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2022 Ben Davenport-Ray
 .\" SPDX-License-Identifier: MIT
-.TH apply 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH apply 3scheme 2022-02-01 "" "Scheme Programmer's Manual"
 .SH NAME
 apply \- call a procedure with a list of arguments
 .
@@ -97,6 +97,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

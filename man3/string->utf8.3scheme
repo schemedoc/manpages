@@ -1,5 +1,5 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2021
+.\" Copyright © 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
 .TH string->utf8 3scheme 2021-03-10 "" "Scheme Programmer's Manual"
 .SH NAME

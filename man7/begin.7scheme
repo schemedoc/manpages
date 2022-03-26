@@ -1,7 +1,7 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2020 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH begin 3scheme 2020-05-10 "" "Scheme Programmer's Manual"
+.TH begin 7scheme 2020-05-10 "" "Scheme Programmer's Manual"
 .SH NAME
 begin \- wrapper for multiple expressions
 .

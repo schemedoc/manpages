@@ -234,7 +234,7 @@ The meaning of nested quasiquotation was corrected in R6RS.
 .SH ERRORS
 This syntax can raise exceptions with the following condition types:
 .TP
-.BR &syntax-violation " (R6RS)"
+.BR &syntax " (R6RS)"
 It is a syntax violation if any of the identifiers
 .IR quasiquote , unquote ", or" unquote-splicing
 appear in positions within a template

@@ -67,7 +67,7 @@ Implementation Notes above).
 This syntax can raise exceptions during expansion with the following
 condition types:
 .TP
-.BR &syntax-violation " (R6RS)"
+.BR &syntax " (R6RS)"
 The wrong number of operands was given or the operand was not a supported
 endianness symbol.
 .

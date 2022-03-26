@@ -3,16 +3,19 @@
 .\" SPDX-License-Identifier: MIT
 .TH put-u8 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-put-u8 \-
+put-u8, write-u8 \- write a byte to a binary output port
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(put-u8 " ? )
+.BI "(put-u8 " binary-output-port " " octet ) "   \fR;R6RS"
+.BI "(write-u8 " byte ) "                     \fR;R7RS"
+.BI "(write-u8 " byte " " port ) "                \fR;R7RS"
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

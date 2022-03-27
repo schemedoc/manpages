@@ -1,0 +1,144 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH round 3scheme 2022-03-27 "" "Scheme Programmer's Manual"
+.SH NAME
+ceiling, floor, round, truncate \- round a number
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(ceiling " x )
+.BI "(floor " x )
+.BI "(round " x )
+.BI "(truncate " x )
+.BI "(flceiling " fl )
+.BI "(flfloor " fl )
+.BI "(flround " fl )
+.BI "(fltruncate " fl )
+.
+.SH DESCRIPTION
+These procedures return inexact integer objects for inexact
+arguments that are not infinities or NaNs, and exact integer
+objects for exact rational arguments.
+.TP
+.B ceiling
+Returns the smallest integer object not smaller than
+.IR x .
+.TP
+.B floor
+Returns the largest integer object not larger than
+.IR x .
+.TP
+.B round
+Returns the closest integer object to
+.IR x ,
+rounding to even when
+.I x
+represents a number halfway between two integers.
+.TP
+.B truncate
+Returns the integer object closest to
+.I x
+whose absolute value is not larger
+than the absolute value of
+.IR x .
+.PP
+If the argument to one of these procedures is inexact, then the result
+is also inexact.
+.PP
+Although infinities and NaNs are not integer objects, these
+procedures return an infinity when given an infinity as an
+argument, and a NaN when given a NaN.
+.PP
+The flonum variants work as described above, but the argument and
+return value is always a flonum.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single number object that is an integer, an infinity or a
+NaN.
+.SH EXAMPLES
+.
+.EX
+(floor -4.3)         =>  -5.0
+(ceiling -4.3)       =>  -4.0
+(truncate -4.3)      =>  -4.0
+(round -4.3)         =>  -4.0
+
+(floor 3.5)          =>  3.0
+(ceiling 3.5)        =>  4.0
+(truncate 3.5)       =>  3.0
+(round 3.5)          =>  4.0
+
+(round 7/2)          =>  4
+(round 7)            =>  7
+
+(floor +inf.0)       =>  +inf.0
+(ceiling -inf.0)     =>  -inf.0
+(round +nan.0)       =>  +nan.0
+
+(flfloor +inf.0)     =>  +inf.0
+(flceiling -inf.0)   =>  -inf.0
+(fltruncate +nan.0)  =>  +nan.0
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+.SH RATIONALE
+.
+.\" R7RS says IEEE twice
+.BR round (3scheme)
+rounds to even for consistency with the default rounding mode
+specified by the IEEE 754 floating-point standard.
+\" .SH COMPATIBILITY
+\" .
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR rationalize (3scheme),
+.BR div-and-mod (3scheme),
+.BR exact (3scheme)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R2RS, which based them on similar
+functions in Common Lisp. Note that the Common Lisp versions have a
+second return value.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

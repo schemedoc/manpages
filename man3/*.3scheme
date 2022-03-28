@@ -3,21 +3,41 @@
 .\" SPDX-License-Identifier: MIT
 .TH * 3scheme 2020-10-18 "" "Scheme Programmer's Manual"
 .SH NAME
-* \- multiplication
+*, fx*, fl* \- multiplication
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS, fx*"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS, fl*"
 .BR "(import (scheme r5rs))" "              ;R7RS"
 .BR "(import (scheme base))" "              ;R7RS"
 .
 .SH SYNOPSIS
 .nf
 .BI "(* " number " ...)"
+.BI "(fl* " fl1 "...)"  "                        \fR;R6RS"
+.BI "(fx* " fx1 " " fx2 ")"  "                       \fR;R6RS"
 .
 .SH DESCRIPTION
 This procedure returns the product of its arguments.
+.TP
+.B Fixnum variant
+An exception with condition type
+.B &implementation-restriction
+is raised if the product is not a fixnum.
+.TP
+.B Flonum variant
+In general, this procedure should return the flonum that best
+approximates the mathematical product. For implementations that
+represent flonums using IEEE binary floating point, the meaning of
+"best" is defined by the IEEE standards.
+.EX
+(fl+ +inf.0 -inf.0) => +nan.0
+(fl+ +nan.0 fl)     => +nan.0
+(fl* +nan.0 fl)     => +nan.0
+.EE
 .
 .SH "IMPLEMENTATION NOTES"
 .
@@ -29,12 +49,15 @@ is an exact zero.
 .
 .SH "RETURN VALUES"
 .
-The return value is exact if all arguments are exact. If any
-argument is inexact then the result is inexact, unless one of the
-arguments is an exact zero, in which case the return value can
-optionally be an exact zero.
+Returns one value, which is a number object.
 .PP
-In non-R6RS implementations
+For the generic variant, the return value is exact if all arguments
+are exact. If any argument is inexact then the result is inexact,
+unless one of the arguments is an exact zero, in which case the return
+value can optionally be an exact zero.
+.PP
+Non-R6RS implementations may be missing parts of the numeric tower and
+can thus resort to inexact numbers even for exact computations.
 .
 .SH EXAMPLES
 .
@@ -64,7 +87,7 @@ In non-R6RS implementations
 \" .
 .SH COMPATIBILITY
 .
-R6RS is the only report on Scheme to require a full implementation of
+R6RS is the only RnRS report on Scheme to require a full implementation of
 the numeric tower.
 In R7RS code, the feature identifiers
 .BR exact-closed ,
@@ -90,6 +113,8 @@ An argument was outside its domain.
 .BR &implementation-restriction " (R6RS)"
 May be raised when applied to mixed non-rational real and non-real
 complex arguments. Otherwise an unspecified number object is returned.
+Raised by the fixnum variant if the mathematically correct result is
+not a fixnum.
 .TP
 R7RS
 The assertions described above are errors.
@@ -98,8 +123,7 @@ domain of definition to include such arguments,
 or fail catastrophically.
 .
 .SH "SEE ALSO"
-.BR + (3),
-.BR fx* (3)
+.BR + (3)
 .
 .SH STANDARDS
 R4RS,

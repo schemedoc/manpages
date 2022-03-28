@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2022 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH hashtable? 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH hashtable? 3scheme 2022-03-29 "" "Scheme Programmer's Manual"
 .SH NAME
-hashtable? \-
+hashtable? \- check if an object is a hashtable
 .
 .SH LIBRARY
 .nf
@@ -15,47 +15,49 @@ hashtable? \-
 .BI "(hashtable? " obj )
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+Returns
+.B #t
+if
+.I obj
+is a hashtable,
+.B #f
+otherwise.
 .
-.SH "IMPLEMENTATION NOTES"
-.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
 .SH "RETURN VALUES"
 .
+Returns a single boolean object.
 .SH EXAMPLES
 .
 .EX
+(hashtable? (make-eq-hashtable))  =>  #t
+(hashtable? '())                  =>  #f
 .EE
 .
-.SH "APPLICATION USAGE"
-.
-.SH RATIONALE
-.
-.SH COMPATIBILITY
-.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+\" .SH COMPATIBILITY
+\" .
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP
 .BR &assertion " (R6RS)"
 The wrong number of arguments was passed or an argument was outside its domain.
-.TP
-R7RS
-The assertions described above are errors.
-Implementations may signal an error, extend the procedure's
-domain of definition to include such arguments,
-or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
+.BR make-hashtable (3scheme)
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
 R6RS,
-R7RS
+SRFI-126
 .
 .SH HISTORY
 .
+This procedure is new in R6RS. The most common hashtable library
+in Scheme before R6RS was SRFI-69.
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages
@@ -64,6 +66,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

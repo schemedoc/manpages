@@ -1,0 +1,146 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH vector-map 3scheme 2022-03-29 "" "Scheme Programmer's Manual"
+.SH NAME
+vector-map \- map a procedure over the elements of vectors
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(vector-map " proc " " vector1 " " vector2 " ...)"
+.
+.SH DESCRIPTION
+.PP
+The vector-map procedure applies
+.I proc
+element-wise to
+the elements of the
+.IR vector s
+and returns a vector of the results, in order.
+.PP
+.I Proc
+is always called in the same dynamic
+environment as
+.B vector-map
+itself.
+.PP
+The order in which
+.I proc
+is applied to the elements of the vectors is unspecified.
+.PP
+If multiple returns occur from
+.BR vector-map ,
+the return values returned by earlier returns are not mutated.
+.
+.TP
+.B R6RS
+The vectors must all have the same length.
+.TP
+.B R7RS
+If more than one vector is given and not all vectors have the same
+length,
+.B vector-map
+terminates when the shortest vector runs out.
+\" .PP
+\" Implementation responsibilities: The implementation must
+\" check the restrictions on proc to the extent performed by
+\" applying it as described. An implementation may check
+\" whether proc is an appropriate argument before applying
+\" it.
+\" .
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value which is a vector object.
+.SH EXAMPLES
+.
+.EX
+(vector-map cadr '#((a b) (d e) (g h)))
+        => #(b e h)
+
+(vector-map (lambda (n) (expt n n))
+            '#(1 2 3 4 5))
+        => #(1 4 27 256 3125)
+
+(vector-map + '#(1 2 3) '#(4 5 6 7))
+        => #(5 7 9)          ; R7RS
+        raises &assertion    ; R6RS
+
+(let ((count 0))
+  (vector-map
+   (lambda (ignored)
+     (set! count (+ count 1))
+     count)
+   '#(a b)))
+
+=>   #(1 2) or #(2 1)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used in place of
+.BR map (3scheme)
+when vectors are used instead of lists.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The R6RS version is consistent with the R6RS version of
+.BR map (3scheme)
+in that it requires all vectors to be the same length, and R7RS is
+likewise consistent with its version of
+.BR map (3scheme)
+in instead using the shortest vector.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+Likewise this is raised if
+.I proc
+does not accept a single value, and may be raised if it does not return
+a single value.
+.TP
+R7RS
+The assertions described above are errors.
+Additionally it is an error if
+.I proc
+does not return a single value.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR map (3scheme),
+.BR string-map (3scheme),
+.BR vector-for-each (3scheme)
+.SH STANDARDS
+R6RS,
+R7RS,
+SRFI-43
+.
+.SH HISTORY
+.
+The first RnRS report to carry this procedure was R6RS. R7RS also
+included it, basing it on the semantics from SRFI-43.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

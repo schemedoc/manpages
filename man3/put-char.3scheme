@@ -1,0 +1,111 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH put-char 3scheme 2022-03-29 "" "Scheme Programmer's Manual"
+.SH NAME
+put-char, write-char \- write a character to a port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS, put-char"
+.BR "(import (rnrs io simple))" "           ;R6RS, write-char"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(put-char " textual-output-port " " char )
+.BI "(write-char " char )
+.BI "(write-char " char " " textual-output-port )
+.
+.SH DESCRIPTION
+Writes the character
+.I char
+to the
+.IR textual-output-port .
+.PP
+If
+.I textual-output-port
+is omitted, it defaults to the value returned by
+.BR current-output-port (3scheme).
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns unspecified values.
+.SH EXAMPLES
+.
+.EX
+(define (write-with-sign n)
+  (write-char (if (negative? n) #\\- #\\+))
+  (write (abs n)))
+
+(write-with-sign 10)
+        ==> "+10"
+
+(write-with-sign -12)
+        ==> "-12"
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+.SH RATIONALE
+.
+The
+.B put-char
+procedure is consistent with the reworked I/O system in R6RS. The
+procedure
+.B write-char
+was kept for the simplified I/O system.
+.SH COMPATIBILITY
+.
+The
+.B write-char
+procedure exists in all RnRS reports since R2RS.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR display (3scheme),
+.BR fputc (3)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The procedure
+.B write-char
+appeared in R2RS. It has no direct predecessor in MacLisp, but
+does exist in Common Lisp.
+The procedure
+.B put-char
+first appeared in R6RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+IEEE Scheme accidentally omitted
+.BR write-char .

@@ -24,6 +24,6 @@ section 3
 section 7
 test -L manpages || ln -s src manpages
 gosh -r 7 -I . -m manpages.html-index src/html-index.sld
-curl --location --fail --silent --show-error -o html/style.css \
-    https://www.staging.scheme.org/style.css
-cat html/style.css html-mandoc.css >html/mandoc.css
+curl --location --fail --silent --show-error -o html/schemeorg.css \
+    https://www.staging.scheme.org/schemeorg.css
+cat html/schemeorg.css html-mandoc.css >html/mandoc.css

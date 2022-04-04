@@ -34,7 +34,7 @@
            (head
             (meta (@ (charset "UTF-8")))
             (title ,title)
-            (link (@ (rel "stylesheet") (href "/style.css")))
+            (link (@ (rel "stylesheet") (href "/schemeorg.css")))
             (meta (@ (name "viewport")
                      (content "width=device-width, initial-scale=1")))
             (meta (@ (name "description")

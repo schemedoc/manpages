@@ -1,0 +1,139 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH transcoded-port 3scheme 2022-04-04 "" "Scheme Programmer's Manual"
+.SH NAME
+transcoded-port \- convert a binary port to a textual port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(transcoded-port " binary-port " " transcoder )
+.
+.SH DESCRIPTION
+Returns a new textual port with the specified
+.IR transcoder .
+.PP
+The new textual port's state is largely the same as that of
+.IR binary-port .
+.
+.IP \(bu 4n
+If
+.I binary-port
+is an input port, the new textual port will be an input port and will
+transcode the bytes that have not yet been read from
+.IR binary-port .
+.
+.IP \(bu 4n
+If
+.I binary-port
+is an output port, the new textual port will be an output port and
+will transcode output characters into bytes that are written to the
+byte sink represented by
+.IR binary-port .
+.
+.PP
+The
+.I binary-port
+is closed in a special way that allows the new textual port to
+continue to use the byte source and/or sink represented by
+.IR binary-port ,
+even though
+.I binary-port
+itself is closed and cannot be used anymore for input and output.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value, which is a textual port.
+.SH EXAMPLES
+.
+.EX
+;; This is like utf8->string
+(let* ((p (open-bytevector-input-port #vu8(194 169)))
+       (tc (make-transcoder (utf-8-codec)))
+       (tp (transcoded-port p tc)))
+  (get-string-all tp))
+        => "©"
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This is used in applications that initially operate on a port in
+binary mode before switching to textual mode, such as programs that
+detect a file's encoding or that write a binary header.
+.
+It is also used when an API provides a binary port, such as in
+networking libraries, but the port is passed to a library designed for
+textual ports.
+.SH RATIONALE
+.
+Transcoding is more efficient when performed on a buffer. If the
+underlying port was still directly usable then it would be in conflict
+with such buffering. Therefore the binary port is closed, while the
+underlying sink and/or source is kept open.
+.
+.SH COMPATIBILITY
+.
+Compatible with R6RS and semi-compatible with Scheme implementations
+that provide SRFI-181.
+.
+The latter attempted to remove textual input/output ports but does not
+say what happens when a binary input/output port is passed to
+.BR transcoded-port .
+It also makes it an error to read from or write to the
+.I binary-port
+before calling
+.BR transcoded-port .
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+May be raised if
+.I binary-port
+is closed.
+.
+.SH "SEE ALSO"
+.
+.BR make-transcoder (3scheme),
+.BR open-input-file (3scheme),
+.BR ports (7scheme)
+.SH STANDARDS
+R6RS,
+SRFI-181
+.
+.SH HISTORY
+.
+The
+.B transcoded-port
+procedure first appeared in R6RS as part of the reworked I/O system.
+It was much later the subject of SRFI-186, which was withdrawn and
+superseded by the somewhat earlier SRFI-181 (an instance of the "twin
+paradox" in special relativity).
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+How to close the port in the "special way" is not obvious and has been
+interpreted differently, but the intention is clearly just to stop the
+sink and/or source from being used through passing
+.I binary-port
+to an I/O procedure.
+.PP
+Ports can be both input and output ports. This gives rise to some
+tricky situations, and gets worse in combination with transcoders.
+Implementors should be careful to get the edge cases right.

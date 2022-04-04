@@ -1,0 +1,123 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string-ref 3scheme 2022-04-04 "" "Scheme Programmer's Manual"
+.SH NAME
+string-ref \- get a character from a string
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string-ref " string " " k )
+.
+.SH DESCRIPTION
+Returns character
+.I k
+of
+.I string
+using zero-origin indexing.
+.TP
+.B R6RS
+Implementors should make
+.B string-ref
+run in constant time.
+.TP
+.B R7RS
+There is no requirement for this procedure to execute in constant
+time.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Chibi Scheme
+Chibi supports O(1) string access if the
+\f[CR]SEXP_USE_STRING_INDEX_TABLE\fR
+feature is enabled.
+.
+.SH "RETURN VALUES"
+.
+Returns a single value which is a character object. It is
+.BR eqv? (3scheme)
+to the one that was last placed in the string at index
+.IR k .
+.SH EXAMPLES
+.
+.EX
+(string-ref "abc" 1)  =>  #\\b
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used to implement algorithms that read strings in
+non-linear access patterns. Programs that read strings at increasing
+indices can use
+.BR open-string-input-port (3scheme)
+instead.
+.
+.SH RATIONALE
+.
+The choice of R7RS to not require execution in constant time opens the
+possibility for implementations to use UTF-8 or UTF-16 as the internal
+string representation.
+.
+.SH COMPATIBILITY
+.
+This procedure is functionally the same in all RnRS revisions after
+R2RS. The differences are in which characters an implementation can
+represent, how errors are signalled, and the time complexity of doing
+the lookup.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+Raised if
+.I k
+is not a valid index of
+.IR string .
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR string-set! (3scheme),
+.BR vector-ref (3scheme),
+.BR open-string-input-port (3scheme)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+First introduced in R2RS. Scheme before R2RS running on MacLISP had a
+similar
+.B getchar
+function, but it used one-origin indexing and worked on atomic symbols
+instead of character strings.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+It is easy to get the index validity check wrong.
+GNU Guile 3.0.8 segfaults on evaluating \f[CR](string-ref "" -1)\fR.

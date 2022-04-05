@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2022 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH square 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH square 3scheme 2022-04-05 "" "Scheme Programmer's Manual"
 .SH NAME
-square \-
+square \- multiply a number by itself
 .
 .SH LIBRARY
 .nf
@@ -11,50 +11,56 @@ square \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(square " ? )
+.BI "(square " z )
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+Returns the square of
+.IR z .
+This is equivalent to
+\f[CR](* \fIz z\fP)\fR.
 .
-.SH "IMPLEMENTATION NOTES"
-.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
 .SH "RETURN VALUES"
 .
+Returns a single value which is a number.
 .SH EXAMPLES
 .
 .EX
+(square 42)  => 1764
+(square 2.0) => 4.0
 .EE
 .
-.SH "APPLICATION USAGE"
-.
-.SH RATIONALE
-.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
 .SH COMPATIBILITY
 .
+Only exists in R7RS. Can be replaced with
+\f[CR](lambda (z) (* z z))\fR.
 .SH ERRORS
-This procedure can raise exceptions with the following condition types:
-.TP
-.BR &assertion " (R6RS)"
-The wrong number of arguments was passed or an argument was outside its domain.
-.TP
-R7RS
-The assertions described above are errors.
+It is an error for this procedure to be passed
+the wrong number of arguments, and it is an error if
+.I z
+is not a complex number object.
 Implementations may signal an error, extend the procedure's
 domain of definition to include such arguments,
 or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
+.BR sqrt (3scheme),
+.BR expt (3scheme),
+.BR * (3scheme)
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
-R6RS,
 R7RS
 .
 .SH HISTORY
 .
+The
+.B square
+procedure first appears in R7RS.
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages
@@ -63,6 +69,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

@@ -15,7 +15,7 @@ put-char, write-char \- write a character to a port
 .
 .SH SYNOPSIS
 .nf
-.BI "(put-char " textual-output-port " " char )
+.BI "(put-char " textual-output-port " " char )  " \fR;R6RS"
 .BI "(write-char " char )
 .BI "(write-char " char " " textual-output-port )
 .

@@ -1,0 +1,109 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string-ci=? 3scheme 2022-04-08 "" "Scheme Programmer's Manual"
+.SH NAME
+string-ci=?, string-ci<?, string-ci>?, string-ci<=?, string-ci>=? \- case-insensitive string comparison
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs unicode))" "             ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme char))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string-ci=? " string1 " " string2 " " string3 " ...)"
+.BI "(string-ci<? " string1 " " string2 " " string3 " ...)"
+.BI "(string-ci>? " string1 " " string2 " " string3 " ...)"
+.BI "(string-ci<=? " string1 " " string2 " " string3 " ...)"
+.BI "(string-ci>=? " string1 " " string2 " " string3 " ...)"
+.
+.SH DESCRIPTION
+These procedures are similar to
+.BR string=? ,
+.BR string<? ,
+etc., but operate on the case-folded versions of the strings.
+Case-folding is done as if by applying
+.BR string-foldcase (3scheme)
+to the strings.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value, a boolean.
+.SH EXAMPLES
+.
+.EX
+(string-ci=? "z" "Z")  =>  #t
+
+;; May return #t in R7RS.
+(string-ci<? "z" "Z")  =>  #f
+
+;; Can return #f in R7RS, and the characters may not be supported.
+(string-ci=? "Straße" "Strasse")  =>  #t
+
+(string-ci=? "Straße" "STRASSE")  =>  #t
+
+(string-ci=? "XAOΣ" "χαoσ")  =>  #t
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The basic idea of these procedures is the same in all RnRS revisions.
+However, there are some differences.
+.PP
+R5RS and earlier reports only provided two-argument variants.
+.PP
+R6RS implementations are mainly the same, except that they may behave
+differently depending on which version of the Unicode standard they
+support.
+.PP
+R7RS implementations may lack support for some characters. The order
+is also implementation-defined, with lexicographical ordering only
+being one option.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR string=? (3scheme),
+.BR string-foldcase (3scheme)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R2RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

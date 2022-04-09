@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH string-hash 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-string-hash \-
+string-hash, string-ci-hash \-
 .
 .SH LIBRARY
 .nf
@@ -13,6 +13,7 @@ string-hash \-
 .SH SYNOPSIS
 .nf
 .BI "(string-hash " string )
+.BI "(string-ci-hash " string )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

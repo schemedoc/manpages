@@ -67,3 +67,6 @@ More information can be found at
 .
 .SH BUGS
 .
+There is no
+.B record-constructor-descriptor?
+predicate in R6RS.

@@ -1,7 +1,7 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
 .\" Copyright © 2020
 .\" SPDX-License-Identifier: MIT
-.TH syntax-error 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH syntax-error 7scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
 syntax-error \-
 .
@@ -11,7 +11,7 @@ syntax-error \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(syntax-error " ? )
+.BI "(syntax-error " message " " args " ...)"
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
@@ -47,10 +47,6 @@ or fail catastrophically.
 .SH "SEE ALSO"
 .
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
-R6RS,
 R7RS
 .
 .SH HISTORY

@@ -12,7 +12,8 @@ syntax-violation \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(syntax-violation " ? )
+.BI "(syntax-violation " who " " message " " form )
+.BI "(syntax-violation " who " " message " " form " " subform )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

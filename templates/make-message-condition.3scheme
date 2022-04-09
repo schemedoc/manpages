@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH make-message-condition 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-make-message-condition \-
+make-message-condition, message-condition?, condition-message \- message conditions
 .
 .SH LIBRARY
 .nf
@@ -12,7 +12,9 @@ make-message-condition \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(make-message-condition " obj )
+.BI "(make-message-condition " message )
+.BI "(message-condition? " obj )
+.BI "(condition-message " condition )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
@@ -38,21 +40,11 @@ This procedure can raise exceptions with the following condition types:
 .TP
 .BR &assertion " (R6RS)"
 The wrong number of arguments was passed or an argument was outside its domain.
-.TP
-R7RS
-The assertions described above are errors.
-Implementations may signal an error, extend the procedure's
-domain of definition to include such arguments,
-or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
-R6RS,
-R7RS
+R6RS
 .
 .SH HISTORY
 .

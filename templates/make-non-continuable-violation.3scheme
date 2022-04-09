@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH make-non-continuable-violation 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-make-non-continuable-violation \-
+make-non-continuable-violation, non-continuable-violation? \- non-continuable violation conditions
 .
 .SH LIBRARY
 .nf
@@ -13,6 +13,7 @@ make-non-continuable-violation \-
 .SH SYNOPSIS
 .nf
 .BI (make-non-continuable-violation)
+.BI "(non-continuable-violation? " obj )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

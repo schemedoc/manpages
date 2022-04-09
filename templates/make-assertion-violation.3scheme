@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH make-assertion-violation 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-make-assertion-violation \-
+make-assertion-violation, assertion-violation? \-
 .
 .SH LIBRARY
 .nf
@@ -13,6 +13,7 @@ make-assertion-violation \-
 .SH SYNOPSIS
 .nf
 .BI (make-assertion-violation)
+.BI "(assertion-violation? " obj )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

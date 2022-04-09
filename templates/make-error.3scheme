@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH make-error 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-make-error \-
+make-error, error? \- error conditions
 .
 .SH LIBRARY
 .nf
@@ -13,6 +13,7 @@ make-error \-
 .SH SYNOPSIS
 .nf
 .BI (make-error)
+.BI "(error? " obj )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
@@ -48,11 +49,7 @@ or fail catastrophically.
 .SH "SEE ALSO"
 .
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
-R6RS,
-R7RS
+R6RS
 .
 .SH HISTORY
 .

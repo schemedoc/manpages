@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH utf-8-codec 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-utf-8-codec \-
+utf-8-codec, utf-16-codec, latin-1-codec \-
 .
 .SH LIBRARY
 .nf
@@ -13,6 +13,8 @@ utf-8-codec \-
 .SH SYNOPSIS
 .nf
 .BI (utf-8-codec)
+.BI (utf-16-codec)
+.BI (latin-1-codec)
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

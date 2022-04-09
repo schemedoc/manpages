@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH make-no-infinities-violation 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-make-no-infinities-violation \-
+make-no-infinities-violation, no-infinities-violation? \-
 .
 .SH LIBRARY
 .nf
@@ -13,6 +13,7 @@ make-no-infinities-violation \-
 .SH SYNOPSIS
 .nf
 .BI (make-no-infinities-violation)
+.BI "(no-infinities-violation? " obj )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
@@ -38,21 +39,11 @@ This procedure can raise exceptions with the following condition types:
 .TP
 .BR &assertion " (R6RS)"
 The wrong number of arguments was passed or an argument was outside its domain.
-.TP
-R7RS
-The assertions described above are errors.
-Implementations may signal an error, extend the procedure's
-domain of definition to include such arguments,
-or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
-R6RS,
-R7RS
+R6RS
 .
 .SH HISTORY
 .

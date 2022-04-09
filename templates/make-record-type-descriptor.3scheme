@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH make-record-type-descriptor 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-make-record-type-descriptor \-
+make-record-type-descriptor, record-type-descriptor? \-
 .
 .SH LIBRARY
 .nf
@@ -12,7 +12,8 @@ make-record-type-descriptor \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(make-record-type-descriptor " ? )
+.BI "(make-record-type-descriptor " name " " parent " " uid " " sealed? " " opaque? " " fields )
+.BI "(record-type-descriptor? " obj )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

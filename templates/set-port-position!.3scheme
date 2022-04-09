@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH set-port-position! 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-set-port-position! \-
+set-port-position!, port-has-set-port-position!? \-
 .
 .SH LIBRARY
 .nf
@@ -13,6 +13,7 @@ set-port-position! \-
 .SH SYNOPSIS
 .nf
 .BI "(set-port-position! " ? )
+.BI "(port-has-set-port-position!? " port )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

@@ -47,10 +47,6 @@ or fail catastrophically.
 .SH "SEE ALSO"
 .
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
-R6RS,
 R7RS
 .
 .SH HISTORY
@@ -66,3 +62,6 @@ More information can be found at
 .
 .SH BUGS
 .
+R7RS defines another
+.B make-promise
+in an example, but that is not the same procedure.

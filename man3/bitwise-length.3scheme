@@ -100,8 +100,9 @@ The wrong number of arguments was passed or an argument was outside its domain.
 .SH STANDARDS
 R6RS
 .
-\" .SH HISTORY
-\" .
+.SH HISTORY
+.
+MacLisp had an equivalent procedure called \fBhaulong\fP.
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages

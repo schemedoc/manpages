@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH write 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-write \-
+write, write-shared, write-simple \-
 .
 .SH LIBRARY
 .nf
@@ -16,6 +16,12 @@ write \-
 .nf
 .BI "(write " obj )
 .BI "(write " obj " " textual-output-port )
+
+; R7RS only:
+.BI "(write-shared " obj )
+.BI "(write-shared " obj " " textual-output-port )
+.BI "(write-simple " obj )
+.BI "(write-simple " obj " " textual-output-port )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

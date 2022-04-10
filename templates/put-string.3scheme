@@ -3,16 +3,26 @@
 .\" SPDX-License-Identifier: MIT
 .TH put-string 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-put-string \-
+put-string, write-string \- write a string to a textual output port
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(put-string " textual-port " " string " " number " " number )
+; R6RS only:
+.BI "(put-string " textual-output-port " " string )
+.BI "(put-string " textual-output-port " " string " " start )
+.BI "(put-string " textual-output-port " " string " " start " " count )
+
+; R7RS only:
+.BI "(write-string " string )
+.BI "(write-string " string " " textual-output-port )
+.BI "(write-string " string " " textual-output-port " " start )
+.BI "(write-string " string " " textual-output-port " " start " " count )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

@@ -217,13 +217,9 @@ Somewhat unusually, the
 .I endianness-mandatory?
 argument can be any object.
 .TP
-R7RS
-The assertions described above are errors.
-Implementations may signal an error, extend the procedure's
-domain of definition to include such arguments,
-or fail catastrophically.
-.IP
-In particular, it is an error to pass
+Unsupported characters (R7RS)
+.
+It is an error to pass
 .B utf8->string
 a character in UTF-8 encoded form which the implementation does not
 support. 7-bit ASCII (except \fB#\\null\fR) must be supported. Any
@@ -232,6 +228,13 @@ other character is optional and potentially an error. You can use the
 feature identifier in
 .BR cond-expand (7scheme)
 to check if all of Unicode 6.0 is supported.
+.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
 .
 .SH "SEE ALSO"
 .

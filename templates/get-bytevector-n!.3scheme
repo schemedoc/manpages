@@ -3,16 +3,24 @@
 .\" SPDX-License-Identifier: MIT
 .TH get-bytevector-n! 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-get-bytevector-n! \-
+get-bytevector-n!, read-bytevector! \- get bytes from a port into a bytevector
 .
 .SH LIBRARY
 .nf
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(get-bytevector-n! " binary-port " " bytevector " " number " " number )
+;; R6RS
+.BI "(get-bytevector-n! " binary-input-port " " bytevector " " start " " count )
+
+;; R7RS
+.BI "(read-bytevector! " bytevector )
+.BI "(read-bytevector! " bytevector " " binary-input-port )
+.BI "(read-bytevector! " bytevector " " binary-input-port " " start )
+.BI "(read-bytevector! " bytevector " " binary-input-port " " start " " end )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

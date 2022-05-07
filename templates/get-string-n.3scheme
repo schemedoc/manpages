@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH get-string-n 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-get-string-n \-
+get-string-n, read-string \-
 .
 .SH LIBRARY
 .nf
@@ -12,7 +12,12 @@ get-string-n \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(get-string-n " textual-port " " number )
+;; R6RS
+.BI "(get-string-n " textual-port " " count )
+
+;; R7RS
+.BI "(read-string " count )
+.BI "(read-string " count " " textual-input-port )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

@@ -3,16 +3,25 @@
 .\" SPDX-License-Identifier: MIT
 .TH lookahead-char 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-lookahead-char \-
+lookahead-char, peek-char \-
 .
 .SH LIBRARY
 .nf
+;; lookahead-char
 .BR "(import (rnrs))" "                     ;R6RS"
 .BR "(import (rnrs io ports))" "            ;R6RS"
+
+;; peek-char
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io simple))" "           ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
 .
 .SH SYNOPSIS
 .nf
-.BI "(lookahead-char " ? )
+.BI "(lookahead-char " textual-input-port ) " \fR;R6RS\fP"
+.BI (peek-char)
+.BI "(peek-char " textual-input-port )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

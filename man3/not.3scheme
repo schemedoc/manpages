@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2022 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH not 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH not 3scheme 2022-05-07 "" "Scheme Programmer's Manual"
 .SH NAME
-not \-
+not \- boolean negation
 .
 .SH LIBRARY
 .nf
@@ -17,29 +17,45 @@ not \-
 .BI "(not " obj )
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
-.
-.SH "IMPLEMENTATION NOTES"
-.
+Returns
+.B #t
+if
+.I obj
+is false, and returns
+.I #f
+otherwise.
+\" .
+\" .SH "IMPLEMENTATION NOTES"
+\" .
 .SH "RETURN VALUES"
+.
+Returns a single value; a boolean.
 .
 .SH EXAMPLES
 .
 .EX
+(not #t)         =>  #f
+(not 3)          =>  #f
+(not (list 3))   =>  #f
+(not #f)         =>  #t
+(not '())        =>  #f
+(not (list))     =>  #f
+(not 'nil)       =>  #f
 .EE
 .
-.SH "APPLICATION USAGE"
-.
-.SH RATIONALE
-.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
 .SH COMPATIBILITY
+.
+This procedure works the same in all Schemes.
 .
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP
 .BR &assertion " (R6RS)"
-The wrong number of arguments was passed or an argument was outside its domain.
+The wrong number of arguments was passed.
 .TP
 R7RS
 The assertions described above are errors.
@@ -48,6 +64,9 @@ domain of definition to include such arguments,
 or fail catastrophically.
 .
 .SH "SEE ALSO"
+.
+.BR if (7scheme),
+.BR boolean=? (3scheme)
 .
 .SH STANDARDS
 R4RS,
@@ -58,6 +77,11 @@ R7RS
 .
 .SH HISTORY
 .
+The
+.B not
+function has been in Scheme since the beginning, even when it ran on
+MacLisp, and it was also present in LISP 1.5.
+.
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages
@@ -66,6 +90,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,130 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH remq 3scheme 2022-05-07 "" "Scheme Programmer's Manual"
+.SH NAME
+remq, remv, remove, remp \- remove elements from a list
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs lists))" "               ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(remq " obj " " list )
+.BI "(remv " obj " " list )
+.BI "(remove " obj " " list )
+.BI "(remp " proc " " list )
+.
+.SH DESCRIPTION
+Each of these procedures returns a list of the elements of
+.I list
+that do not satisfy a given condition.
+.PP
+The
+.B remp
+procedure applies
+.I proc
+to each element of list and returns a
+list of the elements of list for which
+.I proc
+returned
+.BR #f .
+The other procedures return a list of the elements that are not
+.IR obj .
+.PP
+The
+.B remq
+procedure uses
+.BR eq? (3scheme)
+to compare
+.I obj
+with the elements of list,
+while
+.B remv
+uses
+.BR eqv? (3scheme)
+and
+.B remove
+uses
+.BR equal? (3scheme).
+.PP
+The elements of the result list are in the same order as they appear
+in the input list. If multiple returns occur, the return values
+returned by earlier returns are not mutated.
+.
+.PP
+.I Proc
+should accept one argument and return a single value.
+.
+.I Proc
+should not mutate
+.IR list .
+.
+.I Proc
+is always called in the same dynamic environment as this procedure
+itself.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+The implementation must check the restrictions on
+.I proc
+to the extent performed by applying it as described above. An
+implementation may check whether
+.I proc
+is an appropriate argument before applying it.
+.
+.SH "RETURN VALUES"
+.
+These procedures return a single value; a list.
+.SH EXAMPLES
+.
+.EX
+(remp even? '(3 1 4 1 5 9 2 6 5))
+        =>  (3 1 1 5 9 5)
+
+(remove 1 '(3 1 4 1 5 9 2 6 5))
+        =>  (3 4 5 9 2 6 5)
+
+(remv 1 '(3 1 4 1 5 9 2 6 5))
+        =>  (3 4 5 9 2 6 5)
+
+(remq 'foo '(bar foo baz))
+        =>  (bar baz)
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures are unique to R6RS.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.
+.SH "SEE ALSO"
+.
+.BR filter (3scheme)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

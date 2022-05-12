@@ -1,0 +1,85 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string-hash 3scheme 2022-05-12 "" "Scheme Programmer's Manual"
+.SH NAME
+string-hash, string-ci-hash \- string hash functions
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs hashtables))" "          ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string-hash " string )
+.BI "(string-ci-hash " string )
+.
+.SH DESCRIPTION
+Returns an integer hash value for string, based on its current
+contents. It is used with
+.BR make-hashtable (3scheme).
+.
+.TP
+.B string-hash
+This hash function is suitable for use with
+.BR string=? (3scheme) as an equivalence
+function.
+.
+.TP
+.B string-ci-hash
+This hash function ignores case. It is suitable for use with
+.BR string-ci=? (3scheme)
+as an equivalence function.
+.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.
+.SH "RETURN VALUES"
+.
+Returns a single value; an integer.
+.SH EXAMPLES
+.
+.EX
+(= (string-hash "Quux") (string-hash "Quux"))     =>  #t
+(= (string-ci-hash "quux") (string-hash "QUUX"))  =>  #t
+(= (string-hash "foo") (string-hash "bar"))       =>  #t or #f
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used as an argument to
+.BR make-hashtable (3scheme).
+\" .SH RATIONALE
+\" .
+\" .SH COMPATIBILITY
+\" .
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.
+.SH "SEE ALSO"
+.
+.BR make-hashtable (3scheme)
+.SH STANDARDS
+R6RS,
+SRFI-69
+.
+.SH HISTORY
+.
+The first Scheme report to include this procedure was R6RS for its new
+hashtable library. There is a similar procedure in SRFI-69.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

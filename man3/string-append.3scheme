@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2022 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH string-append 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH string-append 3scheme 2022-05-12 "" "Scheme Programmer's Manual"
 .SH NAME
-string-append \-
+string-append \- append strings
 .
 .SH LIBRARY
 .nf
@@ -17,29 +17,41 @@ string-append \-
 .BI "(string-append " string " ...)"
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+Returns a newly allocated string whose characters form the
+concatenation of the given strings.
 .
 .SH "IMPLEMENTATION NOTES"
 .
+Some implementations have a single empty string object; see
+.BR make-string (3scheme).
 .SH "RETURN VALUES"
 .
+Returns a single value; a string.
 .SH EXAMPLES
 .
 .EX
+(string-append "Hello," " " "world!")  =>  "Hello, world!"
+(string-append)                        =>  ""
 .EE
 .
 .SH "APPLICATION USAGE"
 .
-.SH RATIONALE
-.
+Applications should not use this in a loop to accumulate output.
+Use
+.BR open-string-output-port (3scheme)
+instead.
+\" .SH RATIONALE
+\" .
 .SH COMPATIBILITY
 .
+This procedure works the same in all RnRS revisions. The only
+difference between implementations is whether the empty string is
+newly allocated or not (see above).
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP
 .BR &assertion " (R6RS)"
-The wrong number of arguments was passed or an argument was outside its domain.
+An argument was outside its domain.
 .TP
 R7RS
 The assertions described above are errors.
@@ -49,6 +61,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
+.BR append (3scheme),
+.BR open-string-output-port (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,
@@ -58,6 +72,8 @@ R7RS
 .
 .SH HISTORY
 .
+This procedure first appeared in R2RS.
+.
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages
@@ -66,6 +82,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

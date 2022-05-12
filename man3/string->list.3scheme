@@ -1,0 +1,122 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string->list 3scheme 2022-05-12 "" "Scheme Programmer's Manual"
+.SH NAME
+string->list, list->string \- convert between strings and lists
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string->list " string )
+.BI "(string->list " string " " start ) "         \fR;R7RS\fP"
+.BI "(string->list " string " " start " " end ) "     \fR;R7RS\fP"
+.BI "(list->string " list )
+.
+.SH DESCRIPTION
+The
+.B string->list
+procedure returns a newly allocated list of the characters that make
+up the given string.
+.PP
+The
+.B list->string
+procedure returns a newly allocated string formed from the characters
+in list.
+.PP
+These procedures are inverses so far as
+.BR equal? (3string)
+is concerned, and preserve the order of the characters.
+.TP
+.B R7RS
+The
+.B string->list
+procedure returns a newly allocated list
+of the characters of string between
+.I start
+(inclusive)
+and
+.I end
+(exclusive).
+.
+.SH "IMPLEMENTATION NOTES"
+.
+Some implementations have a single empty string object; see
+.BR make-string (3scheme).
+.SH "RETURN VALUES"
+.
+Both of these procedures return a single value. The
+.B string->list
+procedure returns a list (a pair or the empty list); the
+.B list->string
+procedure returns a string object.
+.SH EXAMPLES
+.
+.EX
+(string->list "Quux")  =>  (#\\Q #\\u #\\u #\\x)
+
+(list->string '(#\\f #\\o #\\o))  =>  "foo"
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures can be seen in some highly functional programming styles.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The
+.I start
+and
+.I end
+arguments are unique to R7RS. The only other difference between
+implementations is whether the empty string is newly allocated or not
+(see above).
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I list
+must be a list of characters and
+.I string
+must be a string.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR list->vector (3scheme),
+.BR string-append (3scheme)
+.SH STANDARDS
+R4RS,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R2RS. They are missing from IEEE
+Scheme.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

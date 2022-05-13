@@ -1,0 +1,158 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string-upcase 3scheme 2022-05-13 "" "Scheme Programmer's Manual"
+.SH NAME
+string-upcase, string-downcase, string-titlecase, string-foldcase \- string case conversion
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs unicode))" "             ;R6RS"
+.BR "(import (scheme char))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string-upcase " string )
+.BI "(string-downcase " string )
+.BI "(string-titlecase " string ) "\fR           ;R6RS"
+.BI "(string-foldcase " string )
+.
+.SH DESCRIPTION
+Returns a case-converted version of
+.IR string .
+.
+.TP
+.B string-upcase
+Converts a string to upper case.
+.TP
+.B string-downcase
+Converts a string to lower case.
+.TP
+.B string-foldcase
+Converts the string to its case-folded counterpart, using the full
+case-folding mapping, but without the special mappings for Turkic
+languages.
+.TP
+.B string-titlecase
+Converts the first cased character of each word, and downcases all
+other cased characters.
+.PP
+These procedures are defined in terms of Unicode's locale-independent
+case mappings from Unicode scalar-value sequences to scalar-value
+sequences. In particular, the length of the result string can be
+different from the length of the input string.
+.PP
+Since these procedures are locale-independent, they may not be
+appropriate for some locales.
+.TP
+.B R7RS
+The Unicode Standard prescribes special treatment of the Greek letter
+Σ, whose normal lower-case form is σ but which becomes ς at the end of
+a word. See Unicode Standard Annex #44 for details.
+However, implementations of
+.B string-downcase
+are not required to provide this behavior, and may choose to change Σ
+to σ in all cases.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+The case mappings needed for implementing these procedures can be
+extracted from UnicodeData.txt, SpecialCasing.txt,
+WordBreakProperty.txt, and CaseFolding.txt from the Unicode
+Consortium.
+.PP
+Word breaking, as needed for the correct casing of Σ and for
+string-titlecase, is specified in Unicode Standard Annex #29.
+.
+.SH "RETURN VALUES"
+.
+These procedures return a single value; a string.
+.PP
+When the specified
+result is equal in the sense of
+.BR string=? (3scheme)
+to the argument, these procedures may return the argument instead of a
+newly allocated string.
+.
+.SH EXAMPLES
+.
+.EX
+(string-upcase "Hi")               =>  "HI"
+(string-downcase "Hi")             =>  "hi"
+(string-foldcase "Hi")             =>  "hi"
+(string-upcase "Stra\[ss]e")           =>  "STRASSE"
+(string-downcase "Stra\[ss]e")         =>  "stra\[ss]e"
+(string-foldcase "Stra\[ss]e")         =>  "strasse"
+(string-downcase "STRASSE")        =>  "strasse"
+(string-downcase "Σ")              =>  "σ"
+
+;; Chi Alpha Omicron Sigma.
+;; See the note on R7RS in the description.
+(string-upcase "XAOΣ")             =>  "XAOΣ"
+(string-downcase "XAOΣ")           =>  "χαoς"
+(string-downcase "XAOΣΣ")          =>  "χαoσς"
+(string-downcase "XAOΣ Σ")         =>  "χαoς σ"
+(string-foldcase "XAOΣΣ")          =>  "χαoσσ"
+(string-upcase "χαoς")             =>  "XAOΣ"
+(string-upcase "χαoσ")             =>  "XAOΣ"
+
+(string-titlecase "kNock KNoCK")   =>  "Knock Knock"
+(string-titlecase "who's there?")  =>  "Who's There?"
+(string-titlecase "r6rs")          =>  "R6rs"
+(string-titlecase "R6RS")          =>  "R6rs"
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+In R6RS implementations, case conversion differs according to which
+Unicode version is supported. R7RS does not have
+.BR string-titlecase .
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR char-upper-case? (3scheme)
+.PP
+.UR https://www.unicode.org/reports/tr44/
+Unicode Standard Annex #44: Unicode Character Database.
+.UE
+.PP
+.UR https://www.unicode.org/reports/tr29/
+Unicode Standard Annex #29: Unicode Text Segmentation.
+.UE
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The first Scheme report with these procedures is R6RS. They were later
+also added in R7RS, except for
+.BR string-titlecase .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

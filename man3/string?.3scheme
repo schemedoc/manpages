@@ -52,7 +52,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR make-string (3)
+.BR make-string (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

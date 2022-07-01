@@ -35,7 +35,7 @@ Returns a single bytevector object.
 .SH COMPATIBILITY
 .
 This procedure is absent from R6RS. Use
-.BR u8-list>bytevector (3)
+.BR u8-list>bytevector (3scheme)
 instead.
 .SH ERRORS
 It is an error if one of the arguments is not an exact integer
@@ -46,7 +46,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR u8-list->bytevector (3)
+.BR u8-list->bytevector (3scheme)
 .SH STANDARDS
 R7RS
 .

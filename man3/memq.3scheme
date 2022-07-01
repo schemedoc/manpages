@@ -174,10 +174,10 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR eq? (3),
-.BR assq (3),
-.BR find (3),
-.BR exists (3)
+.BR eq? (3scheme),
+.BR assq (3scheme),
+.BR find (3scheme),
+.BR exists (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,
@@ -212,7 +212,7 @@ Programs should not use the more discriminating
 and
 .B memv
 when the object is not comparable with
-.BR eq? (3)
+.BR eq? (3scheme)
 and
-.BR eqv? (3),
+.BR eqv? (3scheme),
 respectively.

@@ -107,8 +107,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR char-upper-case? (3),
-.BR char-lower-case? (3)
+.BR char-upper-case? (3scheme),
+.BR char-lower-case? (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

@@ -154,7 +154,7 @@ Returns the values given as arguments.
 .
 This procedure is often combined with syntax to receive the values,
 such as
-.BR let-values (3).
+.BR let-values (3scheme).
 Another option is
 .B receive
 from SRFI-8, which only binds a single set of values.
@@ -207,9 +207,9 @@ is unspecified and implementation-dependent.
 .
 .SH "SEE ALSO"
 .
-.BR apply (3),
-.BR let-values (3),
-.BR call-with-values (3)
+.BR apply (3scheme),
+.BR let-values (3scheme),
+.BR call-with-values (3scheme)
 .
 .SH STANDARDS
 R5RS,

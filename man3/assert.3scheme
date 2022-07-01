@@ -74,7 +74,7 @@ The wrong number of arguments was passed or an argument was outside its domain.
 More or fewer than one expression was passed.
 .
 .SH "SEE ALSO"
-.BR assertion-violation (3)
+.BR assertion-violation (3scheme)
 .
 .SH STANDARDS
 R6RS

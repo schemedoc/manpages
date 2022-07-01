@@ -61,13 +61,13 @@ The
 procedure is used in programs that work with lists or other
 structures that consist of pairs.
 In many cases it can be better to process a list with procedures like
-.BR map (3),
-.BR filter (3),
-.BR fold-left (3),
+.BR map (3scheme),
+.BR filter (3scheme),
+.BR fold-left (3scheme),
 or one of the procedures from SRFI-1.
 .PP
 Larger structures can be created with
-.BR quasiquote (3),
+.BR quasiquote (3scheme),
 which lets the code resemble the structure it creates.
 .SH RATIONALE
 .
@@ -91,9 +91,9 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR set-car! (3),
-.BR set-cdr! (3),
-.BR pairs (7)
+.BR set-car! (3scheme),
+.BR set-cdr! (3scheme),
+.BR pairs (7scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

@@ -63,8 +63,8 @@ This procedure never raises an exception.
 .
 .SH "SEE ALSO"
 .
-.BR greatest-fixnum (3),
-.BR least-fixnum (3)
+.BR greatest-fixnum (3scheme),
+.BR least-fixnum (3scheme)
 .SH STANDARDS
 R6RS
 .

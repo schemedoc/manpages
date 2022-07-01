@@ -129,10 +129,10 @@ is zero or \fIk+size-1\fP is not a valid index of
 .
 .SH "SEE ALSO"
 .
-.BR bytevector-u8-ref (3),
-.BR bytevector-u8-set! (3),
-.BR bytevector-u16-ref (3),
-.BR bytevector-u16-set! (3)
+.BR bytevector-u8-ref (3scheme),
+.BR bytevector-u8-set! (3scheme),
+.BR bytevector-u16-ref (3scheme),
+.BR bytevector-u16-set! (3scheme)
 .SH STANDARDS
 R6RS
 .

@@ -87,8 +87,8 @@ input or output port, respectively.
 .
 .SH "SEE ALSO"
 .
-.BR close-port (3),
-.BR call-with-port (3)
+.BR close-port (3scheme),
+.BR call-with-port (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,
@@ -110,6 +110,6 @@ More information can be found at
 .SH BUGS
 .
 It is often better to use
-.BR call-with-port (3)
+.BR call-with-port (3scheme)
 or one of the related procedures. They make it easier to ensure that a
 port is closed when an exception is raised.

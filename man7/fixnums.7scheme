@@ -44,7 +44,7 @@ R6RS
 .
 .SH SEE ALSO
 .
-.BR fixnum-width (3)
+.BR fixnum-width (3scheme)
 .
 .SH AUTHORS
 This page is part of the

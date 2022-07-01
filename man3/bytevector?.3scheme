@@ -53,7 +53,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR make-bytevector (3)
+.BR make-bytevector (3scheme)
 .SH STANDARDS
 R6RS,
 R7RS

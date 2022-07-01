@@ -94,7 +94,7 @@ The wrong number of arguments was passed or an argument was outside its domain.
 .
 .SH "SEE ALSO"
 .
-.BR char-alphabetic? (3)
+.BR char-alphabetic? (3scheme)
 .SH STANDARDS
 R6RS
 .

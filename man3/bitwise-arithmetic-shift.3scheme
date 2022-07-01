@@ -112,8 +112,8 @@ representable as a fixnum.
 .
 .SH "SEE ALSO"
 .
-.BR fixnum-width (3),
-.BR expt (3)
+.BR fixnum-width (3scheme),
+.BR expt (3scheme)
 .SH STANDARDS
 R6RS
 .

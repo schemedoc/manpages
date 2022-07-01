@@ -258,7 +258,7 @@ As for R7RS, except unpredictable behavior is promised.
 .
 .SH "SEE ALSO"
 .
-.BR quote (3)
+.BR quote (3scheme)
 .
 .SH STANDARDS
 R4RS,

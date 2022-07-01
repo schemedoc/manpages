@@ -95,8 +95,8 @@ The wrong number of arguments was passed or an argument was outside its domain.
 .
 .SH "SEE ALSO"
 .
-.BR bitwise-first-bit-set (3),
-.BR log (3)
+.BR bitwise-first-bit-set (3scheme),
+.BR log (3scheme)
 .SH STANDARDS
 R6RS
 .

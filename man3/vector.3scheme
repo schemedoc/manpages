@@ -58,7 +58,7 @@ Applications should avoid calling this procedure with an unknown
 number of arguments. The arguments are passed on the stack, which
 may not be able to handle a very large number of arguments.
 A better way to convert a list to a vector is with the
-.BR list->vector (3)
+.BR list->vector (3scheme)
 procedure.
 \" .SH RATIONALE
 \" .
@@ -73,9 +73,9 @@ out-of-memory condition which generally cannot be handled.
 .
 .SH "SEE ALSO"
 .
-.BR list->vector (3),
-.BR make-vector (3),
-.BR list (3)
+.BR list->vector (3scheme),
+.BR make-vector (3scheme),
+.BR list (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

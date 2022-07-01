@@ -46,7 +46,7 @@ Returns a single boolean object.
 .SH "APPLICATION USAGE"
 .
 This procedure is used on the result of I/O read operations, such as
-.BR read (3),
+.BR read (3scheme),
 to see if the port has an end-of-file condition. It also appears in
 the context of generators (e.g. SRFI 158).
 \" .SH RATIONALE
@@ -93,7 +93,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR eof-object (3)
+.BR eof-object (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

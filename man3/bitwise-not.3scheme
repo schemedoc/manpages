@@ -34,7 +34,7 @@ GNU Guile
 .
 In GNU Guile this procedure is faster than the equivalent fixnum-only
 procedure
-.BR fxnot (3).
+.BR fxnot (3scheme).
 .
 .SH "RETURN VALUES"
 Returns the exact integer object whose two's complement representation
@@ -86,7 +86,7 @@ The result is not representable as a fixnum. Raised for
 \fB(fxnot (least-fixnum))\fP.
 .
 .SH "SEE ALSO"
-.BR fxnot (3)
+.BR fxnot (3scheme)
 .
 .SH STANDARDS
 R6RS,

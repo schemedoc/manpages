@@ -52,7 +52,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR make-vector (3)
+.BR make-vector (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

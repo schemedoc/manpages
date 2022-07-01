@@ -39,11 +39,11 @@ Returns a single value which is the length of the string.
 The \fBstring-length\fP procedure often appears in code that decodes
 or encodes data in some protocol or file format or that formats or
 parses strings. Sometimes an alternative is to use higher-order
-procedures (\fBstring-for-each\fP(3),
-.BR string-map (3))
+procedures (\fBstring-for-each\fP(3scheme),
+.BR string-map (3scheme))
 or string ports
-(\fBopen-input-string\fP(3),
-.BR open-output-string (3)).
+(\fBopen-input-string\fP(3scheme),
+.BR open-output-string (3scheme)).
 \" .SH RATIONALE
 \" .
 .SH COMPATIBILITY
@@ -64,11 +64,11 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR make-string (3),
-.BR string-ref (3),
-.BR string-for-each (3),
-.BR string-map (3),
-.BR open-input-string (3).
+.BR make-string (3scheme),
+.BR string-ref (3scheme),
+.BR string-for-each (3scheme),
+.BR string-map (3scheme),
+.BR open-input-string (3scheme).
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

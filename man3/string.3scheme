@@ -22,7 +22,7 @@ Returns a newly allocated string composed of the arguments.
 .SH "IMPLEMENTATION NOTES"
 .
 Some implementations have a single empty string object. See
-.BR make-string (3).
+.BR make-string (3scheme).
 .SH "RETURN VALUES"
 .
 Returns a single value; a string.

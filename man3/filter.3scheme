@@ -82,8 +82,8 @@ improper.
 .
 .SH "SEE ALSO"
 .
-.BR map (3),
-.BR remp (3)
+.BR map (3scheme),
+.BR remp (3scheme)
 .SH STANDARDS
 R6RS
 .

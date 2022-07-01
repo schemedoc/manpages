@@ -32,7 +32,7 @@ This procedure is expected to run in time linear to the number of
 elements in the list. Implementations can be expected to use an
 algorithm like Floyd's cycle-finding algorithm ("tortoise and hare"),
 which handles the case of circular lists created with
-.BR set-cdr! (3).
+.BR set-cdr! (3scheme).
 .SH "RETURN VALUES"
 .
 Returns a boolean object.

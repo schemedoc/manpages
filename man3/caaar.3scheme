@@ -43,7 +43,7 @@ caaar, ..., cddddr \- additional compositions of car and cdr
 .SH DESCRIPTION
 These twenty-four procedures are further compositions of \fBcar\fP and
 \fBcdr\fP on the same principles as
-.BR caar (3).
+.BR caar (3scheme).
 For example, \fBcaddr\fP could be
 defined by
 .PP
@@ -90,7 +90,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR caar (3)
+.BR caar (3scheme)
 .
 .SH STANDARDS
 R4RS,

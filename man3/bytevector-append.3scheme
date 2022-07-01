@@ -51,8 +51,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR make-bytevector (3),
-.BR append (3)
+.BR make-bytevector (3scheme),
+.BR append (3scheme)
 .SH STANDARDS
 R7RS
 \" .

@@ -94,7 +94,7 @@ or fail catastrophically.
 .SH "SEE ALSO"
 .
 .BR emergency-exit (3scheme),
-.BR exit (3),
+.BR exit (3scheme),
 .BR dynamic-wind (3scheme)
 .SH STANDARDS
 R6RS,

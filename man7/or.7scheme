@@ -66,7 +66,7 @@ something else. It is used when several expressions should be tested
 but evaluation should not continue past the first true value.
 .PP
 When expressions are more complicated it is better to use
-.BR cond (3).
+.BR cond (3scheme).
 .SH COMPATIBILITY
 .
 The \fBor\fP syntax is widely compatible across Lisp systems.
@@ -86,9 +86,9 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR and (3),
-.BR cond (3),
-.BR if (3)
+.BR and (3scheme),
+.BR cond (3scheme),
+.BR if (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

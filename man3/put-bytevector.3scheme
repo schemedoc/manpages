@@ -159,7 +159,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR put-u8 (3)
+.BR put-u8 (3scheme)
 .SH STANDARDS
 R6RS,
 R7RS

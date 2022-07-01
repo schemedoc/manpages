@@ -20,7 +20,7 @@ fixnum range, \fB#f\fP otherwise.
 .SH "IMPLEMENTATION NOTES"
 .
 The fixnum range is implementation-dependent, see
-.BR fixnum-width (3).
+.BR fixnum-width (3scheme).
 .SH "RETURN VALUES"
 .
 Returns a single boolean object as per the description.
@@ -55,7 +55,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR fixnum-width (3)
+.BR fixnum-width (3scheme)
 .SH STANDARDS
 R6RS
 .

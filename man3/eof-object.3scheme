@@ -65,7 +65,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR eof-object? (3)
+.BR eof-object? (3scheme)
 .SH STANDARDS
 R6RS,
 R7RS

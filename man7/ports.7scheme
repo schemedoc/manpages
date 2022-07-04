@@ -39,23 +39,23 @@ scheme with a one-to-one correspondence between character numbers and
 bytes.
 .PP
 The process ports can be fetched by calling
-.BR current-input-port (3)
+.BR current-input-port (3scheme)
 and
-.BR current-output-port (3).
+.BR current-output-port (3scheme).
 Implementations can optionally provide
-.BR with-input-from-file (3)
+.BR with-input-from-file (3scheme)
 and
-.BR with-output-to-file (3),
+.BR with-output-to-file (3scheme),
 which dynamically rebind the input and output ports while a procedure
 is running. The procedures
-.BR open-input-file (3)
+.BR open-input-file (3scheme)
 and
-.BR open-output-file (3)
+.BR open-output-file (3scheme)
 open files for reading and for writing. They should be closed
 with
-.BR close-input-port (3)
+.BR close-input-port (3scheme)
 and
-.BR close-output-port (3)
+.BR close-output-port (3scheme)
 when the program is done with them, or there could be
 a resource leak.
 .
@@ -97,13 +97,13 @@ UTF-8.
 Custom binary and textual ports can be used to implement things like
 network ports, transparent compression, other encodings and arbitrary
 processing. Custom ports are created with
-.BR make-custom-binary-input-port (3),
-.BR make-custom-textual-input-port (3),
-.BR make-custom-binary-output-port (3),
-.BR make-custom-textual-output-port (3),
-.BR make-custom-binary-input/output-port (3)
+.BR make-custom-binary-input-port (3scheme),
+.BR make-custom-textual-input-port (3scheme),
+.BR make-custom-binary-output-port (3scheme),
+.BR make-custom-textual-output-port (3scheme),
+.BR make-custom-binary-input/output-port (3scheme)
 and
-.BR make-custom-textual-input/output-port (3).
+.BR make-custom-textual-input/output-port (3scheme).
 .SS R7RS ports
 .
 The I/O port system is derived from the pre-R6RS system, with the
@@ -192,7 +192,7 @@ with newer versions of that system.
 .SH "SEE ALSO"
 .
 .BR stdio (3)
-\" .BR transcoders (7)
+\" .BR transcoders (7scheme)
 .
 .SH STANDARDS
 R4RS,

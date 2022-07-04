@@ -76,8 +76,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR = (3),
-.BR > (3).
+.BR = (3scheme),
+.BR > (3scheme).
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

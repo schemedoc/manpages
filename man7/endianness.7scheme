@@ -73,8 +73,8 @@ endianness symbol.
 .
 .SH "SEE ALSO"
 .
-.BR native-endianness (3),
-.BR bytevector-u16-ref (3)
+.BR native-endianness (3scheme),
+.BR bytevector-u16-ref (3scheme)
 .SH STANDARDS
 R6RS
 .

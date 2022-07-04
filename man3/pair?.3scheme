@@ -45,7 +45,7 @@ The \fBpair?\fP predicate allows a program to walk over a data
 structure built from pairs. It also allows programs to protect
 themselves against invalid calls to procedures that expect pairs, such
 as
-.BR car (3).
+.BR car (3scheme).
 .SH COMPATIBILITY
 .
 Not all predicates are guaranteed to be disjoint from this predicate.
@@ -67,8 +67,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR car (3),
-.BR cons (3)
+.BR car (3scheme),
+.BR cons (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

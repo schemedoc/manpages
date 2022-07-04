@@ -55,7 +55,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR symbol->string (3)
+.BR symbol->string (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

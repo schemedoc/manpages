@@ -120,7 +120,7 @@ procedure when its argument is an inexact non-integral real.
 .
 .SH "SEE ALSO"
 .
-.BR fixnum->flonum (3).
+.BR fixnum->flonum (3scheme).
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

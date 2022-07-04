@@ -136,7 +136,7 @@ Returns unspecified values.
 .SH COMPATIBILITY
 .
 See the notes in
-.BR bytevector-u16-ref (3).
+.BR bytevector-u16-ref (3scheme).
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP
@@ -151,7 +151,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR bytevector-u8-set! (3)
+.BR bytevector-u8-set! (3scheme)
 .SH STANDARDS
 R6RS
 .
@@ -169,4 +169,4 @@ More information can be found at
 .SH BUGS
 .
 See the notes in
-.BR bytevector-u16-ref (3).
+.BR bytevector-u16-ref (3scheme).

@@ -52,8 +52,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR char->integer (3),
-.BR integer->char (3)
+.BR char->integer (3scheme),
+.BR integer->char (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

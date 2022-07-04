@@ -77,8 +77,8 @@ must be evenly divisible by
 .
 .SH "SEE ALSO"
 .
-.BR endianness (7),
-.BR u8-list->bytevector (3)
+.BR endianness (7scheme),
+.BR u8-list->bytevector (3scheme)
 .SH STANDARDS
 R6RS
 .

@@ -67,10 +67,10 @@ R7RS
 .
 .SH SEE ALSO
 .
-.BR cons (3),
-.BR list-ref (3),
-.BR pairs (7),
-.BR set-car! (3)
+.BR cons (3scheme),
+.BR list-ref (3scheme),
+.BR pairs (7scheme),
+.BR set-car! (3scheme)
 .
 .SH HISTORY
 .

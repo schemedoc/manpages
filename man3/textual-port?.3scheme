@@ -77,7 +77,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR input-port? (3).
+.BR input-port? (3scheme).
 .SH STANDARDS
 R6RS,
 R7RS

@@ -85,7 +85,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR char<=? (3)
+.BR char<=? (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

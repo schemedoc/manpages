@@ -215,10 +215,10 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR cons (3),
-.BR find (3),
-.BR make-hashtable (3),
-.BR memq (3)
+.BR cons (3scheme),
+.BR find (3scheme),
+.BR make-hashtable (3scheme),
+.BR memq (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

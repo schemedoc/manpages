@@ -50,7 +50,7 @@ not in any way guaranteed to wipe the data from memory.
 .PP
 A bytevector that contains the specified value would normally be
 created from scratch with
-.BR make-bytevector (3).
+.BR make-bytevector (3scheme).
 \" .SH RATIONALE
 \" .
 .SH COMPATIBILITY
@@ -65,8 +65,8 @@ The wrong number of arguments was passed or an argument was outside its domain.
 .
 .SH "SEE ALSO"
 .
-.BR vector-fill! (3),
-.BR make-bytevector (3)
+.BR vector-fill! (3scheme),
+.BR make-bytevector (3scheme)
 .SH STANDARDS
 R6RS
 .

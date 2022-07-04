@@ -53,7 +53,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR not (3)
+.BR not (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

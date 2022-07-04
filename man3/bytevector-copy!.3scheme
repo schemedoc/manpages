@@ -77,7 +77,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR bytevector-copy (3)
+.BR bytevector-copy (3scheme)
 .SH STANDARDS
 R6RS,
 R7RS

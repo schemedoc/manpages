@@ -101,7 +101,7 @@ More information can be found at
 .SH BUGS
 .
 If a program checks if a file exists using
-.BR file-exists? (3)
+.BR file-exists? (3scheme)
 before calling
 .B delete-file
 then another program may still have deleted the file before the second

@@ -138,9 +138,9 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR cond (3),
-.BR unless (3),
-.BR when (3)
+.BR cond (3scheme),
+.BR unless (3scheme),
+.BR when (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

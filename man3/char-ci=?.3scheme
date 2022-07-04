@@ -46,7 +46,7 @@ Returns a single boolean value.
 .SH COMPATIBILITY
 .
 These procedures are defined in terms of
-.BR char-foldcase (3).
+.BR char-foldcase (3scheme).
 Whatever
 compatibility concerns apply to that procedure also apply here, in addition
 to any concerns applicable to \fBchar<?\fP etc.
@@ -69,8 +69,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR char=? (3),
-.BR char-foldcase (3)
+.BR char=? (3scheme),
+.BR char-foldcase (3scheme)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

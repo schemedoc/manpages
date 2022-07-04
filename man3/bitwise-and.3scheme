@@ -31,7 +31,7 @@ they are passed no arguments, they return the integer object (either
 .
 .PP
 The procedures whose names begin with \fBfx\fP take
-.BR fixnums (7)
+.BR fixnums (7scheme)
 as arguments and only return fixnums.
 \" .SH "IMPLEMENTATION NOTES"
 \" .
@@ -82,7 +82,7 @@ These procedures can raise exceptions with the following condition types:
 An argument was outside its domain.
 .
 .SH "SEE ALSO"
-.BR bitwise-not (3)
+.BR bitwise-not (3scheme)
 .
 .SH STANDARDS
 R6RS,

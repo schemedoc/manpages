@@ -98,7 +98,7 @@ or the symbol
 .\" XXX: Is this difference intentional?
 This differs from other bytevector procedures that can support
 additional implementation-defined endianness values. See
-.BR native-endianness (3)
+.BR native-endianness (3scheme)
 for a definition of endianness.
 The default endianness for the
 .B string->

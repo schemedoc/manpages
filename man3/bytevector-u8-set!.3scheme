@@ -76,7 +76,7 @@ was not a valid index for
 .
 .SH "SEE ALSO"
 .
-.BR bytevector-u16-set! (3)
+.BR bytevector-u16-set! (3scheme)
 .SH STANDARDS
 R6RS
 .

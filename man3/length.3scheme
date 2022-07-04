@@ -64,10 +64,10 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR cons (3),
-.BR make-list (3),
-.BR list-ref (3),
-.BR vector-length (3).
+.BR cons (3scheme),
+.BR make-list (3scheme),
+.BR list-ref (3scheme),
+.BR vector-length (3scheme).
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

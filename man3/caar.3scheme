@@ -46,14 +46,14 @@ procedures often show up. An
 or
 .I alist
 associates a key in the car field with a value in the cdr field, see
-.IR assq (3).
+.IR assq (3scheme).
 A
 .I property list
 or
 .I plist
 also associates a key with a value, but it uses a flat
 structure, see
-.IR memq (3).
+.IR memq (3scheme).
 .PP
 .
 .SH "RETURN VALUES"
@@ -80,7 +80,7 @@ It can be tempting to write code that stores data as a new kind of
 tree of pairs and uses these procedures to walk that tree. While it is
 possible, it quickly becomes hard to follow. In modern code it is
 often better to define a new data type with
-.BR define-record-type "(3)."
+.BR define-record-type "(3scheme)."
 .
 An alternative is to use a pattern matching library like Alex Shinn's
 widely available
@@ -105,7 +105,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR car (3)
+.BR car (3scheme)
 .
 .SH STANDARDS
 R4RS,

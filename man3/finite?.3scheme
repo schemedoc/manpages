@@ -148,7 +148,7 @@ with names that coincide with those in R6RS.
 .PP
 The C99 language and POSIX offer a more detailed classification which
 includes subnormals, see
-.BR fpclassify (3scheme).
+.BR fpclassify (3).
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages

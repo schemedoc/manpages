@@ -1,0 +1,131 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH hashtable-update! 3scheme 2023-01-21 "" "Scheme Programmer's Manual"
+.SH NAME
+hashtable-update! \- update an entry in a hashtable
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs hashtables))" "          ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(hashtable-update! " hashtable " " key " " proc " " default )
+.
+.SH DESCRIPTION
+Applies
+.I proc
+to the value
+in
+.I hashtable
+associated with
+.IR key ,
+or to
+.I default
+if
+.I hashtable
+does not contain an association for
+.IR key .
+The
+.I hashtable
+is then changed to associate
+.I key
+with the value returned by
+.IR proc .
+.
+.SH "IMPLEMENTATION NOTES"
+.
+The behavior of
+.B hashtable-update!
+is equivalent to the
+following code, but may be implemented more efficiently in
+cases where the implementation can avoid multiple lookups
+of the same key:
+.PP
+.EX
+(hashtable-set!
+  hashtable key
+  (proc (hashtable-ref
+          hashtable key default)))
+.EE
+.SH "RETURN VALUES"
+.
+This procedure returns unspecified values.
+.SH EXAMPLES
+.
+.EX
+;; This R6RS example places integers in one of
+;; five buckets by using hashtable-update!.
+(import (rnrs))
+
+(do ((ht (make-eqv-hashtable))
+     (i 0 (+ i 1)))
+    ((= i 42)
+     (hashtable-entries ht))
+  (hashtable-update! ht (mod i 5)
+                     (lambda (lst)
+                       (cons i lst))
+                     '()))
+ => #(0 1 2 3 4)
+    #((40 35 30 25 20 15 10 5 0)
+      (41 36 31 26 21 16 11 6 1)
+      (37 32 27 22 17 12 7 2)
+      (38 33 28 23 18 13 8 3)
+      (39 34 29 24 19 14 9 4))
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is commonly used to accumulate values in a hashtable,
+as in the example above. There are also other usage patterns such
+as counting occurrences of an element.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is new to R6RS but compatible variants can be found in
+SRFI-69, SRFI-125 and SRFI-126.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I hashtable
+should be a hashtable,
+.I key
+and
+.I default
+should be in the domain of
+.IR hashtable 's
+hash and equal procedures,
+.I proc
+should be a procedure that accepts one arguments, returns one value
+and does not mutate
+.IR hashtable .
+.
+.SH "SEE ALSO"
+.
+.BR hashtable-set! (3scheme)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS and a similar procedure can be
+found in SRFI-69, which predates R6RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

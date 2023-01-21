@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2023 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH hashtable-contains? 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH hashtable-contains? 3scheme 2023-01-121 "" "Scheme Programmer's Manual"
 .SH NAME
-hashtable-contains? \-
+hashtable-contains? \- check if a key exists in a hashtable
 .
 .SH LIBRARY
 .nf
@@ -15,23 +15,44 @@ hashtable-contains? \-
 .BI "(hashtable-contains? " hashtable " " key )
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+Returns
+.B #t
+if
+.I hashtable
+contains an association for
+.IR key ,
+.B #f
+otherwise.
 .
-.SH "IMPLEMENTATION NOTES"
-.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
 .SH "RETURN VALUES"
 .
+Returns a single value; a boolean object.
 .SH EXAMPLES
 .
 .EX
+(let ((ht (make-eqv-hashtable)))
+  (hashtable-set! ht (* 7 6) 'answer)
+  (hashtable-contains? ht 42))
+    => #t
 .EE
 .
 .SH "APPLICATION USAGE"
 .
-.SH RATIONALE
+This procedure provides a general for checking if hashtables contain
+certain keys. If the hashtable never has associations with booleans
+then another common solution is to use
+.BR hashtable-ref (3scheme)
+with
+.B #f
+as the default value.
 .
+\" .SH RATIONALE
+\" .
 .SH COMPATIBILITY
+.
+This procedure is unique to R6RS.
 .
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
@@ -47,14 +68,14 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
+.BR hashtable-ref (3scheme)
 .SH STANDARDS
-R4RS,
-IEEE Scheme,
-R5RS,
-R6RS,
-R7RS
+R6RS
 .
 .SH HISTORY
+.
+This procedure first appeared in R6RS. An equivalent procedure can be found
+in SRFI-69 under the name hash-table-exists?.
 .
 .SH AUTHORS
 This page is part of the
@@ -64,6 +85,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

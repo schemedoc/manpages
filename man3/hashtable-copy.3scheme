@@ -1,0 +1,90 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH hashtable-copy 3scheme 2023-01-22 "" "Scheme Programmer's Manual"
+.SH NAME
+hashtable-copy \- copy a hashtable
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs hashtables))" "          ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(hashtable-copy " hashtable )
+.BI "(hashtable-copy " hashtable " " mutable )
+.
+.SH DESCRIPTION
+Returns a copy of
+.IR hashtable .
+.PP
+If the
+.I mutable
+argument is provided and is true, the returned hashtable is mutable;
+otherwise it is immutable.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a hashtable.
+.
+.SH EXAMPLES
+.
+.EX
+(define (alist->eqv-hashtable alist)
+  (let ((ht (make-eqv-hashtable)))
+    (do ((alist alist (cdr alist)))
+        ((null? alist)
+         (hashtable-copy ht))
+      (hashtable-set! ht (caar alist) (cdar alist)))))
+
+(hashtable-entries
+ (alist->eqv-hashtable '((0 . zero) (1 . one) (2 . three))))
+    => #(0 1 2)
+       #(zero one three)
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+.SH RATIONALE
+.
+Allowing the hashtable to be immutable allows implementations to
+create an optimized representation for the hashtable.
+.
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I hashtable
+must be a hashtable.
+.
+.SH "SEE ALSO"
+.
+.BR make-hashtable (3scheme)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS, but a similar procedure was
+also present in SRFI-69.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

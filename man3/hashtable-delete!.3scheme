@@ -1,0 +1,81 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH hashtable-delete! 3scheme 2023-01-22 "" "Scheme Programmer's Manual"
+.SH NAME
+hashtable-delete! \- remove an association from a hashtable
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs hashtables))" "          ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(hashtable-delete! " hashtable " " key )
+.
+.SH DESCRIPTION
+Removes any association for
+.I key
+within
+.IR hashtable .
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns unspecified values.
+.
+.SH EXAMPLES
+.
+.EX
+(let ((ht (make-eq-hashtable)))
+  (hashtable-set! ht 'foo 0)
+  (hashtable-delete! ht 'foo)
+  (hashtable-delete! ht 'bar)
+  (hashtable-size ht))
+    => 0
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I hashtable
+should be a mutable hashtable and
+.I key
+should be in the domain of the hashtable's hash and equal functions.
+.
+.SH "SEE ALSO"
+.
+.BR hashtable-clear! (3scheme),
+.BR hashtable-set! (3scheme)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS. An equivalent procedure can be found
+in SRFI-69 under the name hash-table-delete!.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

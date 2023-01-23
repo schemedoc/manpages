@@ -1,0 +1,126 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH vector-for-each 3scheme 2023-01-23 "" "Scheme Programmer's Manual"
+.SH NAME
+vector-for-each \- loop over the elements of a vector
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(vector-for-each " proc " " vector1 " " vector2 " ...)"
+.
+.SH DESCRIPTION
+Applies
+.I proc
+element-wise to
+the elements of the
+.IR vector s
+for its side effects, in order from the first elements to the last.
+.PP
+.
+.TP
+.B R6RS
+The procedure
+.I proc
+is always called in the same dynamic environment as
+.B vector-for-each
+itself.
+.IP
+The implementation must check the restrictions on
+.I proc
+to the extent performed by applying it as described. An implementation
+may check whether
+.I proc
+is an appropriate argument before applying it.
+.
+.TP
+.B R7RS
+If more than one vector is given and not all vectors have the same
+length,
+.B vector-for-each
+terminates when the shortest vector runs out.
+.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns an unspecified value.
+.
+.SH EXAMPLES
+.
+.EX
+(vector-for-each
+  display
+  '#("Hello, " "world" ".\n"))
+; prints: Hello, world.
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+.SH RATIONALE
+.
+R7RS says that this procedure and a few others were added in order to
+round out the sequence operations.
+.
+.SH COMPATIBILITY
+.
+The R7RS variant of this procedure terminates early if the vectors are
+not the same length, but the R6RS variant requires that all the
+vectors are the same length. Additionally R7RS makes it an error to
+mutate any of the vectors.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular, the
+.IR vector s
+should all have the same length and
+.I proc
+should accept as many arguments are there are vectors.
+.TP
+R7RS
+The assertions described above (except for the length requirement) are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.IP
+It is an error for
+.I proc
+to mutate any of the vectors.
+.
+.SH "SEE ALSO"
+.
+.BR for-each (3scheme),
+.BR vector-map (3scheme)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS. It was later also added to R7RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

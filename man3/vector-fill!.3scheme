@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2020
+.\" Copyright © 2023 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH vector-fill! 3scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH vector-fill! 3scheme 2023-01-26 "" "Scheme Programmer's Manual"
 .SH NAME
-vector-fill! \-
+vector-fill! \- fill a vector
 .
 .SH LIBRARY
 .nf
@@ -15,25 +15,51 @@ vector-fill! \-
 .SH SYNOPSIS
 .nf
 .BI "(vector-fill! " vector " " obj )
+.BI "(vector-fill! " vector " " obj " " start ) "     \fR;R7RS"
+.BI "(vector-fill! " vector " " obj " " start " " end ) " \fR;R7RS"
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+Stores
+.I obj
+in every element of
+.IR vector .
+.TP
+.B R7RS
+The operation is limited to the elements between
+.I start
+(inclusive)
+and
+.I end
+(exclusive). These default to 0 and the length of
+.IR vector .
 .
-.SH "IMPLEMENTATION NOTES"
-.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
 .SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns an unspecified value.
 .
 .SH EXAMPLES
 .
 .EX
+;; This example is for R7RS
+(define a (vector 1 2 3 4 5))
+(vector-fill! a 'smash 2 4)
+a         => #(1 2 smash smash 5)
 .EE
 .
-.SH "APPLICATION USAGE"
-.
-.SH RATIONALE
-.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
 .SH COMPATIBILITY
+.
+The R7RS variant of this procedure has extra arguments.
 .
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
@@ -49,14 +75,16 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
+.BR make-vector (3scheme)
 .SH STANDARDS
 R4RS,
-IEEE Scheme,
 R5RS,
 R6RS,
 R7RS
 .
 .SH HISTORY
+.
+This procedure first appeared in R2RS.
 .
 .SH AUTHORS
 This page is part of the
@@ -66,6 +94,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

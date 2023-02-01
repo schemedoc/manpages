@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
 .\" Copyright © 2023 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH get-bytevector-n 3scheme 2023-01-30 "" "Scheme Programmer's Manual"
+.TH get-bytevector-n! 3scheme 2023-01-31 "" "Scheme Programmer's Manual"
 .SH NAME
-get-bytevector-n, read-bytevector \- read data from a binary port
+get-bytevector-n!, read-bytevector! \- read bytes from a port into a bytevector
 .
 .SH LIBRARY
 .nf
@@ -14,32 +14,62 @@ get-bytevector-n, read-bytevector \- read data from a binary port
 .SH SYNOPSIS
 .nf
 ;; R6RS
-.BI "(get-bytevector-n " binary-input-port " " k )
+.BI "(get-bytevector-n! " binary-input-port " " bytevector " " start " " count )
 
 ;; R7RS
-.BI "(read-bytevector " k )
-.BI "(read-bytevector " k " " binary-input-port )
+.BI "(read-bytevector! " bytevector )
+.BI "(read-bytevector! " bytevector " " binary-input-port )
+.BI "(read-bytevector! " bytevector " " binary-input-port " " start )
+.BI "(read-bytevector! " bytevector " " binary-input-port " " start " " end )
 .
 .SH DESCRIPTION
+.
 Reads from
 .IR binary-input-port ,
 blocking as necessary, until
 .I count
 bytes are available from
 .I binary-input-port
-or until an end of file is reached.
-.
-If an end of file is reached before any bytes are available
-then the end-of-file object is returned.
-.
+or until an end of file is reached. The return value depends on the
+result of the read operation:
+.IP \(bu 4n
+If \fIcount\fP bytes are available before an end of file, they are
+written into
+.I bytevector
+starting at index
+.IR start ,
+and the result is
+.IR count .
+.IP \(bu 4n
+If fewer bytes are available
+before the next end of file, the available bytes are written
+into
+.I bytevector
+starting at index
+.IR start ,
+and the result is a number object representing the number of bytes
+actually read.
+.IP \(bu 4n
+If an end of file is reached before any bytes are available, an
+end-of-file object is returned.
+.PP
 The input port is updated to point just past the bytes read.
 .
 .TP
 .B R7RS
-The default value for
+The procedure call
+\f[CR](read-bytevector! bv port start end)\fP
+procedure is analogous to
+\f[CR](get-bytevector-n! port bv start (- end start))\fP.
+The argument
 .I binary-input-port
-is the object returned by
-.BR current-input-port (3scheme).
+defaults to the object returned by
+.BR current-input-port (3scheme),
+.I start
+defaults to 0, and
+.I end
+defaults to the length of
+.IR bytevector .
 .
 .TP
 .B Multiple end-of-file conditions
@@ -53,10 +83,8 @@ does not.
 \" .
 .SH "RETURN VALUES"
 .
-Returns a single value; a bytevector or an end-of-file object. An
-empty bytevector is returned if
-.I k
-is zero.
+Returns a single value; an exact nonnegative integer, or an
+end-of-file object.
 .
 .TP
 .B R6RS
@@ -65,14 +93,23 @@ There is a single, unique end-of-file object.
 .SH EXAMPLES
 .
 .EX
+;; Apologies for the nonsensical example.
 (call-with-port (open-file-input-port "/dev/zero")
   (lambda (p)
-    (get-bytevector-n p 4)))
-        => #vu8(0 0 0 0)
+    (let ((bv (make-bytevector 4 1)))
+      (get-bytevector-n! p bv 1 1)
+      bv)))
+        => #vu8(1 0 1 1)
 .EE
 .
-\" .SH "APPLICATION USAGE"
-\" .
+.SH "APPLICATION USAGE"
+.
+This procedure is suitable when when you need to read binary data
+directly into a buffer, which tends to be the case for some types of
+binary structures. Other times it is more appropriate to use
+.BR get-bytevector-n (3scheme),
+which will automatically give you a bytevector limited to the
+length of the data returned by the read operation.
 \" .SH RATIONALE
 \" .
 \" .SH COMPATIBILITY
@@ -83,10 +120,15 @@ This procedure can raise exceptions with the following condition types:
 .BR &assertion " (R6RS)"
 The wrong number of arguments was passed or an argument was outside its domain.
 In particular,
+.I start
+and
 .I count
-must be an exact, nonnegative integer object, and
-.I binary-input-port
-must be an open binary input port.
+must be exact, nonnegative integer objects,
+and
+.I bytevector
+must be a mutable bytevector with at least
+.IR start + count
+elements.
 .TP
 .BR &i/o-read " (R6RS)"
 There was an I/O error during the read operation.
@@ -95,6 +137,7 @@ There was an I/O error during the read operation.
 This condition specifies the port object related to an
 .B &i/o-read
 condition.
+.
 .TP
 R7RS
 The assertions described above are errors.
@@ -104,10 +147,11 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR eof-object? (3scheme),
+.BR get-bytevector-n (3scheme),
 .BR get-bytevector-some (3scheme),
 .BR get-bytevector-all (3scheme),
-.BR get-bytevector-n! (3scheme)
+.BR eof-object? (3scheme)
+.
 .SH STANDARDS
 R6RS,
 R7RS
@@ -128,6 +172,6 @@ More information can be found at
 .SH BUGS
 .
 The default port used by
-.B read-bytevector
+.B read-bytevector!
 is the current input port, which is normally a textual port that is
 not expected to support binary I/O.

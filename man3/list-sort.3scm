@@ -1,0 +1,138 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH list-sort 3scm 2023-01-25 "" "Scheme Programmer's Manual"
+.SH NAME
+list-sort, vector-sort \- stable sorting of lists and vectors
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs sorting))" "             ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(list-sort " proc " " list )
+.BI "(vector-sort " proc " " vector )
+.
+.SH DESCRIPTION
+.
+These procedures perform a stable sort of
+.I list
+or
+.I vector
+in ascending
+order according to
+.IR proc .
+.
+The procedure
+.I proc
+should accept two elements and return a true value when its first
+argument is strictly less than its second, and
+.B #f
+otherwise.
+.
+.TP
+.B Time complexity
+The sorting algorithm performs O(n lg n)
+calls to
+.I proc
+where n is the length of
+.I list
+or
+.IR vector .
+.
+.TP
+.B Side effects
+The procedure
+.I proc
+should not have any side effects.
+.
+The pairing of arguments and the sequencing of calls to
+.I proc
+are not specified.
+.
+The sorting algorithm does not modify
+.I list
+or
+.IR vector .
+.
+.SH "IMPLEMENTATION NOTES"
+.
+Quicksort cannot be used because it has worse time complexity than
+what is required. Heapsort cannot be used either because it is not
+stable. Merge sort satisfies all requirements and can be used, but
+it is not the only option.
+.
+.SH "RETURN VALUES"
+.
+Both of these procedures return a single value.
+The
+.B list-sort
+procedure returns a list, and
+.B vector-sort
+returns a vector.
+.PP
+The return value may be
+.B eq?
+to the argument when the argument is already sorted, and the list
+returned by
+.B list-sort
+may share structure with a tail of the original list.
+.PP
+If multiple returns occur from
+.B list-sort
+or
+.BR vector-sort ,
+the return values returned by earlier returns are not mutated.
+.
+.SH EXAMPLES
+.
+.EX
+(list-sort < '(3 5 2 1))     =>  (1 2 3 5)
+(vector-sort < '#(3 5 2 1))  =>  #(1 2 3 5)
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures are unique to R6RS. Alternatives are available in
+SRFI-95 and SRFI-132.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I proc
+should accept two arguments, which are elements from
+.I list
+or
+.IR vector ,
+and return one value.
+.
+.SH "SEE ALSO"
+.
+.BR vector-sort! (3scm)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

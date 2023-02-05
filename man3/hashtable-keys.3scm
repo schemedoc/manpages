@@ -1,0 +1,82 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH hashtable-keys 3scm 2023-01-22 "" "Scheme Programmer's Manual"
+.SH NAME
+hashtable-keys \- get the keys from a hashtable
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs hashtables))" "          ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(hashtable-keys " hashtable )
+.
+.SH DESCRIPTION
+Returns a vector of all keys in
+.IR hashtable .
+The order of the vector is unspecified.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a vector.
+.SH EXAMPLES
+.
+.EX
+(do ((ht (make-eqv-hashtable))
+     (n 10)
+     (i 0 (+ i 1)))
+    ((> i n)
+     (vector-sort < (hashtable-keys ht)))
+  (do ((j 0 (+ j 1)))
+      ((> j n))
+    (hashtable-set! ht (* i j) #t)))
+    => #(0 1 2 3 4 5 6 7 8 9 10 12 14 15 16 18 20
+        21 24 25 27 28 30 32 35 36 40 42 45 48 49 50
+        54 56 60 63 64 70 72 80 81 90 100)
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS. Similar procedures exist in
+SRFI-69 and SRFI-125.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I hashtable
+should be a hashtable.
+.
+.SH "SEE ALSO"
+.
+.BR hashtable-entries (3scm)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS. An equivalent procedure already
+existed in SRFI-69 under the name
+.BR hash-table-keys .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

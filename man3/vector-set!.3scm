@@ -1,0 +1,134 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 GÖran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH vector-set! 3scm 2023-01-28 "" "Scheme Programmer's Manual"
+.SH NAME
+vector-set! \- modify an element of a vector
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(vector-set! " vector " " k " " obj )
+.
+.SH DESCRIPTION
+Stores
+.I obj
+in element
+.I k
+of
+.IR vector .
+\" .PP
+\" Passing an immutable vector to
+\" .B vector-set!
+\" should cause an exception with condition type
+\" .B &assertion
+\" to be raised.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+Constants in the source code are not supposed to be modified by the
+program, but programs may still be able to do so. A compiler that
+creates executable files can place the constants in read-only pages,
+where the processor will automatically report attempts to mutate them.
+Interpreters and online compilers normally skip this step and tend to
+not detect mutation of constants. Implementations can also mark a
+vector as immutable using various strategies like special memory
+ranges, a special immutable vector tag or an immutable bit next to the
+length field.
+.PP
+Implementations may also do different things in different modes, so
+just testing at the REPL is not a reliable method to check if
+constants are always mutable or not in a particular implementation.
+.
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns an unspecified value.
+.SH EXAMPLES
+.
+.EX
+(let ((vec (vector 0 '(2 2 2 2) "Anna")))
+   (vector-set! vec 1 '("Sue" "Sue"))
+   vec)
+            =>  #(0 ("Sue" "Sue") "Anna")
+
+;; This example shows mutation of a constant vector. Constants are
+;; allowed to be immutable, but implementations do not always check
+;; this. It should raise an &assertion exception.
+(vector-set! '#(0 1 2) 1 "doe")
+            => unspecified
+              ; should raise &assertion exception
+
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+The specification of vectors does not actually require constant access
+time, but in practice they are always implemented as flat arrays.
+Therefore this procedure is used in algorithms that perform
+random-access operations on arrays. Such algorithms would not have the
+same time complexity if lists were used instead.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure works the same everywhere.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I vector
+should be a mutable vector, and
+.I k
+must be an exact nonnegative integer less than the length of
+.IR vector .
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR make-vector (3scm),
+.BR vector-ref (3scm),
+.BR set-car! (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R2RS, where the vector notation was
+optional.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+Programs should not modify constants.

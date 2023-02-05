@@ -1,0 +1,128 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH caar 3scm 2020-04-19 "" "Scheme Programmer's Manual"
+.SH NAME
+caar, cadr, cdar, cddr \- compositions of car and cdr
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(caar " pair )
+.BI "(cadr " pair )
+.BI "(cdar " pair )
+.BI "(cddr " pair )
+.
+.SH DESCRIPTION
+These procedures are compositions of \fBcar\fP and \fBcdr\fP as follows:
+.PP
+.EX
+(define (caar x) (car (car x)))
+(define (cadr x) (car (cdr x)))
+(define (cdar x) (cdr (car x)))
+(define (cddr x) (cdr (cdr x)))
+.EE
+.
+.PP
+These procedures can also be used with lists, which in Scheme are
+linked lists of pairs.
+.
+The \fBcaar\fP and \fBcdar\fP procedures return the car and cdr fields
+of the first element of the list.
+.
+The \fBcadr\fP procedure returns the second element of the list. The
+\fBcddr\fP procedure returns the tail of the tail of the list.
+.
+.PP
+There are two conventions for building lists where these
+procedures often show up. An
+.I association list
+or
+.I alist
+associates a key in the car field with a value in the cdr field, see
+.IR assq (3scm).
+A
+.I property list
+or
+.I plist
+also associates a key with a value, but it uses a flat
+structure, see
+.IR memq (3scm).
+.PP
+.
+.SH "RETURN VALUES"
+.
+Returns the contents of the car or cdr field of the pair which is
+in the car or cdr field of the argument.
+.
+.SH EXAMPLES
+.
+.EX
+(caar '((a . b) (d . e) (g . h))) => a
+(cdar '((a . b) (d . e) (g . h))) => b
+(cadr '(a b c))                   => b
+(cddr '(a b c))                   => (c)
+(map cadr '((a b) (d e) (g h)))   => (b e h)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures should primarily be used when walking lists or
+conventional list structures like alists.
+.
+It can be tempting to write code that stores data as a new kind of
+tree of pairs and uses these procedures to walk that tree. While it is
+possible, it quickly becomes hard to follow. In modern code it is
+often better to define a new data type with
+.BR define-record-type "(3scm)."
+.
+An alternative is to use a pattern matching library like Alex Shinn's
+widely available
+.BR "(chibi match)" .
+.
+.SH COMPATIBILITY
+.
+Most Lisp systems provide these procedures.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed, an argument was not a pair
+or a referenced car or cdr field did not contain a pair.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR car (3scm)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+Present in MIT AI Memo No.\~7 (1958 or 1959).
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .

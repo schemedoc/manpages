@@ -1,0 +1,145 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string=? 3scm 2022-04-09 "" "Scheme Programmer's Manual"
+.SH NAME
+string=?, string<?, string>?, string<=?, string>=? \- string comparison
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string=? " string1 " " string2 " " string3 " ...)"
+.BI "(string<? " string1 " " string2 " " string3 " ...)"
+.BI "(string>? " string1 " " string2 " " string3 " ...)"
+.BI "(string<=? " string1 " " string2 " " string3 " ...)"
+.BI "(string>=? " string1 " " string2 " " string3 " ...)"
+.
+.SH DESCRIPTION
+The
+.B string=?
+procedure returns \fB#t\fP if all the strings are the same length and
+contain exactly the same characters in the same positions, otherwise
+returns \fB#f\fP.
+.PP
+.
+The ordering procedures return \fB#t\fP if their arguments are
+(respectively): monotonically increasing, monotonically decreasing,
+monotonically nondecreasing, or monotonically nonincreasing.
+.
+The behavior of the ordering procedures is different in R6RS and R7RS:
+.
+.TP
+.B R6RS
+These procedures are the lexicographic extensions to strings of the
+corresponding orderings on characters. For example,
+.B string<?
+is the lexicographic ordering on strings induced by the ordering
+.B char<?
+on characters. If two strings differ in length but are the same up to
+the length of the shorter string, the shorter string is considered to
+be lexicographically less than the longer string.
+.
+.TP
+.B R7RS
+.
+The ordering procedures compare strings in an implementation-defined
+way. They may work the same as in R6RS, or they could use some other
+ordering.
+.IP
+These predicates are required to be transitive. In all cases, a pair
+of strings must satisfy exactly one of
+.BR string<? ,
+.BR string=? ,
+and
+.BR string>? ,
+and must satisfy
+.B string<=?
+if and only if they do not satisfy
+.B string>?
+and
+.B string>=?
+if and only if they do not satisfy
+.BR string<? .
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+These procedures return a single value; a boolean.
+.SH EXAMPLES
+.
+.EX
+(string=? "Straße" "Strasse")  =>  #f
+(string<? "z" "ß")             =>  #t
+(string<? "z" "zz")            =>  #t
+(string<? "z" "Z")             =>  #f
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The basic idea of these procedures is the same in all RnRS revisions.
+However, there are some differences.
+.PP
+R5RS and earlier reports only provided two-argument variants.
+.PP
+R6RS implementations all work the same.
+.PP
+R7RS implementations may lack support for some characters. The order
+is also implementation-defined, with lexicographical ordering only
+being one option.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR char<? (3scm),
+.BR string-ci=? (3scm),
+.BR equal? (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R2RS.
+.
+MacLisp had the
+.B samepnamep
+and
+.B alphalessp
+procedures that took two arguments and worked on both symbols and
+strings.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,102 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022
+.\" SPDX-License-Identifier: MIT
+.TH real-part 3scm 2022-04-07 "" "Scheme Programmer's Manual"
+.SH NAME
+real-part, imag-part \- real and imaginary parts of a complex number
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme complex))" "           ;R7RS, optional library"
+.
+.SH SYNOPSIS
+.nf
+.BI "(real-part " z )
+.BI "(imag-part " z )
+.
+.SH DESCRIPTION
+If \fIz\fP is the complex number \fIa+bi\fP, then the
+.B real-part
+procedure returns
+.I a
+and
+.B imag-part
+returns
+.IR b .
+.
+.SH "IMPLEMENTATION NOTES"
+.
+See the notes in
+.BR make-rectangular (3scm).
+.SH "RETURN VALUES"
+.
+These procedures return a single value, a real number.
+.
+.SH EXAMPLES
+.
+.EX
+(real-part 1.1+2.2i)  =>  1.1   ;approximately
+
+(imag-part 1.1+2.2i)  =>  2.2   ;approximately
+
+(real-part -2+3i)  =>  -2  or  -2.0
+
+(imag-part -2+3i)  =>  3  or  3.0
+
+(imag-part 42)  =>  0  or  0.0
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+All R6RS implementations support complex numbers. Implementations of
+the other RnRS reports may or may not support complex numbers. In such
+cases these procedures will be missing.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR make-rectangular (3scm),
+.BR angle (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R2RS, which got them from Common Lisp,
+where they are called
+.B realpart
+and
+.BR imagpart .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

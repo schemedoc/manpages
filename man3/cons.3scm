@@ -1,0 +1,135 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH cons 3scm 2020-08-19 "" "Scheme Programmer's Manual"
+.SH NAME
+cons \- construct a pair
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(cons " obj1 " " obj2 )
+.
+.SH DESCRIPTION
+Returns a newly allocated pair whose
+car is
+.I obj1
+and whose
+cdr is
+.IR obj2 .
+The pair is guaranteed to be different (in the sense of eqv?) from
+every existing object.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+There is not a lot of room for differences between implementations
+of
+.BR cons .
+The main difference will be in how fast a pair can be allocated
+and how allocation affects the garbage collector.
+.PP
+It is possible for an implementation to return a pair that cannot be
+changed (also known as an immutable pair), but this is not standard.
+.
+.TP
+.B Racket
+Pairs in Racket are immutable. This does not apply to its R6RS language.
+.SH "RETURN VALUES"
+.
+Returns a new pair. If the cdr is a list then the return value is also
+considered to be a list.
+.SH EXAMPLES
+.
+.EX
+(cons 'a '())         =>  (a)
+(cons '(a) '(b c d))  =>  ((a) b c d)
+(cons "a" '(b c))     =>  ("a" b c)
+(cons 'a 3)           =>  (a . 3)
+(cons '(a b) 'c)      =>  ((a b) . c)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+The
+.B cons
+procedure is used in programs that work with lists or other
+structures that consist of pairs.
+In many cases it can be better to process a list with procedures like
+.BR map (3scm),
+.BR filter (3scm),
+.BR fold-left (3scm),
+or one of the procedures from SRFI-1.
+.PP
+Larger structures can be created with
+.BR quasiquote (3scm),
+which lets the code resemble the structure it creates.
+.SH RATIONALE
+.
+Pairs are a fundamental data structure.
+.SH COMPATIBILITY
+.
+The
+.B cons
+procedure appears in all Lisps.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR set-car! (3scm),
+.BR set-cdr! (3scm),
+.BR pairs (7scheme)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The predecessor of
+.B cons
+was a subroutine \fBcons(a,d,p,t)\fP along with
+.BR car ", " cdr ", " cpr ", and " ctr .
+The modern
+.B cons
+came from Herbert Gelernter and Carl Gerberich at IBM during the
+development of the FORTRAN List Processing Language
+(History of Lisp, John McCarthy, 1979).
+.PP
+The Lisp in
+MIT AI Memo No.\~1 (September 1958)
+uses the four-argument
+.BR cons .
+The modern two-argument
+.B cons
+appears in
+MIT AI Memo No.\~3.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.

@@ -28,7 +28,7 @@
   `((#f "-*- mode: nroff; coding: utf-8 -*-")
     (#f "Copyright © 2020")
     (#f "SPDX-License-Identifier: MIT")
-    (TH ,name "3scheme" ,date "" "Scheme Programmer's Manual")
+    (TH ,name "3scm" ,date "" "Scheme Programmer's Manual")
     (SH "NAME")
     ,(string-append (symbol->string name) " \\-")
     ()
@@ -115,8 +115,8 @@ or fail catastrophically."
 
 (define (write-template name signatures libraries)
   (let* ((basename (->string name))
-         (fn (string-append "templates/" basename ".3scheme"))
-         (real-fn (string-append "man3/" basename ".3scheme")))
+         (fn (string-append "templates/" basename ".3scm"))
+         (real-fn (string-append "man3/" basename ".3scm")))
     (display fn)
     (newline)
     (cond

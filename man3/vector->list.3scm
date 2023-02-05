@@ -1,0 +1,125 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH vector->list 3scm 2023-01-24 "" "Scheme Programmer's Manual"
+.SH NAME
+vector->list, list->vector \- conversion between vectors and lists
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(vector->list " vector )
+.BI "(vector->list " vector " " start ) "\fR         ;R7RS"
+.BI "(vector->list " vector " " start " " end ) "\fR     ;R7RS"
+.BI "(list->vector " list )
+.
+.SH DESCRIPTION
+The
+.B vector->list
+procedure returns a newly allocated list
+of the objects contained in the elements of
+.IR vector .
+.PP
+The
+.B list->vector
+procedure returns a newly created vector
+initialized to the elements of the list
+.IR list .
+.PP
+In both procedures, order is preserved.
+.TP
+.B R7RS
+The
+.B vector->list
+procedure is limited to the elements between
+.I start
+(inclusive)
+and
+.I end
+(exclusive).
+These arguments default to 0 and the length of the vector, respectively.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Chez Scheme, Loko Scheme
+The empty vector is a unique object, so
+(list->vector '()) does not return a newly allocated vector.
+.SH "RETURN VALUES"
+.
+These procedures both return a single value; a vector object or a list.
+.SH EXAMPLES
+.
+.EX
+(vector->list '#(dah dah didah))
+            => (dah dah didah)
+
+(list->vector '(dididit dah))
+            => #(dididit dah)
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures work the same everywhere except for the
+.I start
+and
+.I end
+arguments, which are only present in the R7RS variant of
+.BR vector->list .
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.IP
+In particular, if
+.B list->vector
+is passed a cyclical list then the procedure may not terminate.
+.
+.SH "SEE ALSO"
+.
+.BR vector (3scm),
+.BR list (3scm),
+.BR list->string (3scm),
+.BR vector->string (3scm)
+.
+.SH STANDARDS
+R4RS,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R2RS. They were left out of IEEE
+Scheme. But in spite of this,
+.B list->vector
+appears as an example in the standard.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS

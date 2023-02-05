@@ -1,0 +1,108 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH put-u8 3scm 2022-04-07 "" "Scheme Programmer's Manual"
+.SH NAME
+put-u8, write-u8 \- write a byte to a binary output port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(put-u8 " binary-output-port " " byte ) "    \fR;R6RS"
+.BI "(write-u8 " byte ) "                     \fR;R7RS"
+.BI "(write-u8 " byte " " binary-output-port ) "  \fR;R7RS"
+.
+.SH DESCRIPTION
+Writes the
+.I byte
+to the given
+.IR binary-output-port.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Chibi Scheme
+The
+.BR current-output-port (3scm)
+at program start is both textual and binary.
+It should normally not be possible to use
+.B write-u8
+on the current output port before rebinding it to a binary output
+port (which is not possible in R6RS).
+.
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns a unspecified value.
+.SH EXAMPLES
+.
+.EX
+;; R7RS code to create a file with the single line "A"
+(call-with-port (open-output-file "test.txt")
+ (lambda (p)
+   (write-u8 65 p)
+   (write-u8 10 p)))
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Commonly used in applications that create binary files or other binary data.
+There is often a mix of single bytes intermixed with larger writes with
+.BR put-bytevector (3scm).
+\" .SH RATIONALE
+\" .
+\" .SH COMPATIBILITY
+\" .
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I byte
+must be an exact integer between 0 and 255.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR put-char (3scm),
+.BR put-bytevector (3scm)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The
+.B put-u8
+procedure is new to the reworked I/O system introduced with R6RS.
+The
+.B write-u8
+procedure is new in R7RS and is similar to
+.BR write-char (3scm)
+but works with binary output ports, which did not exist in R5RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

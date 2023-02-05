@@ -1,0 +1,101 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string-map 3scm 2022-03-29 "" "Scheme Programmer's Manual"
+.SH NAME
+string-map \- map a procedure over the characters in strings
+.
+.SH LIBRARY
+.nf
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string-map " proc " " string1 " " string2 " ...)"
+.
+.SH DESCRIPTION
+The
+.B string-map
+procedure applies
+.I proc
+element-wise to the elements of the strings and returns a string of
+the results, in order.
+.PP
+If more than one string is given and not all strings have the same
+length,
+.B string-map
+terminates when the shortest string runs out.
+.PP
+The dynamic order in which
+.I proc
+is applied to the elements of the strings is unspecified.
+.PP
+If multiple returns occur from
+.BR string-map ,
+the values returned by earlier returns are not mutated.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single string object.
+.SH EXAMPLES
+.
+.EX
+(string-map char-foldcase "AbdEgH")
+        => "abdegh"
+
+(string-map
+ (lambda (c)
+   (integer->char (+ 1 (char->integer c))))
+ "HAL")
+        => "IBM"
+
+; Demonstrates how it ends on the shortest string
+(string-map
+ (lambda (c k)
+   ((if (eqv? k #\u) char-upcase char-downcase)
+    c))
+ "studlycaps xxx"
+ "ululululul")
+        => "StUdLyCaPs"
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+\" .SH COMPATIBILITY
+\" .
+.SH ERRORS
+It is an error if
+.I proc
+does not accept as many arguments as there
+are strings or does not return a single character.
+It is likewise an error if there are fewer than
+two arguments or if one of the arguments is outside its domain.
+.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR map (3scm)
+.SH STANDARDS
+R7RS
+.
+.SH HISTORY
+.
+This procedure also appears in SRFI-13.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,106 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string-normalize-nfd 3scm 2022-05-13 "" "Scheme Programmer's Manual"
+.SH NAME
+string-normalize-nfd, string-normalize-nfkd, string-normalize-nfc, string-normalize-nfkc \- Unicode normalization
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs unicode))" "             ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string-normalize-nfd " string )
+.BI "(string-normalize-nfkd " string )
+.BI "(string-normalize-nfc " string )
+.BI "(string-normalize-nfkc " string )
+.
+.SH DESCRIPTION
+Returns
+.I string
+normalized to Unicode normalization form D, KD, C, or KC,
+respectively:
+.TS
+tab(;);
+LL.
+\fBD\fP;Canonical Decomposition
+\fBKD\fP;Compatibility Decomposition
+\fBC\fP;Canonical Decomposition followed by Canonical Composition
+\fBKC\fP;Compatibility Decomposition followed by Canonical Composition
+.TE
+\" .
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a string.
+.PP
+When the specified result is equal in the sense of
+.BR string=? (3scm)
+to the argument, these procedures may return the argument instead of a
+newly allocated string.
+.SH EXAMPLES
+.
+.EX
+(string-normalize-nfd "\\xE9;")
+        => "\\x65;\\x301;"
+(string-normalize-nfc "\\xE9;")
+        => "\\xE9;"
+(string-normalize-nfd "\\x65;\\x301;")
+        => "\\x65;\\x301;"
+(string-normalize-nfc "\\x65;\\x301;")
+        => "\\xE9;"
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+In Unicode a string that renders as "\[:o]" can consist of one
+character or several characters that combine or join into a single
+character when rendered. The normalization forms are different
+standard ways to break up or combine characters in this way. There are
+various uses for these procedures in applications that deal with
+Unicode data. They may be used before encoding strings or before
+comparing them, such as when searching in a dictionary. The Linux
+console does not render combining marks, so NFC normalization can be
+useful there.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures are unique to R6RS, but if the same functionality is
+found through some other library, then they can be expected to behave
+the same as those in R6RS. See the section on "versioning and
+stability" in UAX #15 (link below).
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.
+.SH "SEE ALSO"
+.
+.BR string-upcase (3scm)
+.PP
+.UR https://www.unicode.org/reports/tr15/
+Unicode Standard Annex #15: Unicode Normalization Forms
+.UE .
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,260 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string->utf8 3scm 2021-03-10 "" "Scheme Programmer's Manual"
+.SH NAME
+string->utf8, string->utf16, string->utf32, utf8->string, utf16->string, utf32->string \- convert between strings and bytevectors
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string->utf8 " string )
+.BI "(string->utf8 " string " " start ) "           \fR;R7RS"
+.BI "(string->utf8 " string " " start " " end ) "       \fR;R7RS"
+.BI "(utf8->string " bytevector )
+.BI "(utf8->string " bytevector " " start ) "       \fR;R7RS"
+.BI "(utf8->string " bytevector " " start " " end ) "   \fR;R7RS"
+
+;; The following procedures are in R6RS and are absent from R7RS.
+
+.BI "(string->utf16 " string )
+.BI "(string->utf16 " string " " endianness )
+.BI "(string->utf32 " string )
+.BI "(string->utf32 " string " " endianness )
+.BI "(utf16->string " bytevector " " endianness )
+.BI "(utf16->string " bytevector " " endianness " " endianness-mandatory? )
+.BI "(utf32->string " bytevector " " endianness )
+.BI "(utf32->string " bytevector " " endianness " " endianness-mandatory? )
+.
+.SH DESCRIPTION
+These procedures convert between string and bytevector representations
+of strings in various Unicode encodings.
+.
+.
+.PP
+The
+.BR string->utf8 ,
+.BR string->utf16 ,
+and
+.BR string->utf32
+procedures return a bytevector that contains an encoding of
+.IR string
+(with no byte-order mark).
+The
+.BR utf8->string ,
+.BR utf16->string ,
+and
+.BR utf32->string
+procedures return a string whose character sequence is encoded by
+.IR bytevector .
+.
+.
+.TP
+.BR utf8->string ", " string->utf8
+These procedures use the UTF-8 encoding.
+.
+.
+.TP
+.B string->utf16
+This procedure encodes according to UTF-16BE (default) or UTF-16LE.
+.
+.
+.TP
+.B string->utf32
+This procedure encodes according to UTF-32BE (default) or UTF-32LE.
+.
+.
+.TP
+.B utf16->string
+This procedure decodes according to UTF-16, UTF-16BE, UTF-16LE, or
+a fourth encoding scheme that differs from all of those, as in the
+description of
+.I endianness-mandatory?
+below.
+.
+.
+.TP
+.B utf32->string
+This procedure decodes according to UTF-32, UTF-32BE, UTF-32LE, or
+a fourth encoding scheme that differs from all of those, as in the
+description of
+.I endianness-mandatory?
+below.
+.
+.
+.TP
+.B Endianness
+If
+.I endianness
+is specified, it must be the symbol
+.B big
+or the symbol
+.BR little .
+.\" XXX: Is this difference intentional?
+This differs from other bytevector procedures that can support
+additional implementation-defined endianness values. See
+.BR native-endianness (3scm)
+for a definition of endianness.
+The default endianness for the
+.B string->
+procedures is
+.BR big .
+The endianness concept is not applicable to UTF-8.
+.TP
+.B Byte-order marks
+A UTF-16 BOM is either the sequence of bytes #xFE, #xFF specifying
+.B big
+and UTF-16BE, or #xFF, #xFE specifying
+.B little
+and UTF-16LE.
+.IP
+A UTF-32 BOM is either the sequence of bytes #x00, #x00, #xFE, #xFF
+specifying
+.B big
+and UTF-32BE, or #xFF, #xFE, #x00, #x00, specifying
+.B little
+and UTF-32LE.
+.IP
+A UTF-8 BOM is the sequence of bytes #xEF, #xBB, #xBF. Neither R6RS
+nor R7RS mentions the UTF-8 BOM. It does not specify an endianness,
+but is sometimes used as a magic string to mark UTF-8 text.
+.TP
+.B The endianness-mandatory? argument (the "fourth" encoding scheme)
+If endianness-mandatory? is absent or
+.BR #f ,
+then
+.B utf16->string
+and
+.B utf32->string
+determine the endianness according to a BOM at
+the beginning of bytevector if a BOM is present; in this
+case, the BOM is not decoded as a character.
+Also in this case, if no BOM is present,
+.I endianness
+specifies the endianness of the encoding.
+If
+.I endianness-mandatory?
+is a true value,
+.I endianness
+specifies the endianness of the encoding, and any BOM in the encoding
+is decoded as a regular character.
+.TP
+.B Decoding errors
+.\" When decoding bytevectors, encoding errors are handled as with the
+.\" .B replace
+.\" semantics of textual I/O:
+If an invalid or incomplete character
+encoding is encountered, then the replacement character U+FFFD is
+appended to the string being generated, an appropriate number of bytes
+are ignored, and decoding continues with the following bytes.
+.TP
+.B R7RS
+R7RS provides two extra arguments for restricting the transcoding
+operation to only a part of the input. Only UTF-8 is provided (and
+possibly only a small subset, see the errors section).
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Chez Scheme
+There is a single empty bytevector object and a single empty string
+object. If these are returned then they are not newly allocated.
+Chez Scheme removes an initial UTF-8 BOM.
+.TP
+.B Loko Scheme
+Same notes as for Chez Scheme.
+.SH "RETURN VALUES"
+.
+Returns a single (unless empty) newly allocated bytevector or string
+object.
+.SH EXAMPLES
+.
+.EX
+;; The #vu8() syntax is used in R6RS. R7RS uses #u8() instead.
+
+(utf8->string #vu8(#x41))
+          => "A"
+
+(string->utf8 "λ")
+          => #vu8(#xCE #xBB)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures are used when interfacing with external systems,
+other processes, and where strings are encoded in one of the supported
+encodings. File operations are usually handled better using a
+transcoded port, except in cases where the file structure as such is
+binary and only some parts represent strings.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The UTF-8 variants of these procedures are present in both R6RS and R7RS,
+but R6RS is missing the \fIstart\fP and \fIend\fP arguments.
+.PP
+The number of bytes skipped when decoding an invalid or incomplete
+character differs between implementations. Relying on the precise
+number of bytes skipped, or the number of replacement characters used,
+is not portable.
+.PP
+Some implementations do not return newly allocated strings or
+bytevectors if they are empty, as they have a single copy of each.
+.PP
+For R7RS, also see the note below in the errors section.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+Somewhat unusually, the
+.I endianness-mandatory?
+argument can be any object.
+.TP
+Unsupported characters (R7RS)
+.
+It is an error to pass
+.B utf8->string
+a character in UTF-8 encoded form which the implementation does not
+support. 7-bit ASCII (except \fB#\\null\fR) must be supported. Any
+other character is optional and potentially an error. You can use the
+.B full-unicode
+feature identifier in
+.BR cond-expand (7scheme)
+to check if all of Unicode 6.0 is supported.
+.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR string->bytevector (3scm),
+.BR bytevector->string (3scm),
+.BR transcoded-port (3scm),
+.SH STANDARDS
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

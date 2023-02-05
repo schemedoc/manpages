@@ -1,0 +1,85 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bytevector-fill! 3scm 2021-02-23 "" "Scheme Programmer's Manual"
+.SH NAME
+bytevector-fill! \- fill a bytevector with a value
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bytevector-fill! " bytevector " " fill )
+.
+.SH DESCRIPTION
+This procedure stores
+.I fill
+in every element of
+.IR bytevector.
+The
+.I fill
+value is an exact integer in the interval [-128, 255]. Negative fill
+values are interpreted as bytes, viz.:
+.EX
+  (bytevector-fill! bytevector (bitwise-and fill #xff))
+.EE
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns unspecified values.
+.SH EXAMPLES
+.
+.\" TODO: Get a better example.
+.EX
+(let ((a (u8-list->bytevector '(1 2 3))))
+  (bytevector-fill! a 0)
+  a)
+   => #vu8(0 0 0)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is sometimes useful to clear sensitive parts of memory,
+like bytevectors holding cryptographic keys. This is optimistic but is
+not in any way guaranteed to wipe the data from memory.
+.PP
+A bytevector that contains the specified value would normally be
+created from scratch with
+.BR make-bytevector (3scm).
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The only difference in behavior between implementations should be in
+how fast it runs. This procedure is not present in R7RS-small.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.
+.SH "SEE ALSO"
+.
+.BR vector-fill! (3scm),
+.BR make-bytevector (3scm)
+.SH STANDARDS
+R6RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

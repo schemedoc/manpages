@@ -1,0 +1,123 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH make-transcoder 3scm 2022-03-30 "" "Scheme Programmer's Manual"
+.SH NAME
+make-transcoder, transcoder-codec, transcoder-eol-style, transcoder-error-handling-mode \- port transcoders
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(make-transcoder " codec )
+.BI "(make-transcoder " codec " " eol-style )
+.BI "(make-transcoder " codec " " eol-style " " handling-mode )
+
+.BI "(transcoder-codec " transcoder )
+.BI "(transcoder-eol-style " transcoder )
+.BI "(transcoder-error-handling-mode " transcoder )
+.
+.SH DESCRIPTION
+Returns a transcoder with the behavior specified by the arguments.
+.PP
+.I Codec
+must be a codec. The standard codecs are those returned by
+.BR latin-1-codec ,
+.BR utf-8-codec ,
+and
+.BR utf-16-codec .
+.PP
+.I Eol-style
+is optional and must be an
+.BR eol-style (3scm)
+symbol:
+.BR lf ,
+.BR cr ,
+.BR crlf ,
+.BR nel ,
+.BR crnel ,
+or
+.BR ls .
+It defaults to the native end-of-line style of the underlying platform.
+.PP
+.I Handling-mode
+is optional and must be an
+.BR error-handling-mode (3scm)
+symbol:
+.BR ignore ,
+.BR raise ,
+or
+.B replace
+(default).
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B IronScheme
+The native end-of-line style is
+.BR crlf .
+.SH "RETURN VALUES"
+.
+Returns a single value which is a transcoder object.
+.SH EXAMPLES
+.
+.EX
+; Decodes a UTF-8-encoded string with ISO-8859-1.
+; Note also how \\r\\n is read as a single newline.
+(let* ((bv (string->utf8 "D\[:o]ner\\r\\nkebab"))
+       (p (open-bytevector-input-port bv))
+       (tc (make-transcoder (latin-1-codec)
+                            (eol-style lf)))
+       (tp (transcoded-port p tc)))
+  (get-string-all tp))
+        => "DÃ¶ner\\nkebab"
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used in applications that need to control the binary
+encoding of textual ports.
+.SH RATIONALE
+.
+Transcoders let applications control parameters that would otherwise
+be implicit.
+.
+.SH COMPATIBILITY
+.
+Transcoders are unique to the R6RS I/O system.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.
+.SH "SEE ALSO"
+.
+.BR transcoded-port (3scm),
+.BR port-transcoder (3scm),
+.BR native-transcoder (3scm),
+.BR native-eol-style (3scm)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+Port transcoders were introduced in R6RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+There is no
+.B transcoder?
+procedure in R6RS.

@@ -1,0 +1,74 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH square 3scm 2022-04-05 "" "Scheme Programmer's Manual"
+.SH NAME
+square \- multiply a number by itself
+.
+.SH LIBRARY
+.nf
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(square " z )
+.
+.SH DESCRIPTION
+Returns the square of
+.IR z .
+This is equivalent to
+\f[CR](* \fIz z\fP)\fR.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value which is a number.
+.SH EXAMPLES
+.
+.EX
+(square 42)  => 1764
+(square 2.0) => 4.0
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Only exists in R7RS. Can be replaced with
+\f[CR](lambda (z) (* z z))\fR.
+.SH ERRORS
+It is an error for this procedure to be passed
+the wrong number of arguments, and it is an error if
+.I z
+is not a complex number object.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR sqrt (3scm),
+.BR expt (3scm),
+.BR * (3scm)
+.SH STANDARDS
+R7RS
+.
+.SH HISTORY
+.
+The
+.B square
+procedure first appears in R7RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

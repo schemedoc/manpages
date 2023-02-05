@@ -1,0 +1,116 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string-fill! 3scm 2022-05-14 "" "Scheme Programmer's Manual"
+.SH NAME
+string-fill! \- fill a string with a character
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs mutable-strings))" "     ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string-fill! " string " " char )
+.BI "(string-fill! " string " " char " " start ) "      \fR;R7RS\fP"
+.BI "(string-fill! " string " " char " " start " " end ) "  \fR;R7RS\fP"
+.
+.SH DESCRIPTION
+Stores
+.I char
+in every element of
+.IR string .
+.TP
+.B R7RS
+Only modifies
+.I string
+between
+.I start
+(inclusive) and
+.I end
+(exclusive).
+If omitted,
+.I start
+defaults to 0 and
+.I end
+defaults to the length of
+.IR string .
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns an unspecified value.
+.SH EXAMPLES
+.
+.EX
+;; R7RS example
+(let ((s (make-string 4 #\\x)))
+  (string-fill! s #\\y 2)
+  s)  =>  "xxyy"
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used to fill strings that have already been created.
+It has marginal utility. The second argument to
+.BR make-string (3scm)
+fills the entire string at creation time.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The
+.I start
+and
+.I end
+arguments are unique to R7RS.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR make-string (3scm),
+.BR string-set! (3scm)
+.SH STANDARDS
+R4RS,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The first Scheme report to carry this procedure was R2RS, which also
+had
+.B substring-fill!
+that filled a substring, but used a different argment order:
+.BI "(substring-fill! " string " " start " " end " " char )\fR.
+It is missing from IEEE Scheme.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,121 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH call-with-port 3scm 2022-05-01 "" "Scheme Programmer's Manual"
+.SH NAME
+call-with-port \- call a procedure with a port, closing it afterwards
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(call-with-port " port " " proc )
+.
+.SH DESCRIPTION
+
+Calls
+.I proc
+with
+.I port
+as an argument. If
+.I proc
+returns,
+.I port
+is closed automatically and the values returned
+by
+.I proc
+are returned.
+.PP
+If
+.I proc
+does not return,
+.I port
+is not closed automatically, except perhaps when it is possible to
+prove that
+.I port
+will never again be used for an input or output operation.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns whatever values
+.I proc
+returns.
+.SH EXAMPLES
+.
+.EX
+(call-with-port (open-input-file "config.scm") read)
+.EE
+.PP
+There are also examples in the
+.BR put-bytevector (3scm)
+and
+.BR put-u8 (3scm)
+pages.
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is a convenience that sometimes makes it easier to
+structure code.
+.
+.SH RATIONALE
+.
+Because Scheme's escape procedures have unlimited
+extent, it is possible to escape from the current continuation
+but later to resume it. If implementations were permitted to
+close the port on any escape from the current continuation,
+then it would be impossible to write portable code using both
+.BR call-with-current-continuation (3scm)
+and
+.BR call-with-port (3scm).
+.
+.SH COMPATIBILITY
+.
+This procedure is identical in R6RS and R7RS, apart from the
+differences in error handling.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular, this is raised if
+.I procedure
+does not accept one argument.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR call-with-bytevector-output-port (3scm),
+.BR call-with-string-output-port (3scm),
+.BR call-with-input-file (3scm),
+.BR with-input-from-file (3scm)
+.
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+This procedure is new in R6RS and later also became new in R7RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

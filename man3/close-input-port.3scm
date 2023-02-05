@@ -1,0 +1,115 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH close-input-port 3scm 2021-02-28 "" "Scheme Programmer's Manual"
+.SH NAME
+close-input-port, close-output-port \- close a port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io simple))" "           ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(close-input-port " port )
+.BI "(close-output-port " port )
+.
+.SH DESCRIPTION
+Closes the file associated with
+.IR port ,
+rendering the port incapable of delivering or accepting characters.
+These routines have no effect if the file has already been closed.
+.TP
+.B R6RS
+If
+.I port
+is a custom port then the closer procedure is called before the
+port is really closed.
+.IP
+Custom ports have a single closer procedure, so they do not
+compose well with only closing one direction. R6RS does not
+explicitly make any mention of closing only one direction.
+.TP
+.B R7RS
+Scheme implementations may provide ports which are simultaneously
+input and output ports, such as sockets; the
+.B close-input-port
+and
+.B close-output-port
+procedures can then be used to close the input and output sides of the
+port independently.
+\" .
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns unspecified values.
+.SH EXAMPLES
+.
+.EX
+(define p (open-output-file "hello.txt"))
+(display "Hello, world\\n" p)
+(close-output-port p)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Ports are often connected to some limited resource, such as a file
+descriptor. Closing ports is important to avoid resource leaks. Some
+implementations will garbage collect ports, but this is not required.
+.SH RATIONALE
+.
+In R6RS these procedures are part of the "simple I/O" library, which
+is provided for compatibility with code written for R5RS and earlier
+reports.
+.SH COMPATIBILITY
+.
+These procedures are provided for portability with code written for
+R5RS and earlier reports.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.IP
+It is an error to
+apply these procedures to a port which is not an
+input or output port, respectively. 
+.
+.SH "SEE ALSO"
+.
+.BR close-port (3scm),
+.BR call-with-port (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+It is often better to use
+.BR call-with-port (3scm)
+or one of the related procedures. They make it easier to ensure that a
+port is closed when an exception is raised.

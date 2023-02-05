@@ -1,0 +1,99 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH textual-port? 3scm 2021-06-25 "" "Scheme Programmer's Manual"
+.SH NAME
+textual-port?, binary-port? \- test if ports are textual or binary
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(binary-port? " port )
+.BI "(textual-port? " port )
+.
+.SH DESCRIPTION
+The
+.B textual-port?
+procedure returns
+.B #t
+if
+.I port
+is textual,
+and returns
+.B #f
+otherwise.
+The
+.B binary-port?
+procedure
+returns
+.B #t if
+.I port
+is binary, and returns
+.B #f
+otherwise.
+.TP
+.B R7RS
+These procedures accept any kind of object.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single boolean object.
+.SH EXAMPLES
+.
+.EX
+(call-with-input-file "/dev/null" textual-port?)
+   => #t
+
+(binary-port? (open-bytevector-input-port #vu8(1 2 3)))
+   => #t
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Some R7RS implementations may allow both
+binary and textual operations on ports.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+Passing the wrong number of arguments is an error.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR input-port? (3scm).
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+New in R6RS and new in R7RS. In R5RS and earlier reports, ports were
+conceptually textual.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,94 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH condition 3scm 2022-05-14 "" "Scheme Programmer's Manual"
+.SH NAME
+condition \- compound conditions
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs conditions))" "          ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(condition " condition\fR1\fP " ...)"
+.
+.SH DESCRIPTION
+Returns a condition object with
+the components of the
+.IR condition s
+as its components, in
+the same order, i.e., with the components of
+.IR condition 1
+appearing first in the same order as in
+.IR condition 1,
+then with the components of
+.IR condition 2,
+and so on.
+.PP
+Compound conditions act as if they were any of the included simple
+conditions with regard to predicates and accessors.
+\" .
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a condition. The returned condition is
+compound if the total number of components is zero or greater than
+one. Otherwise, it may be compound or simple.
+.SH EXAMPLES
+.
+.EX
+(define con
+  (condition
+   (make-error)
+   (make-message-condition "I am an error")))
+
+(error? con)  =>  #t
+(message? con)  =>  #t
+(condition-message con)  =>  "I am an error"
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Compound conditions are used when describing multiple aspects of
+exceptional situations. They are passed to
+.BR raise (3scm)
+and
+.BR raise-continuable (3scm).
+They are normally caught with
+.BR guard (7scheme).
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Compound conditions are unique to R6RS.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.
+.SH "SEE ALSO"
+.
+.BR simple-conditions (3scm)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure was first introduced in R6RS as part of the new
+condition system.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

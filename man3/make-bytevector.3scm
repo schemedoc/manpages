@@ -1,0 +1,133 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH make-bytevector 3scm 2022-03-21 "" "Scheme Programmer's Manual"
+.SH NAME
+make-bytevector \- create a new bytevector
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(make-bytevector " k )
+.BI "(make-bytevector " k " " fill )
+.
+.SH DESCRIPTION
+Return a newly allocated bytevector of
+.I k
+bytes.
+.PP
+If the
+.I fill
+argument is missing, the initial contents of the returned bytevector
+are unspecified.
+.PP
+If the
+.I fill
+argument is present, it must be an exact integer object. Every byte in
+the returned bytevector will be set to this value.
+.TP
+.B R6RS
+The
+.I fill
+argument must be in the range [−128, 255]. If
+.I fill
+is positive, it is interpreted as if passed to
+.BR bytevector-u8-set! (3scm).
+If it is negative, it is instead used as if passed to
+.BR bytevector-s8-set! (3scm).
+.TP
+.B R7RS
+The
+.I fill
+argument must be in the range [0, 255].
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Chez Scheme, Loko Scheme, (others?)
+If
+.I k
+is zero then the empty bytevector object is returned.
+.TP
+.B GNU Guile, Loko Scheme, (others?)
+If
+.I fill
+is missing then the bytevector is initialized to zeros.
+.TP
+.B Chibi Scheme
+Even though Chibi is an R7RS implementation, the
+.I fill
+argument is interpreted as in R6RS. This is a valid extension of R7RS.
+.SH "RETURN VALUES"
+.
+Returns a single object which is a bytevector object of the given
+length. If
+.I k
+is non-zero then the bytevector is fresh. If
+.I k
+is zero then the unique empty bytevector object may be returned.
+.SH EXAMPLES
+.
+.EX
+(make-bytevector 2 12)
+    => #u8(12 12)          ;R7RS notation
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used in code that works with mutable bytevectors.
+For some code an alternative is to use
+.BR open-bytevector-output-port (3scm)
+and to build the data sequentially.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Portable code should provide the second argument, and should keep it
+in the range [0, 255].
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+.BR &implementation-restriction " (R6RS)"
+There is not enough free memory to hold the new bytevector.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR u8-list->bytevector (3scm)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+It is often a mistake to call this procedure without the
+.I fill
+argument. Unusual values of
+.I k
+can stress the Scheme implementation's memory allocator and cause a
+crash.

@@ -1,0 +1,129 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH gcd 3scm 2022-03-25 "" "Scheme Programmer's Manual"
+.SH NAME
+gcd, lcm \- greatest common divisor and least common multiple
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(gcd " number " ...)"
+.BI "(lcm " number " ...)"
+.
+.SH DESCRIPTION
+These procedures return the greatest common divisor and the least
+common multiple of their arguments, respectively. The result is always
+non-negative. The arguments must be integers.
+.\" These things are probably part of the lore of mathematics.
+.TP
+.B Greatest common divisor
+If all arguments are zero, or no arguments are given, then
+.B gcd
+returns zero. Otherwise the greatest common divisor is the largest
+integer that divides each of the arguments.
+.TP
+.B Least common multiple
+If there are no arguments then 1 is returned.
+If one of the arguments is zero then zero is returned.
+Otherwise
+.B lcm
+returns the smallest positive integer that is divisible by each of the
+arguments.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a non-negative number object.
+.SH EXAMPLES
+.
+.EX
+(gcd 32 -36)     =>   4
+(gcd)            =>   0
+
+(lcm 32 -36)     =>   288
+(lcm 32.0 -36)   =>   288.0
+(lcm)            =>   1
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .  Rational numbers, prime factoring
+.SH RATIONALE
+.
+The
+.B gcd
+procedure is needed internally in Scheme implementations for rational
+number support. Its implementation is not trivial, so it makes sense
+to provide it to users as well. The
+.B lcm
+procedure is a natural complement which is easily implemented once
+.B gcd
+is available.
+.
+.SH COMPATIBILITY
+.
+These procedures are identical in all RnRS revisions since R2RS. An
+example with an inexact number was added in R4RS, but the signature
+did not change.
+.PP
+R7RS implementations that do not support arbitrarily large exact
+integers will not always be able to represent the mathematically
+expected result of
+.BR lcm .
+.SH ERRORS
+These procedures can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+An argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR numerator (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The first Scheme report to name these procedures was R2RS.
+Nevertheless, Scheme has always had a
+.B gcd
+procedure because one was present even in MacLISP (see the
+LISP/MACLISP Reference Manual, 1973, Moon et al). The MacLISP version
+did not work with inexact numbers.
+.PP
+An algorithm for computing
+.B gcd
+appears in Euclid's Elements (circa 300 BCE).
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+Ikarus Scheme 0.0.4 has the following bug:
+.EX
+(gcd -1)  => -1    ; wrong! should be 1
+.EE

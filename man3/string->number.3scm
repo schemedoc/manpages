@@ -1,0 +1,165 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string->number 3scm 2022-04-10 "" "Scheme Programmer's Manual"
+.SH NAME
+string->number \- convert a string to a number
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string->number " string )
+.BI "(string->number " string " " radix )
+.
+.SH DESCRIPTION
+
+Returns a number object with maximally precise representation
+expressed by the given
+.IR string .
+.PP
+.I Radix
+must be an exact integer object, either 2, 8, 10, or 16. If supplied,
+radix is a default radix that may be overridden by an explicit radix
+prefix in string (e.g., \f[CR]"#o177"\fP). If radix is not supplied, then the
+default radix is 10.
+.PP
+If string is not a syntactically valid notation for a number, or would
+result in a number that the implementation cannot represent, then
+\fBstring->number\fP returns \fB#f\fP. An error is never signaled due
+to the content of string.
+.\" From R6RS:
+\" If the arguments are as specified, but
+\" .I string
+\" is not a syntactically valid notation for a number object or a
+\" notation for a rational number object with a zero denominator, then
+\" .B string->number
+\" returns
+\" .BR #f .
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B
+Chez Scheme
+The
+.B string->number
+procedure in the \f[CR](chezscheme)\fP library accepts a radix between
+2 and 36.
+.SH "RETURN VALUES"
+.
+Returns a single value which is a number object or \fB#f\fP.
+.SH EXAMPLES
+.
+.EX
+(string->number "100")     =>  100
+(string->number "100" 16)  =>  256
+(string->number "1e2")     =>  100.0
+.EE
+.PP
+In the following examples from R6RS an implementation may return
+\fB#f\fP instead of infinities or nans if they are not supported.
+It does not, like it otherwise would, raise the conditions from
+.BR make-no-infinities-violation (3scm)
+or
+.BR make-no-nans-violation (3scm).
+.PP
+.EX
+(string->number "0/0")     =>  #f
+(string->number "+inf.0")  =>  +inf.0
+(string->number "-inf.0")  =>  -inf.0
+(string->number "+nan.0")  =>  +nan.0
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+.SH RATIONALE
+.
+This procedure provides access to the same number parser that is used
+in
+.BR read (3scm),
+or at least a functionally equivalent parser. R7RS explains it like this:
+.IP
+.\" Verbatim from R7RS
+The rules used by a particular implementation for \fBstring->number\fP must
+also be applied to read and to the routine that reads programs, in
+order to maintain consistency between internal numeric processing,
+I/O, and the processing of programs. As a consequence, the R5RS
+permission to return \fB#f\fP when string has an explicit radix prefix
+has been withdrawn.
+.
+.SH COMPATIBILITY
+.
+The compatibility of this procedure can be viewed in two different
+ways. If we look at this procedure as providing access to the number
+parser of the Scheme implementation then it essentially works the same
+everywhere. If we examine it in terms of which inputs give which
+results, then there can be large differences.
+.PP
+R6RS implementations are basically the same, except that they may lack
+support for infinities and nans. R7RS implementations have much more
+leeway:
+.IP
+.\" Verbatim from R7RS
+The domain of \fBstring->number\fP may be restricted by
+implementations in the following ways. If all numbers supported by an
+implementation are real, then \fBstring->number\fP is permitted to
+return \fB#f\fP whenever string uses the polar or rectangular
+notations for complex numbers. If all numbers are integers, then
+\fBstring->number\fP may return \fB#f\fP whenever the fractional
+notation is used. If all numbers are exact, then \fBstring->number\fP
+may return \fB#f\fP whenever an exponent marker or explicit exactness
+prefix is used. If all inexact numbers are integers, then
+\fBstring->number\fP may return \fB#f\fP whenever a decimal point is
+used.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed,
+.I string
+was not a string object, or
+.I radix
+was passed but was not 2, 8, 10, or 16.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR number->string (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+First appeared in R2RS, where it took three arguments:
+.IR string ,
+.IR exactness ,
+and
+.IR radix .
+The latter two arguments were symbols.
+The modern two-argument variant first appeared in R4RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

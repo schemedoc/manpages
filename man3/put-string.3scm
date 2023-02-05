@@ -1,0 +1,147 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH put-string 3scm 2022-05-23 "" "Scheme Programmer's Manual"
+.SH NAME
+put-string, write-string \- write a string to a textual output port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+; R6RS only:
+.BI "(put-string " textual-output-port " " string )
+.BI "(put-string " textual-output-port " " string " " start )
+.BI "(put-string " textual-output-port " " string " " start " " count )
+
+; R7RS only:
+.BI "(write-string " string )
+.BI "(write-string " string " " textual-output-port )
+.BI "(write-string " string " " textual-output-port " " start )
+.BI "(write-string " string " " textual-output-port " " start " " end )
+.
+.SH DESCRIPTION
+Writes the
+characters of
+.I string
+starting at index
+.I start
+to
+.IR textual-output-port .
+.TP
+.B R6RS
+Exactly
+.I count
+characters are written,
+defaulting to
+\f[CR](string-length \fIstring\fP) − \fIstart\fP\fR.
+.
+.TP
+.B R7RS
+The characters from
+.I start
+to
+.I end
+are written,
+with
+.I end
+defaulting to
+\f[CR](string-length \fIstring\fP)\fR.
+.
+.PP
+The
+.I start
+argument defaults to 0.
+.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns an unspecified value.
+.
+.SH EXAMPLES
+.
+.EX
+(write-string "Hello, world!\\n")
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used, instead of a generic procedure like
+.BR display (scheme),
+because it is slightly faster and makes it possible to write only part
+of the string.
+.SH RATIONALE
+.
+The R7RS variant specifies
+.I end
+instead of
+.I count
+to be consistent with other procedures.
+\" .SH COMPATIBILITY
+\" .
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I start
+and
+.I count
+must be non-negative exact integer objects,
+and
+.I string
+must have a length of at least
+.I start
++
+.IR count .
+.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR put-char (3scm),
+.BR display (3scm),
+.BR open-file-output-port (3scm)
+.SH STANDARDS
+\" R4RS,
+\" IEEE Scheme,
+\" R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The
+.B put-string
+procedure was introduced in R6RS as part of the reworked I/O design.
+The
+.B write-string
+procedure is new in R7RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

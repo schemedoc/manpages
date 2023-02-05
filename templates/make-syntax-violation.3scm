@@ -1,0 +1,62 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020
+.\" SPDX-License-Identifier: MIT
+.TH make-syntax-violation 3scm 2020-04-18 "" "Scheme Programmer's Manual"
+.SH NAME
+make-syntax-violation, syntax-violation?, syntax-violation-form, syntax-violation-subform \- syntax violation conditions
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs conditions))" "          ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(make-syntax-violation " form " " subform )
+.BI "(syntax-violation? " obj )
+.BI "(syntax-violation-form " condition )
+.BI "(syntax-violation-subform " condition )
+.
+.SH DESCRIPTION
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.SH "RETURN VALUES"
+.
+.SH EXAMPLES
+.
+.EX
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+.SH RATIONALE
+.
+.SH COMPATIBILITY
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.
+.SH "SEE ALSO"
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.

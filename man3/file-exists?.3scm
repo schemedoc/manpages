@@ -1,0 +1,103 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH file-exists? 3scm 2021-03-07 "" "Scheme Programmer's Manual"
+.SH NAME
+file-exists? \- test if a file exists
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs files))" "               ;R6RS"
+.BR "(import (scheme file))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(file-exists? " filename )
+.
+.SH DESCRIPTION
+This procedure returns
+.B #t
+if the named file exists at the time the procedure is called and
+.B #f
+otherwise.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single boolean object.
+.SH EXAMPLES
+.
+.EX
+;; Assuming a typical Unix-like system
+(file-exists? "/dev/null")
+          => #t
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used to check if a file exists before trying to
+perform some operation on it. One common usage is in a Scheme
+implementation's library loader, which needs to check if a base
+filename exists in one of multiple paths, often trying different file
+extensions.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+.TP
+.B R6RS
+Valid values for a file name include strings that name a file using
+the native notation of filesystem paths on an implementation’s
+underlying operating system, and may include implementation-dependent
+values as well.
+.TP
+.B R7RS
+It is an error if filename is not a string. See the next section.
+.PP
+This procedure is absent from R5RS and earlier reports.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR delete-file (3scm),
+.BR open-input-file (3scm),
+.BR open-output-file (3scm)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+This procedure is new in R6RS and its description was copied into
+R7RS. It is absent from previous reports. Early Scheme running on
+MacLISP could use the procedure
+.B allfiles
+to check if a file exists.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+Programs that check if a file exist and then immediately operate on it
+are prone to race conditions. The file may have been removed
+immediately after this procedure checked for its existence, or it
+might have been created. This is often not a problem.

@@ -1,0 +1,147 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH * 3scm 2020-10-18 "" "Scheme Programmer's Manual"
+.SH NAME
+*, fx*, fl* \- multiplication
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS, fx*"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS, fl*"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(* " number " ...)"
+.BI "(fl* " fl1 "...)"  "                        \fR;R6RS"
+.BI "(fx* " fx1 " " fx2 ")"  "                       \fR;R6RS"
+.
+.SH DESCRIPTION
+This procedure returns the product of its arguments.
+.TP
+.B Fixnum variant
+An exception with condition type
+.B &implementation-restriction
+is raised if the product is not a fixnum.
+.TP
+.B Flonum variant
+In general, this procedure should return the flonum that best
+approximates the mathematical product. For implementations that
+represent flonums using IEEE binary floating point, the meaning of
+"best" is defined by the IEEE standards.
+.EX
+(fl+ +inf.0 -inf.0) => +nan.0
+(fl+ +nan.0 fl)     => +nan.0
+(fl* +nan.0 fl)     => +nan.0
+.EE
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Chez Scheme
+An exact zero is returned when any of the arguments to
+.B *
+is an exact zero.
+.
+.SH "RETURN VALUES"
+.
+Returns one value, which is a number object.
+.PP
+For the generic variant, the return value is exact if all arguments
+are exact. If any argument is inexact then the result is inexact,
+unless one of the arguments is an exact zero, in which case the return
+value can optionally be an exact zero.
+.PP
+Non-R6RS implementations may be missing parts of the numeric tower and
+can thus resort to inexact numbers even for exact computations.
+.
+.SH EXAMPLES
+.
+.EX
+; Examples apply to R6RS. An R5RS/R7RS implementation
+; might e.g. not provide rational or complex numbers.
+(* 6 7)           => 42
+(* 2 1/3)         => 2/3
+(* 2 1.57)        => 3.14
+(* 5 1+2i)        => 5+10i
+
+; Examples from R6RS
+(* 4)             => 4
+(*)               => 1
+(* 5 +inf.0)      => +inf.0
+(* -5 +inf.0)     => -inf.0
+(* +inf.0 +inf.0) => +inf.0
+(* +inf.0 -inf.0) => -inf.0
+(* 0 +inf.0)      => 0 or +nan.0
+(* 0 +nan.0)      => 0 or +nan.0
+(* 1.0 0)         => 0 or 0.0
+.EE
+\" .
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+R6RS is the only RnRS report on Scheme to require a full implementation of
+the numeric tower.
+In R7RS code, the feature identifiers
+.BR exact-closed ,
+.BR exact-complex ,
+.BR ieee-float ,
+and
+.B ratios
+should be consulted before performing arithmetic that requires
+one of these features.
+.
+.PP
+In R7RS, (* 0 +inf.0) may return 0, or +nan.0, or report that inexact
+numbers are not supported, or report that non-rational real numbers
+are not supported, or fail silently or noisily in other
+implementation-specific ways.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+An argument was outside its domain.
+.TP
+.BR &implementation-restriction " (R6RS)"
+May be raised when applied to mixed non-rational real and non-real
+complex arguments. Otherwise an unspecified number object is returned.
+Raised by the fixnum variant if the mathematically correct result is
+not a fixnum.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.BR + (3scm)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,71 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bytevector-append 3scm 2021-02-28 "" "Scheme Programmer's Manual"
+.SH NAME
+bytevector-append \- append bytevectors
+.
+.SH LIBRARY
+.nf
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bytevector-append " bytevector " " ... )
+.
+.SH DESCRIPTION
+Returns a newly allocated bytevector whose elements are
+the concatenation of the elements in the given bytevectors.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single bytevector object.
+.SH EXAMPLES
+.
+.EX
+(bytevector-append #u8(0 1 2) #u8(3 4 5))
+          => #u8(0 1 2 3 4 5)
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is absent from R6RS. One possible implementation is
+shown below.
+.EX
+(define (bytevector-append . bvs)
+  (call-with-bytevector-output-port
+    (lambda (p)
+      (for-each (lambda (bv) (put-bytevector p bv)) bvs))))
+.EE
+.SH ERRORS
+It is an error if one of the arguments is not a bytevector.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR make-bytevector (3scm),
+.BR append (3scm)
+.SH STANDARDS
+R7RS
+\" .
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

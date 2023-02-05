@@ -1,0 +1,124 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH min 3scm 2022-03-26 "" "Scheme Programmer's Manual"
+.SH NAME
+max, min \- find the maximum or minimum argument
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(max " x1 " " x2 " ...)"
+.BI "(fxmax " fx1 " " fx2 " ...)" "                 \fR;R6RS"
+.BI "(flmax " fl1 " " fl2 " ...)" "                 \fR;R6RS"
+.BI "(min " x1 " " x2 " ...)"
+.BI "(fxmin " fx1 " " fx2 " ...)" "                 \fR;R6RS"
+.BI "(flmin " fl1 " " fl2 " ...)" "                 \fR;R6RS"
+.
+.SH DESCRIPTION
+These procedures return the maximum or minimum of their
+arguments.
+.TP
+.B Generic versions
+For any real number object x that is not a NaN:
+.EX
+(max +inf.0 x)  =>  +inf.0
+(min -inf.0 x)  =>  -inf.0
+.EE
+If any argument is inexact, then the result is also inexact (unless
+the procedure can prove that the inaccuracy is not large enough to
+affect the result, which is possible only in unusual implementations).
+.TP
+.B Fixnum versions
+The arguments and the return value are fixnums. There are no special
+cases.
+.TP
+.B Flonum versions
+The arguments are the return value are flonums. If one or more of the
+arguments is a NaN then a NaN is returned.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single number object.
+.SH EXAMPLES
+.
+.EX
+(max 3 4)        =>  4
+(max 3.9 4)      =>  4.0
+
+(max 42 +nan.0)  => +nan.0
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The generic versions of these procedures work the same in all Scheme
+revisions.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+.BR &implementation-restriction " (R6RS)"
+May be raised if
+.B min
+or
+.B max
+is used to compare number objects of mixed exactness, and the
+numerical value of the result cannot be represented as an inexact
+number object without loss of accuracy.
+.TP
+R7RS
+The reasons for
+.B &assertion
+described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+It is not specified how implementations should handle the
+.B &implementation-restriction
+case described above, but the program may be stopped.
+.
+.SH "SEE ALSO"
+.
+.BR < (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The generic versions of these procedures are in all Scheme reports
+since R2RS. Early Scheme built on top of MacLISP also provided them.
+.PP
+The fixnum and flonum versions are new in R6RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+IEEE Scheme accidentally omitted
+.BR min .

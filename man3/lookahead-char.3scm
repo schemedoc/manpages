@@ -1,0 +1,191 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH lookahead-char 3scm 2023-01-21 "" "Scheme Programmer's Manual"
+.SH NAME
+lookahead-char, peek-char \- peek at the next character from a port
+.
+.SH LIBRARY
+.nf
+;; lookahead-char
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+
+;; peek-char
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io simple))" "           ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(lookahead-char " textual-input-port ) " \fR;R6RS\fP"
+.BI (peek-char)
+.BI "(peek-char " textual-input-port )
+.
+.SH DESCRIPTION
+Read a character from
+.I textual-input-port
+without updating the port to point past the character.
+.PP
+This procedure blocks as necessary until a character is available, or
+the data that are available cannot be the prefix of any valid
+encoding, or an end of file is reached.
+.PP
+If a complete character is available before the next end of file, this
+procedure returns that character.
+.PP
+If an end of file is reached before any data are read, this procedure
+returns the end-of-file object.
+.PP
+If
+.I textual-input-port
+is omitted, it defaults to the value returned by
+.BR current-input-port (3scm).
+.
+.SH "IMPLEMENTATION NOTES"
+.
+With the standard UTF-8, UTF-16 and UTF-32 transcoders, up to four
+bytes of lookahead may be needed.
+.
+They may additionally skip over the BOM at the start of a file, in
+which case two to four bytes are skipped over.
+.
+Nonstandard transcoders may need even more lookahead.
+.SH "RETURN VALUES"
+.
+Returns a single value; a character or an end of file object.
+.SH EXAMPLES
+.
+.EX
+;; This demonstrates one way to parse /etc/passwd
+;; using peek-char.
+(import (scheme base) (scheme file) (scheme write))
+
+(define (get-string-until-chars p terminators)
+  (let lp ((chars '()))
+    (let ((c (peek-char p)))
+      (cond ((or (eof-object? c)
+                 (memv c terminators))
+             ;; Take the characters we found up until
+             ;; the terminator and return them as
+             ;; a string.
+             (list->string (reverse chars)))
+            (else
+             (lp (cons (read-char p) chars)))))))
+
+(define (get-record p)
+ (let lp ((fields '()))
+   (let* ((field (get-string-until-chars p '(#\\: #\\newline)))
+          (terminator (read-char p)))
+     (cond ((and (eof-object? terminator) (null? fields))
+            ;; Returns the end-of-file object
+            terminator)
+           ((or (eof-object? terminator)
+                (eqv? terminator #\\newline))
+            ;; The record was terminated with or
+            ;; without a newline.
+            (reverse (cons field fields)))
+           (else
+            ;; Save the field from the record.
+            (lp (cons field fields)))))))
+
+(call-with-input-file "/etc/passwd"
+  (lambda (p)
+    ;; Read records from the port and write them as lists to standard
+    ;; output until the end of the file.
+    (let lp ()
+      (let ((record (get-record p)))
+        (unless (eof-object? record)
+          (write record)
+          (newline)
+          (lp))))))
+
+;; The R7RS program above prints something like this:
+;;
+;; ("root" "x" "0" "0" "root" "/root" "/bin/bash")
+;; ("daemon" "x" "1" "1" "daemon" "/usr/sbin" "/usr/sbin/nologin")
+;; ("bin" "x" "2" "2" "bin" "/bin" "/usr/sbin/nologin")
+;; ...
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures are commonly used in a certain style of parsers,
+which dispatch on the next character from the input.
+.SH RATIONALE
+.
+An alternative to providing lookahead would be to provide a procedure
+like
+.BR ungetc (3),
+which "unreads" a character from a port. This latter type of operation
+raises questions of how many characters it should be possible to unread.
+Normally in Scheme one would not want there to be a limit for this case,
+but such a requirement would demand a less efficient implementation of
+.BR read-char (3),
+which is also not in line with how Scheme is normally designed.
+.
+.SH COMPATIBILITY
+.
+Except for R7RS's variations in which types of ports and characters
+are supported, these procedures work the same everywhere. The
+.BR lookahead-char (3scm)
+name is unique to R6RS.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+.BR &i/o-port " (R6RS)"
+This condition is included with the conditions below and contains
+.IR textual-input-port .
+.TP
+.BR &i/o-read-error " (R6RS)"
+There was a read error during the I/O operation.
+.TP
+.BR &i/o-decoding " (R6RS)"
+The input from a port cannot be translated into a character by
+the port's transcoder and the transcoder's
+.BR error-handling-mode (7scheme)
+is
+.BR raise .
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR get-char (3)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The name
+.BR lookahead-char (3scm)
+is new to R6RS's reworked I/O system.
+The
+.BR peek-char (3scm)
+procedure first showed up in R4RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+These procedures are prone to a type of bug where you forget to
+consume data from the port following a peek, resulting in an infinite
+loop of peeking.

@@ -1,0 +1,81 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string->vector 3scm 2022-05-14 "" "Scheme Programmer's Manual"
+.SH NAME
+string->vector \- convert a string to a vector
+.
+.SH LIBRARY
+.nf
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string->vector " string )
+.BI "(string->vector " string " " start )
+.BI "(string->vector " string " " start " " end )
+.
+.SH DESCRIPTION
+Returns a newly created vector initialized to the elements
+of
+.I string
+between
+.I start
+(inclusive) and
+.I end
+(exclusive).
+The order of the characters is preserved.
+If omitted,
+.I start
+defaults to 0 and
+.I end
+defaults to the length of
+.IR string .
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a vector object.
+.SH EXAMPLES
+.
+.EX
+(string->vector "ABC")  =>  #(#\\A #\\B #\\C)
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+\" .SH COMPATIBILITY
+\" .
+.SH ERRORS
+It is an error to pass the wrong number of arguments,
+and to pass an argument that is outside its domain.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR string->list (3scm)
+.SH STANDARDS
+R7RS,
+SRFI-133,
+SRFI-140,
+SRFI-152
+.
+.SH HISTORY
+.
+This procedure first appeared in R7RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

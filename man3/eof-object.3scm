@@ -1,0 +1,93 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH eof-object 3scm 2021-03-04 "" "Scheme Programmer's Manual"
+.SH NAME
+eof-object \- return the end-of-file object
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (rnrs io simple))" "           ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI (eof-object)
+.
+.SH DESCRIPTION
+Returns an end-of-file object.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value which is an end-of-file object.
+.SH EXAMPLES
+.
+.EX
+(eof-object? (eof-object))
+          => #t
+
+(eqv? (eof-object) (eof-object))
+          => #t    ;R6RS
+
+(eq? (eof-object) (eof-object))
+          => #t    ;R6RS
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+The end-of-file object is used generally to indicate an end-of-file
+condition. It appears in I/O routines, it is often passed through in
+parsers, and it is used in generators (e.g. SRFI 158).
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Works the same anywhere that it's available. Programs written for
+earlier reports would sometimes get access to the end-of-file object
+by using tricks like reading from an empty file or string port.
+.PP
+R6RS has a single unique end-of-file object.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR eof-object? (3scm)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+First appeared in R6RS and R7RS. Previous reports had
+.BR eof-object? ,
+but the end-of-file object was not necessarily disjoint from other
+types.
+.PP
+Other languages take different approaches, such as having the read
+function return an empty result, or having it return an error and
+providing a function to test for the end-of-file condition.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

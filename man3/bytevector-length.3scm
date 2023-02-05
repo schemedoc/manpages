@@ -1,0 +1,82 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bytevector-length 3scm 2020-12-31 "" "Scheme Programmer's Manual"
+.SH NAME
+bytevector-length \- the length of a bytevector
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bytevector-length " bytevector )
+.
+.SH DESCRIPTION
+Returns, as an exact integer object, the number of bytes
+in \fIbytevector\fP. The length of a bytevector is fixed.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+All extant implementations use fixnums to represent bytevector
+lengths, but this is not required.
+.SH "RETURN VALUES"
+.
+Returns a single value which is the length of the bytevector.
+.SH EXAMPLES
+.
+.EX
+(bytevector-length #vu8(1 2 3))
+          => 3
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is often used in code that deals with variable-length
+binary data.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure works the same in all known Scheme implementations. It
+also appears in other languages as e.g. the \fBlen\fP function on byte
+objects in Python.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR make-bytevector (3scm)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The name first appeared in R6RS. SRFI-4 is the first SRFI to define a
+procedure similar to this one.
+.\" TODO: Investigate when the first length-tagged arrays appeared in
+.\" CS history
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

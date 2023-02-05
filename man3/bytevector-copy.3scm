@@ -1,0 +1,78 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bytevector-copy 3scm 2021-02-20 "" "Scheme Programmer's Manual"
+.SH NAME
+bytevector-copy \- copy a bytevector
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bytevector-copy " bytevector )
+.BI "(bytevector-copy " bytevector " " start ) "      \fR;R7RS\fP"
+.BI "(bytevector-copy " bytevector " " start " " end ) "  \fR;R7RS\fP"
+.
+.SH DESCRIPTION
+Returns a newly allocated bytevector containing the bytes in
+\fIbytevector\fP between \fIstart\fP (inclusive) and \fIend\fP
+(exclusive).
+.PP
+The default value for \fIstart\fP is 0 and the default value
+for \fIend\fP is equal to the length of the input.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a bytevector with the length \fIend\fP - \fIstart\fP.
+.SH EXAMPLES
+.
+.EX
+(define a #u8(1 2 3 4 5))
+(bytevector-copy a 2 4))
+   => #u8(3 4)
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The R6RS version of this procedure only has the first argument.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR bytevector-copy! (3scm)
+.SH STANDARDS
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

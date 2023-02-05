@@ -30,7 +30,7 @@ export MANPATH=$PWD:$(manpath -g)
 ```
 
 Then you should be able to use `man car`, etc. It is also possible to
-write `man man3/car.3scheme`.
+write `man man3/car.3scm`.
 
 ## How to contribute
 
@@ -48,7 +48,7 @@ documents, e.g. checking their structure, searching for missed pages,
 etc.
 
 Sometimes it's appropriate to group together several procedures in the
-same page. See `man3/cdr.3scheme` for an example of how to
+same page. See `man3/cdr.3scm` for an example of how to
 link to another page.
 
 ## A short defense of the manpage language

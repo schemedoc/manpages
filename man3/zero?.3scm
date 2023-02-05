@@ -1,0 +1,102 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH zero? 3scm 2021-01-06 "" "Scheme Programmer's Manual"
+.SH NAME
+zero?, flzero?, fxzero? \- test if a number is zero
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(zero? " z )
+.BI "(flzero? " fl )
+.BI "(fxzero? " fx )
+.
+.SH DESCRIPTION
+Test whether the number object \fIz\fP is zero. This procedure works
+on all number objects, up to and including complex numbers.
+.PP
+The \fBflzero?\fP variant is restricted to flonums and the
+\fBfxzero?\fP variant is restricted to fixnums.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns \fB#t\fP if the number is zero, otherwise \fB#f\fP.
+.SH EXAMPLES
+.
+.EX
+(zero? 0)         => #t
+(zero? 0.0)       => #t
+(zero? 0.0+0.0i)  => #t
+
+(zero? -1)        => #f
+(zero? 1/2)       => #f
+
+(fxzero? 0)       => #t
+(flzero? 0.0)     => #t
+
+(fxzero? 1/2)     => &assertion
+(flzero? 1/2)     => &assertion
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Used as a shorthand for \fB(= x 0)\fP. Use with higher-order functions
+is rare.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The description is the same in all Scheme reports. Compatibility will
+depend on general factors that affect the number system, such as
+implementation support for complex numbers and IEEE 754 floating
+point.
+.PP
+The restricted procedures are only specified in R6RS.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR = (3scm),
+.BR > (3scm).
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+This procedure should normally not be used on inexact numbers since
+inaccuracies in computations makes its use unreliable.

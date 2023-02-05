@@ -1,0 +1,120 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string->symbol 3scm 2022-05-13 "" "Scheme Programmer's Manual"
+.SH NAME
+string->symbol \- string to symbol conversion
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string->symbol " string )
+.
+.SH DESCRIPTION
+Returns the symbol whose name is
+.IR string .
+.PP
+This procedure can create symbols that cannot be read back with
+.BR read (3scm)
+after being written with
+.BR write (3scm).
+In R6RS implementations this happens when
+.I string
+is the empty string, because there is no lexical syntax for the symbol
+with the empty name. (In R7RS the empty symbol is written as
+\f[CR]||\fP).
+.
+.\" R7RS has this weirdly phrased remark:
+.\" This procedure can create symbols with names containing special
+.\" characters that would require escaping when written, but does not
+.\" interpret escapes in its input.
+.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a symbol.
+.
+.SH EXAMPLES
+In the examples below the behavior would change if a case-folding
+reader was used. This may be enabled with the \f[CR]#!fold-case\fP
+directive. In R6RS this directive appears in the non-normative
+appendix. In R5RS and earlier reports it was possible for case
+conversion, either to upper or lower case, to be enabled by default.
+.PP
+.EX
+(eq? 'mISSISSIppi 'mississippi)
+    => #f
+(string->symbol "mISSISSIppi")
+    => the symbol with name "mISSISSIppi"
+(eq? 'bitBlt (string->symbol "bitBlt"))
+    => #t
+
+(eq? 'JollyWog
+     (string->symbol
+      (symbol->string 'JollyWog)))
+    => #t
+
+(string=? "K. Harper, M.D."
+          (symbol->string
+           (string->symbol "K. Harper, M.D.")))
+    => #t
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is in all Scheme reports starting with R2RS.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR symbol->string (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+This procedure first appeared with this name in R2RS. Earlier Scheme
+running on MacLisp had the
+.B getpname
+procedure that returned an atomic symbol's print name as a character
+string.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+There are implementations that do not garbage collect the symbol
+interning table.

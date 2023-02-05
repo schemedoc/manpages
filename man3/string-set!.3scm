@@ -1,0 +1,113 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH string-set! 3scm 2022-05-14 "" "Scheme Programmer's Manual"
+.SH NAME
+string-set! \- modify a string element
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs mutable-strings))" "     ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(string-set! " string " " k " " char )
+.
+.SH DESCRIPTION
+Stores
+.I char
+in element
+.I k
+of
+.IR string .
+.TP
+.B R6RS
+Implementors should make
+.BR string-ref (3scm)
+run in constant time, which may mean that this procedure will also run
+in constant time.
+.TP
+.B R7RS
+There is no requirement for this procedure to execute in constant
+time.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns an unspecified value.
+.SH EXAMPLES
+.
+.EX
+(define (f) (make-string 3 #\\*))
+(define (g) "***")
+(string-set! (f) 0 #\\?)       => unspecified
+(string-set! (g) 0 #\\?)       => unspecified
+             ; should raise &assertion exception
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is rarely used to modify existing strings. It is
+sometimes used to build up new strings, but a better option is often
+to use an output string created by
+.BR open-string-output-port (3scm),
+which have the benefit that the output length does not need to be
+known in advance.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure works the same everywhere. Whether a string literal is
+truly immutable depends on the implementation (but they should not be
+mutated either way).
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I k
+must be a valid index of
+.IR string ,
+which in turn must be a mutable string.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR open-string-output-port (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+The first Scheme report to include this procedure was R2RS.
+.
+In R6RS this procedure was moved to its own library which is normally
+not imported.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

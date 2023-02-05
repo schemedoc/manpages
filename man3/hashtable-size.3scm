@@ -1,0 +1,82 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH hashtable-size 3scm 2023-01-22 "" "Scheme Programmer's Manual"
+.SH NAME
+hashtable-size \- get the number of associations in a hashtable
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs hashtables))" "          ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(hashtable-size " hashtable )
+.
+.SH DESCRIPTION
+Returns the number of keys contained in
+.IR hashtable .
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; an exact non-negative integer object.
+.SH EXAMPLES
+.
+.EX
+(map (lambda (n)
+       (do ((ht (make-eqv-hashtable))
+            (i 0 (+ i 1)))
+           ((> i n)
+            (hashtable-size ht))
+         (do ((j 0 (+ j 1)))
+             ((> j n))
+           (hashtable-set! ht (* i j) #t))))
+     '(0 1 2 3 4 5 6 7 8 9 10 11 12 13))
+    => (1 2 4 7 10 15 19 26 31 37 43 54 60 73)
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS. Similar procedures exist in
+SRFI-69 and SRFI-125.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I hashtable
+should be a hashtable.
+.
+.SH "SEE ALSO"
+.
+.BR make-hashtable (3scm),
+.BR hashtable-keys (3scm),
+.BR hashtable-entries (3scm)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS. An equivalent procedure already
+existed in SRFI-69 under the name
+.BR hash-table-size .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

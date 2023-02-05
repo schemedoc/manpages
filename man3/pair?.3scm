@@ -1,0 +1,100 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH pair? 3scm 2020-12-13 "" "Scheme Programmer's Manual"
+.SH NAME
+pair? \- test if an object is a pair
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(pair? " obj )
+.
+.SH DESCRIPTION
+The \fBpair?\fP predicate returns \fB#t\fP if \fIobj\fP is a pair, and
+otherwise returns \fB#f\fP.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single boolean object as per the description.
+.SH EXAMPLES
+.
+.EX
+(pair? '(a . b))  =>  #t
+(pair? '(a b c))  =>  #t
+(pair? '())       =>  #f
+(pair? '#(a b))   =>  #f
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+One of the most common uses of \fBpair?\fP is to destructure large
+data structures, to extract parts of them and to verify their
+structure. Larger structures are more conveniently destructured
+using a pattern matching library such as \fB(chibi match)\fP.
+.SH RATIONALE
+.
+The \fBpair?\fP predicate allows a program to walk over a data
+structure built from pairs. It also allows programs to protect
+themselves against invalid calls to procedures that expect pairs, such
+as
+.BR car (3scm).
+.SH COMPATIBILITY
+.
+Not all predicates are guaranteed to be disjoint from this predicate.
+Implementations are free to use pairs to construct some of the kinds
+of objects described in the Scheme reports, such as conditions and
+promises. The disjointness of predicates differs between the Scheme
+reports.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR car (3scm),
+.BR cons (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+Lisp has always tagged objects with a type. Early Lisp used pattern
+matching, an example of which is maplist from MIT AI Memo No. 4 (1958
+or 1959). Early Lisp programs written in S-expressions used the null
+and atom predicates to test for the inverse of \fBpair?\fP, as in MIT
+AI Memo No. 14 (1959 or 1960). This style seems to have continued even
+until Scheme (MIT AI Memo No. 349, December 1975). The first Scheme
+report to have \fBpair?\fP is RRRS (MIT AI Memo No. 848, August 1985),
+and it was the first Scheme report to not assume an underlying
+MacLISP implementation.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,98 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH vector 3scm 2020-08-14 "" "Scheme Programmer's Manual"
+.SH NAME
+vector \- make a new vector with the given arguments
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(vector " obj " ...)"
+.
+.SH DESCRIPTION
+Returns a newly allocated vector whose elements contain
+the given arguments.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+Some implementations allocate a new object every time this procedure
+returns an empty vector. One such implementation is Chicken 5.2.0.
+Other implementations, like Chez Scheme 9.5, return the same empty
+vector object every time.
+.SH "RETURN VALUES"
+.
+Returns a newly allocated vector.
+.PP
+If this procedure is called without arguments it returns the empty
+vector, which may or may not be newly allocated.
+.SH EXAMPLES
+.
+.EX
+(vector 'a 'b 'c)         => #(a b c)
+
+; Newly allocated vectors are mutable:
+(define x (vector 'a 'b 'c))
+(vector-set! x 0 'A)
+x                         => #(A b c)
+
+; Vector literals are immutable (but implementations may or
+; may not catch this error):
+(define x '#(a b c))
+(vector-set! x 0 'A)      => error
+
+; Implementations are free to choose if they use one or
+; multiple objects to represent the empty vector.
+(eq? (vector) (vector))   => #t or #f
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Applications should avoid calling this procedure with an unknown
+number of arguments. The arguments are passed on the stack, which
+may not be able to handle a very large number of arguments.
+A better way to convert a list to a vector is with the
+.BR list->vector (3scm)
+procedure.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The
+.B vector
+procedure enjoys wide support across Lisp dialects.
+.SH ERRORS
+This procedure does not raise exceptions, but it may cause an
+out-of-memory condition which generally cannot be handled.
+.
+.SH "SEE ALSO"
+.
+.BR list->vector (3scm),
+.BR make-vector (3scm),
+.BR list (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+\" .
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,148 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH exact 3scm 2021-06-25 "" "Scheme Programmer's Manual"
+.SH NAME
+exact, inexact \- conversion between exact and inexact numbers
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+
+; R5RS legacy names
+.BR "(import (rnrs r5rs))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(exact " z )
+.BI "(inexact " z )
+
+; R5RS legacy names
+.BI "(inexact->exact " z )
+.BI "(exact->inexact " z )
+.
+.SH DESCRIPTION
+
+The
+.B exact
+procedure returns an exact representation of
+.IR z .
+The value returned is the exact number object that is numerically
+closest to the argument; in most cases, the result of this procedure
+should be numerically equal to its argument.
+
+The
+.B inexact
+procedure returns an inexact representation of
+.IR z .
+If inexact number objects of the appropriate type have bounded precision,
+then the value returned is an inexact number object that is nearest to
+the argument.
+
+.TP
+.B Large numbers
+For a real number object whose magnitude is finite but
+so large that it has no reasonable finite approximation as an inexact
+number, a reasonably close inexact equivalent may be
+.B +inf.0
+or
+.BR -inf.0 .
+Similarly, the inexact representation of a complex number object whose
+components are finite may have infinite components.
+.PP
+.TP
+.B Idempotency
+The
+.B inexact
+and
+.B exact
+procedures are idempotent. This means that if they are called with a
+number that already has the desired exactness, then they return that
+number.
+.TP
+.B Complex numbers (R7RS)
+For complex numbers that do not already have the desired exactness,
+the result is a complex number whose real and imaginary parts are the
+result of applying the procedure to the real and imaginary parts of
+the argument, respectively.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single exact or inexact number object, respectively.
+.SH EXAMPLES
+.
+.EX
+(exact 0.5)
+   => 1/2
+
+(inexact 3/4)
+   => 0.75
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures are used to manage the exactness used in computations.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+R7RS implementations are not required to support the full numeric
+tower.
+.SH ERRORS
+These procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+.BR &implementation-restriction " (R6RS)"
+May be raised if an inexact argument has no reasonably close exact
+equivalent, or an exact argument has no reasonably close inexact
+equivalent, respectively.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.IP
+An implementation restriction may be reported under the circumstances
+described above for
+.BR &implementation-restriction ,
+indicating that the implementation is unable to continue execution of
+a correct program. It may also be reported by the
+.B exact
+procedure when its argument is an inexact non-integral real.
+.
+.SH "SEE ALSO"
+.
+.BR fixnum->flonum (3scm).
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures were called
+.B exact->inexact
+and
+.B inexact->exact
+in R5RS and earlier reports.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

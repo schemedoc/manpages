@@ -1,0 +1,154 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2021 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bytevector-sint-ref 3scm 2021-03-02 "" "Scheme Programmer's Manual"
+.SH NAME
+bytevector-sint-ref, bytevector-sint-set!, bytevector-uint-ref, bytevector-uint-set! \- variable length bytevector operations
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs bytevectors))" "         ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bytevector-sint-ref " bytevector " " k " " endianness " " size )
+.BI "(bytevector-uint-ref " bytevector " " k " " endianness " " size )
+.BI "(bytevector-sint-set! " bytevector " " k " " n " " endianness " " size )
+.BI "(bytevector-uint-set! " bytevector " " k " " n " " endianness " " size )
+.
+.SH DESCRIPTION
+These procedures are for working with variable-length integers encoded
+in bytevectors.
+.PP
+The
+.B bytevector-sint-ref
+and
+.B bytevector-uint-ref
+procedures decode a signed or unsigned integer (respectively) from
+.IR bytevector ,
+starting from index
+.IR k ,
+according to
+.IR endianness ,
+reading
+.I size
+bytes.
+.PP
+The integers are encoded according to signedness, endianness and size.
+Signed or unsigned is chosen by using the appropriate procedure. The
+.I size
+argument is a positive exact integer that determines how many bytes
+the encoded integer uses (a 128-bit integer would have a size of 16).
+The
+.I endianness
+is normally one of these symbols:
+.TP
+.B big
+Big endian. The more significant bytes come before the less significant bytes.
+.TP
+.B little
+Little endian. The less significant bytes come before the more significant bytes.
+.PP
+The signed variants use the two's complement representation. The range
+that can be encoded by the unsigned variants is
+[0,(256^\fIsize\fP)−1]. The range of the signed variants is
+[−(256^\fIsize\fP)/2,((256^\fIsize\fP)/2)-1].
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+The
+.B bytevector-sint-ref
+and
+.B bytevector-uint-ref
+procedures return a single exact integer object.
+.PP
+The
+.B bytevector-sint-set!
+and
+.B bytevector-uint-set!
+procedures return unspecified values.
+.SH EXAMPLES
+.
+.EX
+(define b (make-bytevector 16 -127))
+
+;; Using (endianness little) is the same as writing
+;; (quote little), but it gives a free typo check.
+(bytevector-uint-set! b 0 (- (expt 2 128) 3)
+                     (endianness little) 16)
+
+(bytevector-uint-ref b 0 (endianness little) 16)
+          =>
+    #xfffffffffffffffffffffffffffffffd
+
+(bytevector-sint-ref b 0 (endianness little) 16)
+          => -3
+
+(bytevector->u8-list b)
+          => (253 255 255 255 255 255 255 255
+              255 255 255 255 255 255 255 255)
+
+(bytevector-uint-set! b 0 (- (expt 2 128) 3)
+                 (endianness big) 16)
+(bytevector-uint-ref b 0 (endianness big) 16)
+          =>
+    #xfffffffffffffffffffffffffffffffd
+
+(bytevector-sint-ref b 0 (endianness big) 16)
+          => -3
+
+(bytevector->u8-list b)
+          => (255 255 255 255 255 255 255 255
+              255 255 255 255 255 255 255 253))
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures are used in some data formats that encode
+variable-length integers by using an explicit length encoding.
+(Base-128 compression, where the highest bit in every byte is a
+continuation flag, is more common).
+.PP
+They are sometimes used in code that is easier to express as
+operations on integers rather than bytevectors.
+\" .SH RATIONALE
+\" .
+\" .SH COMPATIBILITY
+\" .
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular, if
+.I size
+is zero or \fIk+size-1\fP is not a valid index of
+.IR bytevector .
+.
+.SH "SEE ALSO"
+.
+.BR bytevector-u8-ref (3scm),
+.BR bytevector-u8-set! (3scm),
+.BR bytevector-u16-ref (3scm),
+.BR bytevector-u16-set! (3scm)
+.SH STANDARDS
+R6RS
+.
+\" .SH HISTORY
+\" .
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+In some type of code it is easy to make the mistake of passing a zero
+.I size
+argument, which will raise an exception.

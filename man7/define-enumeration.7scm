@@ -1,0 +1,131 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH define-enumeration 7scheme 2022-03-26 "" "Scheme Programmer's Manual"
+.SH NAME
+define-enumeration \- define an enumeration type
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs enums))" "               ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(define-enumeration " type-name
+.BI "  (" symbol " ...)"
+.BI "  " constructor-syntax )
+.
+.SH DESCRIPTION
+The
+.B define-enumeration
+form defines an enumeration type and provides two macros for
+constructing its members and sets of its members.
+.PP
+A
+.B define-enumeration
+form is a definition and can appear anywhere any other definitions can
+appear.
+.PP
+The
+.I type-name
+argument is an identifier that is bound as a syntactic keyword (see
+below). The
+.I symbol
+arguments are the symbols that comprise the universe of the
+enumeration.
+The
+.I constructor-syntax
+argument is an identifier that is bound to a macro (see below).
+.TP
+.B Type name macro
+.BI ( "type-name symbol" )
+is equivalent to
+.BI "(quote " symbol )
+except that it verifies at macro-expansion time
+that the name of
+.I symbol
+is in the universe associated with
+.IR type-name .
+Otherwise it is a syntax violation.
+.TP
+.B Constructor macro
+.BI ( "constructor-syntax symbol" " ...)"
+checks at macro-expansion
+time whether every
+.I symbol
+is in the universe associated with
+.IR type-name .
+It is a syntax violation
+if one or more is not.
+Duplicates are allowed.
+Otherwise
+.BI ( "constructor-syntax symbol" " ...)"
+is equivalent to
+.BI "((enum-set-constructor (" constructor-syntax ))
+.BI " '(" symbol " ...))"\fR.\fP
+.PP
+In the
+.BI ( "type-name symbol" )
+and
+.BI ( "constructor-syntax symbol" " ...)"
+forms, only the names of the symbols are significant.
+\" The names cannot be shadowed by other bindings.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+This form cannot appear in a context where it returns a value.
+.SH EXAMPLES
+.
+.EX
+(define-enumeration color
+  (black white purple maroon)
+  color-set)
+
+(color black)                    =>  black
+(color purpel)                   =>  &syntax exception
+
+(enum-set->list (color-set))     =>  ()
+(enum-set->list
+ (color-set maroon white))       =>  (white maroon)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Enumerations are used in code that would perhaps traditionally
+represent flags using bits in integers or lists of symbols.
+.SH RATIONALE
+.
+Enumerations were added to support flags in the R6RS I/O system.
+.
+\" .SH COMPATIBILITY
+\" .
+.SH ERRORS
+This syntax can raise exceptions with the following condition types:
+.TP
+.BR &syntax " (R6RS)"
+Invalid arguments was passed.
+.
+.SH "SEE ALSO"
+.
+.BR make-enumeration (3scm)
+.SH STANDARDS
+R6RS,
+SRFI-209
+.
+.SH HISTORY
+.
+First appeared in R6RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

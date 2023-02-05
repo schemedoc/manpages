@@ -1,0 +1,114 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH newline 3scm 2022-05-07 "" "Scheme Programmer's Manual"
+.SH NAME
+newline \- write a newline to a port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io simple))" "           ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI (newline)
+.BI "(newline " textual-output-port )
+.
+.SH DESCRIPTION
+Writes an end of line to
+.IR textual-output-port ,
+which defaults to the value returned by
+.BR current-output-port (3scm).
+.TP
+.B R6RS
+This is equivalent to using
+.BR write-char (3scm)
+to write
+\f[CR]#\\linefeed\fP to
+.IR textual-output-port .
+.IP
+The port transcoder's eol-style determines which characters will be
+written to the port.
+.IP
+Ports with their buffer-mode set to \f[CR]line\fP will be be flushed
+as a side-effect of calling this procedure.
+.TP
+.B R7RS
+Exactly how a newline is produced, and which characters are used,
+differs from one operating system to another.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns an unspecified value.
+.SH EXAMPLES
+.
+.EX
+(display "Hello, world!")
+(newline)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+In R6RS programs this procedure may be used instead of \\n in a string
+or instead of writing #\\linefeed. In R7RS programs this procedure
+writes the characters that would have been selected for a newline by using a
+transcoder with
+.BR native-eol-style (3scm)
+in R6RS.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure has had the same basic functionality since R2RS. In
+R6RS implementations it is possible to control the eol-style.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR get-line (3scm),
+.BR put-char (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+First appeared in R2RS. Scheme running on top of MacLisp has access to
+the same functionality through the
+.B terpri
+(TERminate PRInt line) function, which was also in LISP 1.5.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

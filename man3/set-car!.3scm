@@ -1,0 +1,125 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH set-car! 3scm 2022-05-01 "" "Scheme Programmer's Manual"
+.SH NAME
+set-car!, set-cdr! \- change the fields of a pair
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs mutable-pairs))" "       ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(set-car! " pair " " obj )
+.BI "(set-cdr! " pair " " obj )
+.
+.SH DESCRIPTION
+Stores
+.I obj
+in the car or cdr field of
+.IR pair ,
+respectively.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+These procedures return unspecified values.
+.TP
+.B R7RS
+.\" This is actually not specified in R7RS.
+These procedures return an unspecified value.
+.SH EXAMPLES
+.
+.EX
+(define (f) (list 'not-a-constant-list))
+(define (g) '(constant-list))
+(set-car! (f) 3)                  => unspecified
+(set-car! (g) 3)                  => unspecified
+           ; should raise &assertion exception
+
+(let ((x (list 'a 'b 'c 'a))
+      (y (list 'a 'b 'c 'a 'b 'c 'a)))
+  (set-cdr! (list-tail x 2) x)
+  (set-cdr! (list-tail y 5) y)
+  (list
+   (equal? x x)
+   (equal? x y)
+   (equal? (list x y 'a) (list y x 'b))))
+           => (#t #t #f)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures are used to manipulate list structures. They can be
+quite confusing to use because of the normal issues caused by shared
+state.
+.PP
+In some sense, these procedures are being phased out. Racket already uses
+immutable pairs, and R6RS moved these procedures to their own library to
+hide them away a little bit. Modern code that needs to mutate structures
+is often written with mutable records instead.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+When
+.I pair
+is a mutable pair, these procedures behave the same in all
+implementations.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular, this is raised if
+.I pair
+is not a mutable pair.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR vector-set! (3scm),
+.BR record-mutator (3scm)
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared with these names in R2RS.
+Earlier Scheme used the MacLisp functions
+.B rplaca
+and
+.BR rplacd .
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+It is an error to mutate constants from program code, but
+implementations do not have to check that this restriction is
+followed. Because of this, sometimes a buggy program will work in an
+interpreter but fail when compiled. It is not portable (and generally
+not possible) to use these procedures to create self-modifying
+programs.

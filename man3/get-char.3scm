@@ -1,0 +1,135 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH get-char 3scm 2023-02-03 "" "Scheme Programmer's Manual"
+.SH NAME
+get-char, read-char \- read a character from a textual input port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (rnrs io simple))" "           ;R6RS, read-char"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(get-char " textual-input-port ) "       \fR;R6RS only"
+.BI (read-char)
+.BI "(read-char " textual-input-port )
+.
+.SH DESCRIPTION
+Reads from
+.IR textual-input-port ,
+blocking as necessary until a character is available from
+.IR textual-input-port ,
+or the data that are available cannot be the prefix of any valid
+encoding, or an end of file is reached.
+.PP
+If a complete character is available before the next end of file, that
+character is returned, and the input port is updated to point past
+that character. If an end of file is reached before any data are read,
+the end-of-file object is returned.
+.PP
+If
+.I textual-input-port
+is omitted, it defaults to the value returned by
+.BR current-input-port (3scm)
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a character or an end-of-file object.
+.TP
+.B R6RS
+There is a single, unique end-of-file object.
+.
+.SH EXAMPLES
+.
+.EX
+(let lp ()
+  (let ((c (read-char)))
+    (unless (eof-object? c)
+      (write-char (char-upcase c))
+      (lp))))
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Except for differences in the supported character set and in how
+errors are handled, this procedure works the same everywhere.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+.BR &i/o-decoding " (R6RS)"
+The port's transcoder is in raise mode and it encountered an invalid
+byte sequence.
+.TP
+.BR &i/o-read " (R6RS)"
+There was an I/O error during the read operation.
+.TP
+.BR &i/o-port " (R6RS)"
+This condition specifies the port object related to an
+.B &i/o-read
+condition.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR put-char (3scm),
+.BR get-line (3scm),
+.BR lookahead-char (3scm)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The name
+.B get-char
+is new for the reworked I/O in R6RS.
+.
+The
+.B read-char
+procedure first appeared in R2RS.
+.
+Scheme prior to this, running on MacLISP, had the
+.B readch
+function.
+.
+LISP 1.5 had the subroutines
+.BR startread ,
+.BR advance ,
+and
+.BR endread
+for reading characters from punched cards.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -1,0 +1,56 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2020 Göran Weinholt <goran@weinholt.se>
+.\" SPDX-License-Identifier: MIT
+.TH fixnums 7scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.SH NAME
+fixnums \- Fixnum arithmetic
+.SH LIBRARY
+.nf
+.B (import (rnrs arithmetic fixnums))
+.SH DESCRIPTION
+.
+Every implementation must define its fixnum range as a
+closed interval
+[−2^(w−1), 2^(w−1)−1]
+such that w is a (mathematical) integer w ≥ 24. Every
+mathematical integer within an implementation’s fixnum
+range must correspond to an exact integer object that is
+representable within the implementation. A fixnum is an
+exact integer object whose value lies within this fixnum
+range.
+.PP
+Fixnum operations perform integer arithmetic on their
+fixnum arguments, but raise an exception with condition
+type
+.B &implementation-restriction
+if the result is not a fixnum.
+.
+.SH IMPLEMENTATION NOTES
+.
+.TP
+.B GNU Guile
+Guile runs generic arithmetic faster than fixnums. If the numbers are
+of a certain width (e.g.\& 32-bit) then they should be to truncated
+with
+.BR bitwise-and .
+.TP
+.B IronScheme
+IronScheme stores fixnums on the heap. Remember to not use \fBeq?\fR,
+\fBassq\fR or \fBmemq\fR on fixnums. (This applies to Scheme as such,
+not just IronScheme).
+.
+.SH STANDARDS
+R6RS
+.
+.SH SEE ALSO
+.
+.BR fixnum-width (3scm)
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .

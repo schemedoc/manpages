@@ -1,0 +1,95 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2022 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH cons* 3scm 2022-05-11 "" "Scheme Programmer's Manual"
+.SH NAME
+cons* \- cons up a chain of pairs
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs lists))" "               ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(cons* " obj1 " ... " objn " " obj )
+.BI "(cons* " obj )
+.
+.SH DESCRIPTION
+If called with at least two arguments,
+.B cons*
+returns a freshly allocated chain of pairs whose cars are
+\fIobj1\fR, ...,
+.IR objn ,
+and whose last cdr is
+.IR obj .
+If called with only one argument,
+.B cons*
+returns that argument.
+.PP
+This procedure is similar to
+.BR list (3scm),
+with the difference that the last argument (rather than the empty
+list) becomes the cdr of last pair in the chain.
+\" .
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value, which is either
+.I obj
+itself or a chain of pairs.
+.SH EXAMPLES
+.
+.EX
+(cons* 1 2 '(3 4 5))  =>  (1 2 3 4 5)
+(cons* 1 2 3)         =>  (1 2 . 3)
+(cons* 1)             =>  1
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure replaces constructs like \f[CB](apply list a b x*)\fP.
+It is faster and handles the case where the last argument does not
+need to be a list. Depending on the Scheme implementation, it may
+also be used in the expansion of
+.BR quasiquote (7scheme)
+for constructs like
+\f[CB]`(,a ,b ,@x*)\fP.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
+.TP
+.BR &implementation-restriction " (R6RS)"
+There is not enough free memory to hold the new pairs.
+.
+.SH "SEE ALSO"
+.
+.BR list (3scm),
+.BR cons (3scm)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+The first RnRS report to have this procedure was R6RS.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

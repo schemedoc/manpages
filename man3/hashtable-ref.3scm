@@ -1,0 +1,104 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH hashtable-ref 3scm 2023-01-22 "" "Scheme Programmer's Manual"
+.SH NAME
+hashtable-ref \- get a value from a hashtable
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs hashtables))" "          ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(hashtable-ref " hashtable " " key " " default )
+.
+.SH DESCRIPTION
+Returns the value in
+.I hashtable
+associated with
+.IR key .
+If
+.I hashtable
+does not contain an association for
+.IR key ,
+.I default
+is returned.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single object; either a value from an association in
+.I hashtable
+or the object
+.IR default .
+.SH EXAMPLES
+.
+.EX
+(define ht (make-eq-hashtable))
+(hashtable-set! ht 'foo 'bar)
+(hashtable-ref ht 'foo #f)   =>  bar
+(hashtable-ref ht 'bar #f)   =>  #f
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS. Similar procedures exist in
+SRFI-69 and SRFI-125.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I hashtable
+should be a hashtable and
+.I key
+should be in the domain of the hashtable's hash and equal functions.
+.
+.SH "SEE ALSO"
+.
+.BR make-hashtable (3scm),
+.BR hashtable-keys (3scm),
+.BR hashtable-contains? (3scm)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS. An equivalent procedure already
+existed in SRFI-69 under the name
+.BR hash-table-ref .
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+The following code pattern does not work if the hashtable's
+keys can be associated with the false object.
+.PP
+.EX
+(cond ((hashtable-ref ht key #f) =>
+       (lambda (value)
+         (... do something with value ...)))
+      (else
+       ... assume key is not in ht ...))
+.EE
+.PP
+Use
+.BR hashtable-contains? (3scm)
+to get around this problem.

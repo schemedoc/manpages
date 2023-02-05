@@ -104,7 +104,7 @@ is closed.
 .
 .BR make-transcoder (3scm),
 .BR open-input-file (3scm),
-.BR ports (7scheme)
+.BR ports (7scm)
 .SH STANDARDS
 R6RS,
 SRFI-181

@@ -1,7 +1,7 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
 .\" Copyright © 2020, 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH quasiquote 7scheme 2020-04-27 "" "Scheme Programmer's Manual"
+.TH quasiquote 7scm 2020-04-27 "" "Scheme Programmer's Manual"
 .SH NAME
 quasiquote \- list and vector templates
 .

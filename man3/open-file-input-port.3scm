@@ -103,8 +103,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR file-options (7scheme),
-.BR buffer-mode (7scheme),
+.BR file-options (7scm),
+.BR buffer-mode (7scm),
 .BR open-input-file (3scm),
 .BR open-file-output-port (3scm)
 .SH STANDARDS

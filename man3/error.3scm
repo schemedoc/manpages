@@ -204,8 +204,8 @@ or fail catastrophically.
 .SH "SEE ALSO"
 .
 .BR raise (3scm),
-.BR assert (7scheme),
-.BR guard (7scheme)
+.BR assert (7scm),
+.BR guard (7scm)
 .
 .SH STANDARDS
 R6RS,

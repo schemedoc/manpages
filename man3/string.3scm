@@ -58,7 +58,7 @@ must be supported. Any other character is optional and potentially an
 error. You can use the
 .B full-unicode
 feature identifier in
-.BR cond-expand (7scheme)
+.BR cond-expand (7scm)
 to check if all of Unicode 6.0 is supported.
 .
 .TP

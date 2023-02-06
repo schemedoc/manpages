@@ -147,7 +147,7 @@ There was a read error during the I/O operation.
 .BR &i/o-decoding " (R6RS)"
 The input from a port cannot be translated into a character by
 the port's transcoder and the transcoder's
-.BR error-handling-mode (7scheme)
+.BR error-handling-mode (7scm)
 is
 .BR raise .
 .TP

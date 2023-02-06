@@ -122,7 +122,7 @@ or fail catastrophically.
 .
 .BR get-char (3scm),
 .BR read (3scm),
-.BR eol-style (7scheme)
+.BR eol-style (7scm)
 .SH STANDARDS
 R6RS,
 R7RS

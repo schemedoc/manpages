@@ -47,7 +47,7 @@ systems that use the native endianness to pass data.
 .
 This procedure exists in R6RS and is absent from R7RS-small. SRFI-74
 has the native endianness as part of the
-.BR endianness (7scheme)
+.BR endianness (7scm)
 syntax.
 .PP
 Other endianness values may exist and they are in that case valid
@@ -63,7 +63,7 @@ The wrong number of arguments was passed.
 .
 .SH "SEE ALSO"
 .
-.BR endianness (7scheme),
+.BR endianness (7scm),
 .BR bytevector-u16-native-ref (3scm)
 .SH STANDARDS
 R6RS

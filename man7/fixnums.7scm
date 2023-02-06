@@ -1,7 +1,7 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
 .\" Copyright © 2020 Göran Weinholt <goran@weinholt.se>
 .\" SPDX-License-Identifier: MIT
-.TH fixnums 7scheme 2020-04-18 "" "Scheme Programmer's Manual"
+.TH fixnums 7scm 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
 fixnums \- Fixnum arithmetic
 .SH LIBRARY

@@ -58,7 +58,7 @@ exceptional situations. They are passed to
 and
 .BR raise-continuable (3scm).
 They are normally caught with
-.BR guard (7scheme).
+.BR guard (7scm).
 .
 \" .SH RATIONALE
 \" .

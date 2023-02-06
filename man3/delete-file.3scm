@@ -44,7 +44,7 @@ This procedure is used to delete files. It is commonly used to remove
 existing output files before writing new output files. In R6RS systems
 this is handled without race conditions with (file-options no-fail),
 see
-.BR file-options (7scheme).
+.BR file-options (7scm).
 \" .SH RATIONALE
 \" .
 .SH COMPATIBILITY
@@ -79,7 +79,7 @@ The file does not exist or cannot be deleted.
 .SH "SEE ALSO"
 .
 .BR file-exists? (3scm),
-.BR file-options (7scheme)
+.BR file-options (7scm)
 .SH STANDARDS
 R6RS,
 R7RS
@@ -108,6 +108,6 @@ then another program may still have deleted the file before the second
 call. It is better to wrap
 .B delete-file
 in
-.BR guard (7scheme).
+.BR guard (7scm).
 Another approach is to use (file-options no-fail), see
-.BR file-options (7scheme).
+.BR file-options (7scm).

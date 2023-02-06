@@ -53,7 +53,7 @@ This procedure replaces constructs like \f[CB](apply list a b x*)\fP.
 It is faster and handles the case where the last argument does not
 need to be a list. Depending on the Scheme implementation, it may
 also be used in the expansion of
-.BR quasiquote (7scheme)
+.BR quasiquote (7scm)
 for constructs like
 \f[CB]`(,a ,b ,@x*)\fP.
 .

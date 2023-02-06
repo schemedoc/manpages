@@ -93,7 +93,7 @@ or fail catastrophically.
 .
 .BR set-car! (3scm),
 .BR set-cdr! (3scm),
-.BR pairs (7scheme)
+.BR pairs (7scm)
 .SH STANDARDS
 R4RS,
 IEEE Scheme,

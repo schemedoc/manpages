@@ -199,7 +199,7 @@ was not a multiple of the access size (in the case of the native variants).
 .
 .BR make-bytevector (3scm),
 .BR bytevector-u8-ref (3scm),
-.BR endianness (7scheme),
+.BR endianness (7scm),
 .BR native-endianness (3scm)
 .SH STANDARDS
 R6RS

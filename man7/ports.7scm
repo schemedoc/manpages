@@ -1,7 +1,7 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
 .\" Copyright © 2020 Göran Weinholt <goran@weinholt.se>
 .\" SPDX-License-Identifier: MIT
-.TH ports 7scheme 2020-07-06 "" "Scheme Programmer's Manual"
+.TH ports 7scm 2020-07-06 "" "Scheme Programmer's Manual"
 .SH NAME
 ports \- Port I/O
 .SH LIBRARY
@@ -192,7 +192,7 @@ with newer versions of that system.
 .SH "SEE ALSO"
 .
 .BR stdio (3)
-\" .BR transcoders (7scheme)
+\" .BR transcoders (7scm)
 .
 .SH STANDARDS
 R4RS,

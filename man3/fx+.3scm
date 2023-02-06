@@ -48,7 +48,7 @@ R6RS
 .
 .SH "SEE ALSO"
 .
-.BR fixnums (7scheme)
+.BR fixnums (7scm)
 .
 .SH AUTHORS
 This page is part of the

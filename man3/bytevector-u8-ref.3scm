@@ -67,7 +67,7 @@ These procedure are commonly used when a program is dealing directly
 with data from disk, the network or some other hardware. For more
 advanced non-uniform structures, a helper is usually used instead.
 See
-.BR bytevector (7scheme)
+.BR bytevector (7scm)
 for more information.
 .SH RATIONALE
 .
@@ -106,8 +106,8 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR bytevectors (7scheme),
-.BR fixnums (7scheme),
+.BR bytevectors (7scm),
+.BR fixnums (7scm),
 .BR bytevector-u16-ref (3scm)
 .SH STANDARDS
 R6RS,

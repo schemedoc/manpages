@@ -1,7 +1,7 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
 .\" Copyright © 2022 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH define-enumeration 7scheme 2022-03-26 "" "Scheme Programmer's Manual"
+.TH define-enumeration 7scm 2022-03-26 "" "Scheme Programmer's Manual"
 .SH NAME
 define-enumeration \- define an enumeration type
 .

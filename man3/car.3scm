@@ -69,7 +69,7 @@ R7RS
 .
 .BR cons (3scm),
 .BR list-ref (3scm),
-.BR pairs (7scheme),
+.BR pairs (7scm),
 .BR set-car! (3scm)
 .
 .SH HISTORY

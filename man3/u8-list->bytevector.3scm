@@ -89,7 +89,7 @@ The wrong number of arguments was passed or an argument was outside its domain.
 .BR make-bytevector (3scm),
 .BR bytevector->u8-list (3scm),
 .BR bytevector (3scm),
-.BR endianness (7scheme)
+.BR endianness (7scm)
 .SH STANDARDS
 R6RS
 .

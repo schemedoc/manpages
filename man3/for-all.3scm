@@ -166,8 +166,8 @@ arguments which is either not a chain of pairs or is circular.
 .
 .SH "SEE ALSO"
 .
-.BR or (7scheme),
-.BR and (7scheme)
+.BR or (7scm),
+.BR and (7scm)
 .SH STANDARDS
 R6RS
 .

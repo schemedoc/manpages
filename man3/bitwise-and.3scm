@@ -31,7 +31,7 @@ they are passed no arguments, they return the integer object (either
 .
 .PP
 The procedures whose names begin with \fBfx\fP take
-.BR fixnums (7scheme)
+.BR fixnums (7scm)
 as arguments and only return fixnums.
 \" .SH "IMPLEMENTATION NOTES"
 \" .

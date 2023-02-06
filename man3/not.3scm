@@ -65,7 +65,7 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
-.BR if (7scheme),
+.BR if (7scm),
 .BR boolean=? (3scm)
 .
 .SH STANDARDS

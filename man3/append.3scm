@@ -1,0 +1,113 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH append 3scm 2023-02-08 "" "Scheme Programmer's Manual"
+.SH NAME
+append \- append an object to one or multiple lists
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI (append)
+.BI "(append " list " ... " obj )
+.
+.SH DESCRIPTION
+Returns a possibly improper list consisting of the elements
+of the first
+.I list
+followed by the elements of the other
+.IR list s,
+with
+.I obj
+as the cdr of the final pair.
+.PP
+An improper list
+results if
+.I obj
+is not a list. Returns the empty list if called with no arguments.
+.PP
+The return value is made from new pairs for all arguments
+but the last; the last is merely placed at the end of the new
+structure.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value. An improper list results if
+.I obj
+is not a proper list.
+.
+.SH EXAMPLES
+.
+.EX
+(append '(x) '(y))         =>  (x y)
+(append '(a) '(b c d))     =>  (a b c d)
+(append '(a (b)) '((c)))   =>  (a (b) (c))
+(append '(a b) '(c . d))   =>  (a b c . d)
+(append '() 'a)            =>  a
+(append)                   =>  ()
+(append 'a)                =>  a
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Except for differences in error behavior, this procedure works the
+same everywhere.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR cons* (3scm),
+.BR cons (3scm),
+.BR list-tail (3scm)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+.\" LISP_Prog_Man-Mar_1959.pdf
+The
+.B append
+procedure has existed in LISP since at least 1959.
+The variants before R3RS only accepted proper lists.
+Scheme before R2RS running on MacLISP accept any number of argments,
+while in LISP 1.5 the procedure only accepted two arguments.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

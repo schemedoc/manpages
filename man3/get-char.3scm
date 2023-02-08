@@ -116,6 +116,7 @@ Scheme prior to this, running on MacLISP, had the
 .B readch
 function.
 .
+.\" These were introduced in 1961, AIM-022
 LISP 1.5 had the subroutines
 .BR startread ,
 .BR advance ,

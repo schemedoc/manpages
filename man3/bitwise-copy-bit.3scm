@@ -1,0 +1,112 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bitwise-copy-bit 3scm 2023-02-12 "" "Scheme Programmer's Manual"
+.SH NAME
+bitwise-copy-bit, fxcopy-bit \- copy a bit from an integer onto another integer
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bitwise-copy-bit " n " " k " " bit )
+.BI "(fxcopy-bit " n " " k " " bit )
+.
+.SH DESCRIPTION
+Returns the result of replacing the
+.I k th
+bit of
+.I n
+by
+.IR bit .
+.
+.SH "IMPLEMENTATION NOTES"
+.
+The following are reference implementations from R6RS.
+.PP
+.EX
+;; bitwise-copy-bit
+(let ((mask (bitwise-arithmetic-shift-left 1 k)))
+  (bitwise-if mask
+              (bitwise-arithmetic-shift-left bit k)
+              n))
+
+;; fxcopy-bit
+(let ((mask (fxarithmetic-shift-left 1 k)))
+  (fxif mask
+        (fxarithmetic-shift-left bit k)
+        n))
+.EE
+.
+.SH "RETURN VALUES"
+.
+Returns a single value; an exact integer.
+.SH EXAMPLES
+.
+.EX
+(bitwise-copy-bit 0 10 1)       =>  1024
+(bitwise-copy-bit #x8000 0 1)   =>  #x8001
+(bitwise-copy-bit #x8001 15 0)  =>  #x0001
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures are unique to R6RS. Similar procedures can be found
+in SRFI-60 and SRFI-151.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I k must
+be non-negative, and
+.I bit
+must be either 0 or 1.
+The fixnum variant further requires that
+.I n
+is a fixnum and that
+.I k
+is non-negative and less than \f[CR](fixnum-width)\fP-1.
+.
+.SH "SEE ALSO"
+.
+.BR bitwise-if (3scm),
+.BR bitwise-bit-set? (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS. There was previously a
+similar procedure in SRFI-60,
+.BR copy-bit .
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+If
+.I k
+is very large then an implementation might try to allocate an
+excessive amount of memory. In normal implementations it is expected
+that all practical values of
+.I k
+are fixnums.

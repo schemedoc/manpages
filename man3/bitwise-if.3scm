@@ -1,0 +1,101 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bitwise-if 3scm 2023-02-12 "" "Scheme Programmer's Manual"
+.SH NAME
+bitwise-if, fxif \- bitwise if
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bitwise-if " mask " " a " " b )
+.BI "(fxif " mask " " a " " b )
+.
+.SH DESCRIPTION
+Returns the number that is the bit-wise "if" of the two's complement
+representations of its arguments, i.e. for each bit, if it is 1 in
+.IR mask ,
+the corresponding bit in
+.I a
+becomes the value of the corresponding bit in the result, and if it is
+0, the corresponding bit in
+.I b
+becomes the corresponding bit in the value of the result.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+The following are reference implementations from R6RS:
+.
+.EX
+(bitwise-ior (bitwise-and mask a)
+             (bitwise-and (bitwise-not mask) b))
+
+(fxior (fxand mask a)
+       (fxand (fxnot mask) b))
+.EE
+.
+.SH "RETURN VALUES"
+.
+Returns an single value; an exact integer. The fixnum variant returns
+a fixnum.
+.
+.SH EXAMPLES
+.
+.\" The second example is from SRFI-151 by John Cowan
+.EX
+(bitwise-if #xf0f0 #x1234 #xABCD)  =>  #x1B3D
+(bitwise-if #b00111100 #b11110000 #b00001111) => #b00110011
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures are unique to R6RS. Compatible procedures can be
+found in SRFI-60 and SRFI-151.
+.
+.SH ERRORS
+These procedures can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR bitwise-and (3scm),
+.BR bitwise-ior (3scm),
+.BR bitwise-copy-bit (3scm),
+.BR bitwise-copy-bit-field (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS which got the idea from
+SRFI-60.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

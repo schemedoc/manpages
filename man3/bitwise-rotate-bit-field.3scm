@@ -1,0 +1,126 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bitwise-rotate-bit-field 3scm 2023-02-12 "" "Scheme Programmer's Manual"
+.SH NAME
+bitwise-rotate-bit-field, fxrotate-bit-field \- bitwise rotate left
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bitwise-rotate-bit-field " n " " start " " end " " count )
+.BI "(fxrotate-bit-field " n " " start " " end " " count )
+.
+.SH DESCRIPTION
+Returns the result of cyclically permuting in
+.I n
+the bits at positions from
+.I start
+(inclusive)
+to
+.I end
+(exclusive) by
+.I bits
+towards the more significant bits.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+The following are reference implementations from R6RS.
+.PP
+.EX
+;; bitwise-rotate-bit-field
+(let ((width (- end start)))
+  (if (positive? width)
+      (let* ((count (mod count width))
+             (field0
+               (bitwise-bit-field n start end))
+             (field1 (bitwise-arithmetic-shift-left
+                       field0 count))
+             (field2 (bitwise-arithmetic-shift-right
+                       field0
+                       (- width count)))
+             (field (bitwise-ior field1 field2)))
+        (bitwise-copy-bit-field n start end field))
+      n))
+
+;; fxrotate-bit-field
+(let ((width (fx- end start)))
+  (fxcopy-bit-field n start end
+    (fxior
+      (fxarithmetic-shift-left
+        (fxbit-field n start (fx- end count))
+        count)
+      (fxarithmetic-shift-right
+        (fxbit-field n start end)
+        (fx- width count)))))
+.EE
+.
+.SH "RETURN VALUES"
+.
+Returns a single value; an exact integer.
+.
+.SH EXAMPLES
+.
+.EX
+(fxrotate-bit-field #x1234 4 12 4)  =>  #x1324
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Bitwise rotation is a common operation in cryptography.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures are unique to R6RS. Similar alternatives can be found
+in SRFI-60 and SRFI-151.
+.
+.SH ERRORS
+These procedures can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside
+its domain. In particular, all arguments must be exact integers,
+\fIstart\fP, \fIend\fP and \fIcount\fP must be non-negative, and
+\fIstart\fP must be less than or equal to \fIend\fP.
+.IP
+For the fixnum variant there are further restrictions. All arguments
+must be fixnums, and \fIstart\fP, \fIend\fP and \fIcount\fP must be
+less than the implementation's fixnum width, and \fIcount\fP must be
+less than or equal to \fIend\fP-\fIstart\fP.
+.
+.SH "SEE ALSO"
+.
+.BR bitwise-rotate-bit-field (3scm),
+.BR bitwise-arithmetic-shift (3scm),
+.BR bitwise-copy-bit-field (3scm)
+.SH STANDARDS
+R6RS.
+.
+.SH HISTORY
+.
+Many processor instruction set architectures have an integer rotate
+instruction. R6RS was the first Scheme report to standardize this
+operation. Previously SRFI-60 had slightly different
+.B bit-field-rotate
+procedure. Early Scheme running on MacLISP had access to the
+.B rot
+procedure that rotated a whole 36-bit fixnum by some amount.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

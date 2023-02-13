@@ -1,0 +1,133 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH bitwise-copy-bit-field 3scm 2023-02-13 "" "Scheme Programmer's Manual"
+.SH NAME
+bitwise-copy-bit-field, fxcopy-bit-field \- copy a bitfield from one integer onto another
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs arithmetic bitwise))" "  ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(bitwise-copy-bit-field " to " " start " " end " " from )
+.BI "(fxcopy-bit-field " to " " start " " end " " from )
+.
+.SH DESCRIPTION
+Returns the result of replacing in
+.I to
+the bits at positions from
+.I start
+(inclusive) to
+.I end
+(exclusive) by the bits in
+.I from
+from position 0 (inclusive) to
+position
+.IR end − start
+(exclusive).
+.
+.SH "IMPLEMENTATION NOTES"
+.
+The following are reference implementations from R6RS.
+.PP
+.EX
+; bitwise-copy-bit-field
+(let* ((mask1
+        (bitwise-arithmetic-shift-left -1 start))
+       (mask2
+        (bitwise-not
+         (bitwise-arithmetic-shift-left -1 end)))
+       (mask (bitwise-and mask1 mask2)))
+  (bitwise-if mask
+              (bitwise-arithmetic-shift-left from start)
+              to))
+
+; fxcopy-bit-field
+(let* ((mask1 (fxarithmetic-shift-left -1 start))
+       (mask2 (fxnot
+               (fxarithmetic-shift-left -1 end)))
+       (mask (fxand mask1 mask2))
+       (mask3 (fxnot (fxarithmetic-shift-left
+                       -1 (- end start)))))
+  (fxif mask
+        (fxarithmetic-shift-left (fxand from mask3)
+                                 start)
+        to))
+.EE
+.SH "RETURN VALUES"
+.
+Returns a single value; an exact integer. The fixnum variant returns a
+fixnum.
+.
+.SH EXAMPLES
+.
+.EX
+(fxcopy-bit-field #b0000001 2 5 #b1111000)
+          => 1
+(fxcopy-bit-field #b0000001 2 5 #b0001111)
+          => 29
+(fxcopy-bit-field #b0001111 2 5 #b0001111)
+          => 31
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I start
+and
+.I end
+must be non-negative, and
+.I start
+must be less than or equal to
+.IR end .
+.
+.IP
+The fixnum variant furthermore requires that all arguments are
+fixnums and that
+.I start
+and
+.I end
+are less than \f[CR](fixnum-width)\fP.
+.
+.SH "SEE ALSO"
+.
+.BR bitwise-copy-bit (3scm),
+.BR bitwise-bit-field (3scm),
+.BR bitwise-ior (3scm)
+.BR bitwise-arithmetic-shift (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS. There is a similar procedure
+in SRFI-60 that uses a different argument order,
+.BR copy-bit-field .
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

@@ -32,16 +32,18 @@ becomes the corresponding bit in the value of the result.
 The following are reference implementations from R6RS:
 .
 .EX
+; bitwise-if
 (bitwise-ior (bitwise-and mask a)
              (bitwise-and (bitwise-not mask) b))
 
+; fxif
 (fxior (fxand mask a)
        (fxand (fxnot mask) b))
 .EE
 .
 .SH "RETURN VALUES"
 .
-Returns an single value; an exact integer. The fixnum variant returns
+Returns a single value; an exact integer. The fixnum variant returns
 a fixnum.
 .
 .SH EXAMPLES

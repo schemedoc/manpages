@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
 .\" Copyright © 2021 Göran Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH fixnum-width 3scm 2021-01-06 "" "Scheme Programmer's Manual"
+.TH fixnum-width 3scm 2023-01-06 "" "Scheme Programmer's Manual"
 .SH NAME
-fixnum-width \- the width of the fixnum range
+fixnum-width, least-fixnum, greatest-fixnum \- query the fixnum range
 .
 .SH LIBRARY
 .nf
@@ -13,12 +13,27 @@ fixnum-width \- the width of the fixnum range
 .SH SYNOPSIS
 .nf
 .BI (fixnum-width)
+.BI (least-fixnum)
+.BI (greatest-fixnum)
 .
 .SH DESCRIPTION
 The fixnum range is defined as the closed interval
 [−2^(\fIw\fP−1), 2^(\fIw\fP−1)−1]
 such that \fIw\fP is an implementation-defined integer \fIw\fP ≥ 24.
-This procedure returns the implementation's \fIw\fP.
+The
+.B fixnum-width
+procedure returns the implementation's \fIw\fP.
+The
+.B least-fixnum
+procedure returns −2^(\fIw\fP−1).
+The
+.B greatest-fixnum
+procedure returns 2^(\fIw\fP−1)−1.
+.PP
+The fixnum range is important to consider when using the fixnum
+procedures because these procedures require that their arguments and
+results are fixnums. They raise an exception when a result cannot be
+represented as a fixnum.
 .
 .SH "IMPLEMENTATION NOTES"
 .
@@ -37,14 +52,17 @@ The fixnum width is 32.
 The fixnum width is 61.
 .SH "RETURN VALUES"
 .
-Returns a single fixnum equal to or larger than 24.
+These procedures each return a single value; a fixnum as per the
+description above.
+.
 .SH EXAMPLES
 .
-If the fixnum width is 32 (or greater) then fixnums can represent all
-signed 32-bit integers.
 .PP
 .EX
-(fixnum-width)   => 61
+; The results are different for different implementations.
+(fixnum-width)     =>  61
+(least-fixnum)     => -1152921504606846976
+(greatest-fixnum)  =>  1152921504606846975
 .EE
 .
 .SH "APPLICATION USAGE"
@@ -52,24 +70,38 @@ signed 32-bit integers.
 This procedure is sometimes used in libraries that provide optimized
 variants of code for implementations where the fixnum width is large
 enough.
+.
+If the fixnum width is 32 (or greater) then fixnums can represent all
+signed 32-bit integers.
 \" .SH RATIONALE
 \" .
 .SH COMPATIBILITY
 .
-This procedure is only present in R6RS. An alternative is
-\fB(+ 1 (bitwise-length (greatest-fixnum)))\fP.
+This procedure is only present in R6RS. An alternative to
+\f[CR](fixnum-width)\fP is \f[CR](+ 1 (bitwise-length
+(greatest-fixnum)))\fP. But normally there is no need to use fixnum
+procedures if they are not available; generic arithmetic can be used
+instead and will give the same results.
+.
 .SH ERRORS
-This procedure never raises an exception.
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
 .
 .SH "SEE ALSO"
 .
-.BR greatest-fixnum (3scm),
-.BR least-fixnum (3scm)
+.BR bitwise-length (3scm)
+.
 .SH STANDARDS
 R6RS
 .
-\" .SH HISTORY
-\" .
+.SH HISTORY
+.
+These procedures are new to the fixnum library in R6RS.
+Implementations have always had some kind of fixnum type but was
+normally not seen by the user.
+.
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages

@@ -1,0 +1,98 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH call-with-string-output-port 3scm 2023-02-15 "" "Scheme Programmer's Manual"
+.SH NAME
+call-with-string-output-port \- call a procedure with a string output port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(call-with-string-output-port " proc )
+.
+.SH DESCRIPTION
+Creates a textual output port that accumulates the characters written
+to it and calls
+.I proc
+with that output port as an argument.
+.
+Whenever
+.I proc
+returns, a string consisting of all of the port's accumulated
+characters (regardless of the port's current position) is returned and
+the port is closed.
+.PP
+The port should support the
+.BR port-position (3scm)
+and
+.BR set-port-position! (3scm)
+operations.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+The port may or may not have an associated transcoder; if it does, the
+transcoder is implementation-dependent.
+.
+.SH "RETURN VALUES"
+.
+Returns a single value; a string.
+.
+.SH EXAMPLES
+.
+.EX
+(call-with-string-output-port
+  (lambda (p)
+    (for-each (lambda (x)
+                (display x p))
+              '("Hello " world #\\newline))))
+        => "Hello world\\n"
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is commonly used when creating strings piecemeal.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS. It is a wrapper around
+.BR open-string-output-port (3scm).
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I proc
+must be a procedure that accepts one argument.
+.
+.SH "SEE ALSO"
+.
+.BR call-with-string-output-port (3scm),
+.BR open-string-output-port (3scm)
+.BR open-string-input-port (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure is new to the reworked I/O in R6RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

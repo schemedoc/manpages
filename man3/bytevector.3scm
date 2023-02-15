@@ -35,7 +35,7 @@ Returns a single bytevector object.
 .SH COMPATIBILITY
 .
 This procedure is absent from R6RS. Use
-.BR u8-list>bytevector (3scm)
+.BR u8-list->bytevector (3scm)
 instead.
 .SH ERRORS
 It is an error if one of the arguments is not an exact integer

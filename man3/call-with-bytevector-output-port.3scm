@@ -1,0 +1,99 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH call-with-bytevector-output-port 3scm 2023-02-15 "" "Scheme Programmer's Manual"
+.SH NAME
+call-with-bytevector-output-port \- call a procedure with a bytevector output port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(call-with-bytevector-output-port " proc )
+.BI "(call-with-bytevector-output-port " proc " " maybe-transcoder )
+.
+.SH DESCRIPTION
+Creates an output port that accumulates the bytes written to it and
+calls
+.I proc
+with that output port as an argument.
+.
+Whenever
+.I proc
+returns, a bytevector consisting of all of the port's accumulated
+bytes (regardless of the port’s current position) is returned and the
+port is closed.
+.PP
+The transcoder associated with the output port is determined as for a
+call to
+.BR open-bytevector-output-port (3scm).
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a bytevector.
+.
+.SH EXAMPLES
+.
+.EX
+(call-with-bytevector-output-port
+  (lambda (p)
+    (put-u8 p 7)))
+        => #vu8(7)
+
+(call-with-bytevector-output-port
+  (lambda (p)
+    (put-string p "0123"))
+  (native-transcoder))
+        => #vu8(48 49 50 51)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is commonly used when creating bytevectors piecemeal.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS. It is a wrapper around
+.BR open-bytevector-output-port (3scm).
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I proc
+must be a procedure that can accept one argument, and
+.I maybe-transcoder
+must be a transcoder or \f[CR]#f\fP.
+.
+.SH "SEE ALSO"
+.
+.BR open-bytevector-output-port (3scm),
+.BR call-with-bytevector-input-port (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure is new to the reworked I/O in R6RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

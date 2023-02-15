@@ -77,7 +77,7 @@ must be a transcoder or \f[CR]#f\fP.
 .SH "SEE ALSO"
 .
 .BR open-bytevector-output-port (3scm),
-.BR call-with-bytevector-input-port (3scm)
+.BR open-bytevector-input-port (3scm)
 .
 .SH STANDARDS
 R6RS

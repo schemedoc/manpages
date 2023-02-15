@@ -1,0 +1,220 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH = 3scm 2023-02-15 "" "Scheme Programmer's Manual"
+.SH NAME
+=, <, >, <=, >=, fl=?, fl<?, fl>?, fl<=?, fl>=?, fx=?, fx<?, fx>?, fx<=?, fx>=? \- compare numbers
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(= " z1 " " z2 " " z3 " ...)"
+.BI "(< " x1 " " x2 " " x3 " ...)"
+.BI "(> " x1 " " x2 " " x3 " ...)"
+.BI "(<= " x1 " " x2 " " x3 " ...)"
+.BI "(>= " x1 " " x2 " " x3 " ...)"
+.BI "(fl=? " fl1 " " fl2 " " fl3 " ...)"
+.BI "(fl<? " fl1 " " fl2 " " fl3 " ...)"
+.BI "(fl>? " fl1 " " fl2 " " fl3 " ...)"
+.BI "(fl<=? " fl1 " " fl2 " " fl3 " ...)"
+.BI "(fl>=? " fl1 " " fl2 " " fl3 " ...)"
+.BI "(fx=? " fx1 " " fx2 " " fx3 " ...)"
+.BI "(fx<? " fx1 " " fx2 " " fx3 " ...)"
+.BI "(fx>? " fx1 " " fx2 " " fx3 " ...)"
+.BI "(fx<=? " fx1 " " fx2 " " fx3 " ...)"
+.BI "(fx>=? " fx1 " " fx2 " " fx3 " ...)"
+.
+.SH DESCRIPTION
+These procedures return \f[CR]#t\fP if their arguments are
+(respectively): equal, monotonically increasing, monotonically
+decreasing, monotonically nondecreasing, or monotonically
+nonincreasing, and \f[CR]#f\fP otherwise.
+These predicates are transitive.
+.
+.TP
+.B Infinities
+Infinities are equal to themselves:
+.IP
+.EX
+(= +inf.0 +inf.0)  =>  #t
+(= -inf.0 +inf.0)  =>  #f
+(= -inf.0 -inf.0)  =>  #t
+.EE
+.IP
+For any real number object \fIx\fP that is neither infinite nor NaN:
+.IP
+.EX
+(< -inf.0 x +inf.0)  =>  #t
+(> +inf.0 x -inf.0)  =>  #t
+.EE
+.
+.TP
+.B NaNs
+For any number object \fIz\fP:
+.IP
+.EX
+(= +nan.0 z)  =>  #f
+.EE
+.IP
+For any real number object \fIx\fP:
+.IP
+.EX
+(< +nan.0 x)  =>  #f
+(> +nan.0 x)  =>  #f
+.EE
+.
+.TP
+.B Negative zero
+IEEE 754 binary floating point numbers always have a sign bit. This
+also applies to NaNs and zero, so there is a negative zero. For the
+purpose of these predicates the negative zero is equal to zero.
+.IP
+.EX
+(= 0.0 -0.0)  =>  #t
+(< 0.0 -0.0)  =>  #f
+.EE
+.IP
+Negative zero can be distinguished with
+.BR eqv? (3scm).
+Implementations are not required to use IEEE 754 and are not required
+to support negative zero.
+.
+.TP
+.B Inexact numbers
+While it is possible to compare inexact number objects
+using these predicates, the results may be unreliable because a
+small inaccuracy may affect the result; this is especially true of
+.B =
+and
+.BR zero? (3cm).
+.IP
+Quoting the Scheme reports: "When in doubt, consult a numerical analyst."
+.TP
+.B Flonum and fixnum variants
+The flonum and fixnum variants of these predicates only operate on
+these types of objects.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+The traditional implementations of these predicates in Lisp-like
+languages are not transitive. Quoting from R7RS:
+.IP
+The implementation approach of converting all arguments
+to inexact numbers if any argument is inexact is not
+transitive.
+.
+For example, let \f[CR]big\fP be \f[CR](expt 2 1000)\fP, and assume
+that \f[CR]big\fP is exact and that inexact numbers are represented by
+64-bit IEEE binary floating point numbers.
+.
+Then
+\f[CR](= (- big 1) (inexact big))\fP
+and
+\f[CR](= (inexact big) (+ big 1))\fP
+would both be true with this approach, because of the limitations of
+IEEE representations of large integers, whereas
+\f[CR](= (- big 1) (+ big 1))\fP is false.
+.
+Converting inexact values to exact numbers that are the same (in the
+sense of \fB=\fP) to them will avoid this problem, though special care
+must be taken with infinities.
+.
+.SH "RETURN VALUES"
+.
+These procedures return a single value; a boolean.
+.
+.SH EXAMPLES
+.
+.EX
+(> 5 4)  =>  #t
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These predicates are present in all Schemes. There are variations in
+which numbers are supported and what happens when they are called with
+bad arguments. R7RS does not require support for the whole numeric
+tower and R6RS does not actually require that implementations use IEEE
+754, even though that is the most common implementation choice.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR zero? (3scm),
+.BR max (3scm),
+.BR equal? (3scm)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures only took two arguments in R3RS and did not
+explicitly require them to be transitive.
+.PP
+R2RS specified additional redundant names ending with \fB?\fP, e.g.,
+\fB<=?\fP in order to "make all user populations happy".
+.PP
+R2RS mentions that some implementations allowed many arguments like in
+Common Lisp, although Scheme before R2RS that ran on MacLISP also had
+predicates that worked like this. MacLISP's
+.BR greaterp ,
+and
+.B lessp
+accepted two or more arguments. On the other hand, MacLISP also had
+the procedures
+.BR = ,
+.BR > ,
+and
+.B <
+that only accepted two arguments and required that the arguments are
+both fixnums or both flonums.
+.PP
+LISP 1.5 had the subroutines
+.BR equal ,
+.BR greaterp ,
+and
+.BR lessp .
+The first one was the same as kind of predicate as
+.BR equal? (3scm)
+while the latter were subroutines of two arguments that compared
+numbers.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

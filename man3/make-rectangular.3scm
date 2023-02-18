@@ -1,0 +1,172 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH make-rectangular 3scm 2023-02-18 "" "Scheme Programmer's Manual"
+.SH NAME
+make-rectangular, make-polar \- construct complex numbers
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme complex))" "           ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(make-rectangular " x " " y )
+.BI "(make-polar " m " " a )
+.
+.SH DESCRIPTION
+The
+.B make-rectangular
+procedure returns
+the complex number with real part
+.I x
+and imaginary part
+.IR y .
+.PP
+The
+.B make-polar
+procedure returns
+the complex number with approximate magnitude
+.I m
+and approximate angle
+.IR a .
+.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B GNU Guile 3.0
+Guile does not have a way to represent exact complex numbers with
+non-zero imaginary parts. This means that 1+2i is automatically turned
+into 1.0+2.0i. This is a deviation from R6RS but is allowed by R7RS.
+.
+.TP
+.B Loko Scheme
+Loko Scheme can internally represent complex numbers in polar
+notation, keeping the polar notation when convenient. This is mostly
+done as a joke and isn't something normally found in Scheme. Most
+implementations convert the polar notation to an inexact rectangular
+representation.
+.PP
+The real numbers, the rational numbers and the integers are a subset
+of the complex numbers. Many implementations will simplify the return
+type when one of
+.IR y ,
+.IR m ,
+and
+.I a
+is exact zero.
+.
+.SH "RETURN VALUES"
+.
+Both procedures return a single value; a complex number. If either
+argument is inexact then the returned number is inexact. The
+.B make-polar
+procedure may return inexact results even when the arguments are
+exact.
+.
+.SH EXAMPLES
+.
+.EX
+(make-rectangular 1 2)
+          => 1+2i
+
+(make-rectangular 1.1 2.2)
+          => 1.1+2.2i ; approximately
+
+(make-polar 1.1 2.2)
+          => 1.1@2.2 ; approximately
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures, where they are implemented, are intended to achieve
+the same result: return the mathematically correct result to the
+extent allowed by the implementation. Some variations between
+implementations are noted above.
+.PP
+Support for these procedures is required by R6RS. There are however
+still variations in which types of numbers that can be represented.
+Some of the possible variations are: IEEE 754 floats are not required,
+-0.0 does not need to be distinct, the precision of inexact numbers
+can vary, numbers in polar notation can be turned into inexact
+numbers in rectangular notation.
+.PP
+Support for complex numbers is not guaranteed at all in R7RS.
+.PP
+An R7RS implementation's support can be tested with
+.BR cond-expand (7scm):
+.TP
+.B exact-complex
+Exact complex numbers are provided. (Note that this refers to
+the rectangular representation only).
+.TP
+.B ieee-float
+Inexact numbers are IEEE 754 binary floating point values.
+.\" .PP
+.\" .EX
+.\" (define (make-rectangular x y)
+.\"   (+ x (* y +i)))
+.\"
+.\" (define (make-polar m a)
+.\"   (* m (exp (* +i a))))
+.\"
+.\" (define (make-polar m a)
+.\"   (+ (* m (cos a))
+.\"      (* r (sin a) +i)))
+.\" .EE
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular, all arguments must be real numbers.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.TP
+R7RS and unsupported numbers
+If an implementation encounters an exact numerical constant that it
+cannot represent as an exact number, then it may either report a
+violation of an implementation restriction or it may silently
+represent the constant by an inexact number.
+.
+.
+.SH "SEE ALSO"
+.
+.BR exp (3scm),
+.BR sin (3scm)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R2RS, which got them from Common Lisp.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

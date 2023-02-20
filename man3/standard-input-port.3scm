@@ -1,0 +1,114 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH standard-input-port 3scm 2023-02-20 "" "Scheme Programmer's Manual"
+.SH NAME
+standard-input-port, standard-output-port, standard-error-port \- fresh standard I/O ports
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI (standard-input-port)
+.BI (standard-output-port)
+.BI (standard-error-port)
+.
+.SH DESCRIPTION
+Returns a fresh binary port connected to standard input, standard
+output or standard error respectively. The first returns an input port
+and the latter two return output ports.
+.PP
+Whether the port supports the
+.BR port-position (3scm)
+and
+.BR set-port-position! (3scm)
+operations is implementation-dependent.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a fresh port.
+.
+.SH EXAMPLES
+.
+The following program converts its standard input from ISO-8859-1 to
+UTF-8 on its standard output.
+.PP
+.EX
+(import (rnrs))
+
+(call-with-port
+    (transcoded-port (standard-input-port)
+                     (make-transcoder (latin-1-codec)))
+  (lambda (inp)
+    (call-with-port
+        (transcoded-port (standard-output-port)
+                         (make-transcoder (utf-8-codec)))
+      (lambda (outp)
+        (let lp ()
+          (let ((c (get-char inp)))
+            (unless (eof-object? c)
+              (put-char outp c)
+              (lp))))))))
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This is used in application that need binary I/O on the standard
+input, output and error. It can also be used to create transcoded
+ports for when the default transcoder on
+.BR current-input-port (3scm)
+etc is not desired.
+.
+.SH RATIONALE
+.
+These procedures make it possible to do binary I/O on standard input,
+output and error.
+.
+.SH COMPATIBILITY
+.
+These procedures are unique to R6RS. There is nothing similar in R7RS
+but some implementations will, as an extension, allow binary I/O on
+textual ports. Chibi-Scheme is an example of such an implementation.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
+.
+.SH "SEE ALSO"
+.
+.BR current-input-port (3scm),
+.BR make-transcoder (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures are new to the reworked I/O in R6RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+Programs should use
+.BR flush-output-port (3scm)
+or
+.BR close-port (3scm)
+on these ports before exiting, or use
+.BR call-with-port (3scm).
+The ports can be buffered and not all
+implementations flush open ports at exit.

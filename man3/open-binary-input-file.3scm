@@ -1,0 +1,101 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH open-binary-input-file 3scm 2023-02-20 "" "Scheme Programmer's Manual"
+.SH NAME
+open-binary-input-file, open-binary-output-file \- open a binary file
+.
+.SH LIBRARY
+.nf
+.BR "(import (scheme file))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(open-binary-input-file " string )
+.BI "(open-binary-output-file " string )
+.
+.SH DESCRIPTION
+Takes a
+.I string
+for a filename and returns a binary input or output port respectively.
+.PP
+When opening a file for input it must already exist. If the file
+already exists when opening it for output the effect is unspecified.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Both procedures return a single value; a fresh binary input or output port.
+\" .SH EXAMPLES
+\" .
+\" .EX
+\" .EE
+\" .
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures are unique to R7RS. The
+.BR open-file-input-port (3scm)
+and
+.BR open-file-output-port (3scm)
+procedures are compatible replacements with stricter specifications.
+.
+.SH ERRORS
+These procedure can raise exceptions satisfying the following predicates:
+.TP
+.BR file-error? " (R7RS)"
+Raised if the file cannot be opened. In particular, this is raised by
+.B open-binary-input-file
+if the file does not exist.
+.TP
+R7RS
+It is an error if the wrong number of arguments was passed
+or an argument was outside its domain.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR open-file-input-port (3scm),
+.BR file-error? (3scm)
+.
+.SH STANDARDS
+.
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R7RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+You should be aware of what your implementation does when the file
+already exists because there is no way to check for this condition
+before attempting to open a file. The text in R7RS explicitly says
+that
+.B "the effect is unspecified"
+when this happens.
+.PP
+You cannot check for this condition ahead of time using
+.BR file-exists? (3scm)
+and
+.BR delete-file (3scm)
+because they are prone to time-to-check to time-of-use (TTCTOU) bugs.
+.PP
+If this is a concern then
+.BR open-file-output-port (3scm)
+can be used instead with appropriate options.

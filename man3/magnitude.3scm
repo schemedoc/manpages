@@ -1,0 +1,109 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH magnitude 3scm 2023-03-14 "" "Scheme Programmer's Manual"
+.SH NAME
+magnitude, angle \- magnitude and angle of complex numbers
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.BR "(import (scheme complex))" "           ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(magnitude " z )
+.BI "(angle " z )
+.
+.SH DESCRIPTION
+Return the magnitude and angle of
+.IR z ,
+respectively.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+Most implementations of complex numbers do not store them in polar
+form but instead use rectangular form. The magnitude can be found
+using the equation for Euclidean distance:
+\f[CR](sqrt (+ (expt (real-part z) 2) (expt (imag-part z) 2)))\fP.
+The angle can be found using atan:
+\f[CR](atan (imag-part z) (real-part z))\fP.
+.
+.SH "RETURN VALUES"
+.
+These procedures return a single value; a real number.
+.
+.SH EXAMPLES
+.
+.EX
+(angle -1)       =>  3.141592653589793   ; approximately
+(magnitude 1+i)  =>  1.4142135623730951  ; approximately
+
+(angle -1.0+0.0i)
+        =>  3.141592653589793   ; approximately
+(angle -1.0-0.0i)
+        =>  -3.141592653589793  ; approximately
+        ; if -0.0 is distinguished
+
+(angle +inf.0)  =>  0.0
+(angle -inf.0)  =>  3.141592653589793  ; approximately
+
+(angle 0)        =>  &assertion raised
+(magnitude 0)    =>  0
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures work the same everywhere that they are supported.
+R7RS implementations may not have support for complex numbers.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR abs (3scm),
+.BR make-rectangular (3scm)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R2RS, which used Common Lisp
+as inspiration for its number system.
+In Common Lisp these procedures are called
+.B abs
+and
+.BR phase .
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

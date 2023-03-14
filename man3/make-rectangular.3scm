@@ -146,7 +146,9 @@ represent the constant by an inexact number.
 .SH "SEE ALSO"
 .
 .BR exp (3scm),
-.BR sin (3scm)
+.BR sin (3scm),
+.BR angle (3scm),
+.BR real-part (3scm)
 .
 .SH STANDARDS
 R4RS,
@@ -157,7 +159,14 @@ R7RS
 .
 .SH HISTORY
 .
-These procedures first appeared in R2RS, which got them from Common Lisp.
+These procedures first appeared in R2RS, which used Common Lisp as
+inspiration for its number system.
+.
+The
+.B make-rectangular
+procedure is called
+.B complex
+in Common Lisp.
 .
 .SH AUTHORS
 This page is part of the

@@ -1,0 +1,88 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH symbol-hash 3scm 2023-03-20 "" "Scheme Programmer's Manual"
+.SH NAME
+symbol-hash \- symbol hash function
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs hashtables))" "          ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(symbol-hash " symbol )
+.
+.SH DESCRIPTION
+Returns an integer hash value for
+.IR symbol .
+.
+.SH "IMPLEMENTATION NOTES"
+.
+Symbol names are immutable and therefore the hash value can be
+computed once and stored in the object. It is possible to delay
+the computation until the hash is needed, similarly to how
+Chez Scheme lazily generates the names of gensyms.
+.
+.SH "RETURN VALUES"
+.
+Returns a single value; an (exact) integer.
+.
+.SH EXAMPLES
+.
+.EX
+(let ((ht (make-hashtable symbol-hash eq?)))
+  (hashtable-set! ht 'car 'vehicle)
+  (hashtable-set! ht 'blue 'color)
+  (hashtable-ref ht 'car #f))
+        =>  vehicle
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used with
+.BR make-hashtable (3scm)
+together with
+.BR eq? (3scm).
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS. Similar procedures exist in SRFI-126
+and SRFI-128.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.
+.SH "SEE ALSO"
+.
+.BR equal-hash (3scm),
+.BR make-hashtable (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS. A similar procedure existed in the
+sample implementation of SRFI-69 but the official interface of that SRFI
+does not export it. Instead the generic
+.B hash
+procedure would be used for symbols.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

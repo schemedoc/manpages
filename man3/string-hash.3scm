@@ -16,7 +16,9 @@ string-hash, string-ci-hash \- string hash functions
 .BI "(string-ci-hash " string )
 .
 .SH DESCRIPTION
-Returns an integer hash value for string, based on its current
+Returns an integer hash value for
+.IR string ,
+based on its current
 contents. It is used with
 .BR make-hashtable (3scm).
 .

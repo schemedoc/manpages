@@ -1,0 +1,87 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright © 2023 Göran Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH digit-value 3scm 2023-03-21 "" "Scheme Programmer's Manual"
+.SH NAME
+digit-value \- get the numeric value of a character
+.
+.SH LIBRARY
+.nf
+.BR "(import (scheme char))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(digit-value " char )
+.
+.SH DESCRIPTION
+This procedure returns the numeric value of its argument if it is a
+numeric digit or
+.B #f
+on any other character.
+.
+Numeric digits are those for which
+.B char-numeric?
+returns
+.BR #t.
+Only the numeric values 0 to 9 are supported; characters representing
+other values are non-numeric.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; an exact integer or
+.BR #f .
+.SH EXAMPLES
+.
+.EX
+(digit-value #\\3)      =>  3
+(digit-value #\\x0664)  =>  4    ;if supported
+(digit-value #\\x0AE6)  =>  0    ;if supported
+(digit-value #\\x0EA6)  =>  #f   ;if supported
+.EE
+\" .
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Implementations are not required to support characters other than
+ASCII (excluding \fB#\\null\fP). Therefore only the characters
+\fB#\\0\fP to \fB#\\9\fP need to be supported. Even implementations
+with full Unicode support may return
+.B #f
+for some characters that other implementations support, because the
+Unicode standard changes over time.
+.
+.SH ERRORS
+It is an error if the wrong number of arguments was passed or an argument was outside its domain.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR string->number (3scm),
+.BR char-general-category (3scm),
+.BR char-numeric? (3scm)
+.
+.SH STANDARDS
+R7RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R7RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

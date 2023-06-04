@@ -160,6 +160,21 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-\" .
-\" .SH BUGS
-\" .
+.
+.SH BUGS
+.
+Applications should not pass untrusted input to this procedure. It is
+easy to make it consume large amounts of memory and CPU time:
+.
+.EX
+(time (bitwise-length (string->number "#e1e1000000")))
+    no collections
+    2.256397608s elapsed cpu time
+    2.256396107s elapsed real time
+    1392400 bytes allocated
+3321929
+.EE
+.
+The number consumes several megabytes of memory and the conversion
+takes much longer to run than would be expected for such a short
+input. Adding a few more zeroes makes it an easy DoS.

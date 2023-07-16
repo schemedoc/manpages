@@ -1,5 +1,5 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2021 Göran Weinholt
+.\" Copyright (c) 2021 G. Weinholt
 .\" SPDX-License-Identifier: MIT
 .TH bytevector-copy 3scm 2021-02-20 "" "Scheme Programmer's Manual"
 .SH NAME

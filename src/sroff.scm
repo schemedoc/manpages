@@ -1,5 +1,5 @@
 ;; -*- mode: scheme; coding: utf-8 -*-
-;; Copyright © 2020 Göran Weinholt
+;; Copyright (c) 2020 G. Weinholt
 ;; SPDX-License-Identifier: MIT
 
 ;; Format an sroff expression as nroff/troff. This s-expression

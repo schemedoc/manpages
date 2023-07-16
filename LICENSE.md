@@ -1,4 +1,4 @@
-Copyright © 2020 Göran Weinholt
+Copyright (c) 2020 G. Weinholt
 
 Much of the material in this project is based on the RnRS Scheme
 reports, which give this permission:

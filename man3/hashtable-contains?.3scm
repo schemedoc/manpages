@@ -1,5 +1,5 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2023 Göran Weinholt
+.\" Copyright (c) 2023 G. Weinholt
 .\" SPDX-License-Identifier: MIT
 .TH hashtable-contains? 3scm 2023-01-121 "" "Scheme Programmer's Manual"
 .SH NAME

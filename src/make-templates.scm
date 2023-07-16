@@ -1,6 +1,6 @@
 #!/usr/bin/env scheme-script
 ;; -*- mode: scheme; coding: utf-8 -*-
-;; Copyright © 2020 Göran Weinholt
+;; Copyright (c) 2020 G. Weinholt
 ;; SPDX-License-Identifier: MIT
 
 (import
@@ -26,7 +26,7 @@
 
 (define (template name signatures libraries)
   `((#f "-*- mode: nroff; coding: utf-8 -*-")
-    (#f "Copyright © 2020")
+    (#f "Copyright (c) 2020")
     (#f "SPDX-License-Identifier: MIT")
     (TH ,name "3scm" ,date "" "Scheme Programmer's Manual")
     (SH "NAME")

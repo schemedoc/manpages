@@ -1,5 +1,5 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright © 2022 Göran Weinholt
+.\" Copyright (c) 2022 G. Weinholt
 .\" SPDX-License-Identifier: MIT
 .TH transcoded-port 3scm 2022-04-04 "" "Scheme Programmer's Manual"
 .SH NAME
@@ -59,7 +59,7 @@ Returns a single value, which is a textual port.
        (tc (make-transcoder (utf-8-codec)))
        (tp (transcoded-port p tc)))
   (get-string-all tp))
-        => "©"
+        => "(c)"
 .EE
 .
 .SH "APPLICATION USAGE"

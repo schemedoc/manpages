@@ -59,7 +59,7 @@ Returns a single value, which is a textual port.
        (tc (make-transcoder (utf-8-codec)))
        (tp (transcoded-port p tc)))
   (get-string-all tp))
-        => "(c)"
+        => "©"
 .EE
 .
 .SH "APPLICATION USAGE"

@@ -1,0 +1,145 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH utf-8-codec 3scm 2023-07-19 "" "Scheme Programmer's Manual"
+.SH NAME
+utf-8-codec, utf-16-codec, latin-1-codec \- predefined codecs
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI (utf-8-codec)
+.BI (utf-16-codec)
+.BI (latin-1-codec)
+.
+.SH DESCRIPTION
+These are predefined codecs for the ISO 8859-1, UTF-8,
+and UTF-16 encoding schemes.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B The latin-1 codec
+.
+The latin-1 codec can only handle characters in the range [#\\x00,
+#\\xFF]. The transcoding is a one-to-one mapping between the
+byte values and character objects in the sense of
+.BR char->integer (3scm)
+and
+.BR integer->char (3scm).
+.IP
+When transcoding in the input direction, each byte is read as
+one character.
+.IP
+When transcoding in the output direction, characters less than #\\x100
+are written as one byte. Otherwise the behavior depends on the
+transcoder's error handling mode. In \f[CB]raise\fP mode an
+.BR &i/o-encoding (7scm)
+condition is raised; in \f[CB]ignore\fP mode the character is dropped;
+and in \f[CB]replace\fP mode a \\x3F byte (#\\?) is written.
+.
+.TP
+.B The UTF-8 codec
+.
+The UTF-8 transcoder can handle all Unicode characters. For characters
+in the range [#\\x00, #\\x7F] there is a one-to-one mapping between
+byte values and character object in the sense of
+.BR char->integer (3scm)
+and
+.BR integer->char (3scm).
+.IP
+For characters above #\\x7F, UTF-8 tags the initial byte with a length
+and then follows that byte with a number of continuation bytes. There
+is a specific pattern that must be followed and any deviation is an
+error. The same applies to short sequences. Errors are handled
+according to the transcoder's error handling mode. In \f[CB]raise\fP
+mode an
+.BR &i/o-decoding (7scm)
+condition is raised; in \f[CB]ignore\fP mode the character is dropped;
+and in \f[CB]replace\fP mode an #\\xFFFD character is read.
+.IP
+Implementations vary in how many #\\xFFFD characters are produced for
+an invalid sequence.
+.IP
+There are no encoding errors with the UTF-8 codec.
+.
+.TP
+.B The UTF-16 codec
+The UTF-16 codec works with pairs of bytes. The bytes are 16-bit
+quantities encoded in either big endian or little endian. A byte
+order mark (BOM) is either the byte sequence #xFE, #xFF for big
+endian or #xFF, #xFE for little endian.
+.IP
+The 16-bit quantities mostly map directly to character objects
+.BR integer->char (3scm). There is an exception for the range
+[#xD800, #xDFFF], which are called the surrogate pairs. A pair of
+these 16-bit quantities are used to encode characters that would
+otherwise not fit in the 16-bit range.
+.IP
+Short byte sequences and errors in surrogate pairs are errors. In
+\f[CB]raise\fP mode an
+.BR &i/o-decoding (7scm)
+condition is raised; in \f[CB]ignore\fP mode the character is dropped;
+and in \f[CB]replace\fP mode an #\\xFFFD character is read.
+.IP
+There are no encoding errors with the UTF-16 codec.
+.
+.SH "RETURN VALUES"
+.
+A call to any of these procedures returns a value that is
+equal in the sense of
+.BR eqv? (3scm)
+to the result of any other call to the same procedure.
+.
+.SH EXAMPLES
+.
+.EX
+;; This is like utf8->string
+(let* ((p (open-bytevector-input-port #vu8(194 169)))
+       (tc (make-transcoder (utf-8-codec)))
+       (tp (transcoded-port p tc)))
+  (get-string-all tp))
+        => "©"
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures are used when creating transcoders.
+.
+\" .SH RATIONALE
+\" .
+\" .SH COMPATIBILITY
+\" .
+.SH ERRORS
+These procedures can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed.
+.
+.SH "SEE ALSO"
+.
+.BR make-transcoder (3scm),
+.BR error-handling-mode (7scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS as part of the reworked I/O system.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

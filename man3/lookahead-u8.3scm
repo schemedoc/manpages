@@ -1,0 +1,111 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH lookahead-u8 3scm 2023-07-20 "" "Scheme Programmer's Manual"
+.SH NAME
+lookahead-u8, peek-u8 \- peek at the next byte from a port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(lookahead-u8 " binary-input-port ) "    \fR;R6RS\fP"
+.BI "(peek-u8)                           \fR;R7RS\fP"
+.BI "(peek-u8 " binary-input-port )  "         \fR;R7RS\fP"
+.
+.SH DESCRIPTION
+.\" R6
+This procedure is like
+.BR get-u8 (3scm),
+but it does not update
+.I binary-input-port
+to point past the byte.
+.PP
+If an end of file is pending then it is also not removed.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; an exact integer object or the
+end of file object.
+.TP
+.B R7RS
+There may be several end of file objects.
+.
+.SH EXAMPLES
+.
+.EX
+; This is for R7RS. Use open-file-input-port for R6RS.
+(import (scheme base) (scheme file))
+(define p (open-binary-input-file "/etc/os-release"))
+(peek-u8 p)  =>  80  ; P
+(read-u8 p)  =>  80  ; P
+(read-u8 p)  =>  82  ; R
+(peek-u8 p)  =>  69  ; E
+(peek-u8 p)  =>  69  ; E
+(read-u8 p)  =>  69  ; E
+(read-u8 p)  =>  84  ; T
+(read-u8 p)  =>  84  ; T
+(read-u8 p)  =>  89  ; Y
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is used when parsing binary data and the parser is
+written to use lookahead. This is common with handwritten parsers and
+is generally used in modular parsers that call other parsers when they
+see a certain byte.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Both one-argument versions of this procedure are compatible with each
+other. However, some implementations of the R7RS procedure allow it to
+be used on any type of port, which is not guaranteed to work in all
+implementations.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR get-u8 (3scm),
+.BR lookahead-char (3scm)
+.
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS as part of the reworked I/O
+system.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+It is relatively easy to mistakenly have this procedure consume end of
+file objects.

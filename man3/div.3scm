@@ -1,0 +1,216 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH div 3scm 2023-07-21 "" "Scheme Programmer's Manual"
+.SH NAME
+div, mod, div-and-mod \- number-theoretic integer division
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs base))" "                ;R6RS"
+.BR "(import (rnrs arithmetic fixnums))" "  ;R6RS"
+.BR "(import (rnrs arithmetic flonums))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(div " x1 " " x2 )
+.BI "(mod " x1 " " x2 )
+.BI "(div-and-mod " x1 " " x2 )
+.BI "(div0 " x1 " " x2 )
+.BI "(mod0 " x1 " " x2 )
+.BI "(div0-and-mod0 " x1 " " x2 )
+.BI "(fldiv " fl1 " " fl2 )
+.BI "(flmod " fl1 " " fl2 )
+.BI "(fldiv-and-mod " fl1 " " fl2 )
+.BI "(fldiv0 " fl1 " " fl2 )
+.BI "(flmod0 " fl1 " " fl2 )
+.BI "(fldiv0-and-mod0 " fl1 " " fl2 )
+.BI "(fxdiv " fx1 " " fx2 )
+.BI "(fxmod " fx1 " " fx2 )
+.BI "(fxdiv-and-mod " fx1 " " fx2 )
+.BI "(fxdiv0 " fx1 " " fx2 )
+.BI "(fxmod0 " fx1 " " fx2 )
+.BI "(fxdiv0-and-mod0 " fx1 " " fx2 )
+.
+.SH DESCRIPTION
+These procedures implement number-theoretic integer division
+and return the results of the corresponding mathematical
+operations specified below.
+.IP
+.EX
+(div x1 x2)                  => x1 div x2
+(mod x1 x2)                  => x1 mod x2
+(div-and-mod x1 x2)
+    => x1 div x2, x1 mod x2
+       ; two return values
+(div0 x1 x2)                 => x1 div₀ x2
+(mod0 x1 x2)                 => x1 mod₀ x2
+(div0-and-mod0 x1 x2 )
+    => x1 div₀ x2, x1 mod₀ x2
+       ; two return values
+.EE
+.
+.TP
+.B Mathematical definition
+.\" TODO: would be nice to have subscripts here
+These procedures are defined in terms of the mathematical
+operations div, mod, div₀ and mod₀:
+.IP
+.BR div ,
+.BR mod ,
+.BR div0 ,
+and
+.B mod0
+each accept two real numbers x_1 and x_2 as operands, where x_2 must
+be nonzero.
+.B div
+returns an integer, and
+.B mod
+returns a real. Their results are specified by
+.IP
+    x_1 div x_2 = n_d
+    x_1 mod x_2 = x_m
+.br
+where
+    x_1 = n_d x_2 + x_m
+      0 ≤ xm < abs(x2)
+.IP
+.B div0
+and
+.B mod0
+are like
+.B div
+and
+.BR mod ,
+except the result of
+.B mod0
+lies within a half-open interval centered on zero. The
+results are specified by
+.IP
+    x_1 div₀ x_2 = n_d
+    x_1 mod₀ x_2 = x_m
+.br
+where:
+        x_1 = n_d x_2 + x_m
+  −abs(x_2/2) ≤ x_m < abs(x_2/2)
+.IP
+(A note to those who are eager to implement these procedures: the
+mathematical definition says essentially nothing about how to
+calculate the results).
+.TP
+.B Generic variants
+If
+.I x1
+and
+.I x2
+are exact,
+.I x2 must be nonzero.
+.IP
+In the cases where the mathematical requirements specified above
+cannot be satisfied by any number object, either an exception is
+raised with condition type
+.BR &implementation-restriction (7scm),
+or unspecified number objects (one for div, mod, div0 and
+mod0, two for div-and-mod and div0-and-mod0) are returned.
+.
+.TP
+.B Fixnum variants
+.I Fx2
+must be nonzero. All arguments and return values are fixnums.
+.IP
+In the cases where the mathematical requirements above cannot be
+satisfied by any fixnum, either an exception is raised with condition
+type
+.BR &implementation-restriction .
+This happens with (fxdiv (least-fixnum) -1).
+.
+.TP
+.B Flonum variants
+All arguments and return values are flonums.
+.IP
+In the cases where the mathematical requirements above cannot be
+satisfied by any flonum, either an exception is raised with condition
+type
+.BR &implementation-restriction ,
+or unspecified flonums are returned.
+.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+The procedures div-and-mod and div0-and-mod0 (and their variants)
+return two values which are number objects.
+.PP
+The div and mod (and their variants) return a single value; a number
+object.
+.
+.SH EXAMPLES
+.
+The following examples are for the mathematical operators.
+.EX
+     123 div 10 = 12
+     123 mod 10 = 3
+    123 div −10 = −12
+    123 mod −10 = 3
+    −123 div 10 = −13
+    −123 mod 10 = 7
+   −123 div −10 = 13
+   −123 mod −10 = 7
+    123 div₀ 10 = 12
+    123 mod₀ 10 = 3
+   123 div₀ −10 = −12
+   123 mod₀ −10 = 3
+   −123 div₀ 10 = −12
+   −123 mod₀ 10 = −3
+  −123 div₀ −10 = 12
+  −123 mod₀ −10 = −3
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedures are unique to R6RS. Compatible procedures under
+different names can be found in SRFI-141.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.TP
+.BR &implementation-restriction " (R6RS)"
+There is no number object of the correct type that can represent
+the result under the mathematical restrictions described above.
+.
+.SH "SEE ALSO"
+.
+.BR quotient (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS. RnRS revisions before that
+had
+.BR / (3scm),
+.BR quotient (3scm)
+and
+.BR remainder (3scm).
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

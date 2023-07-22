@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright (c) 2020
+.\" Copyright (c) 2023 G. Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH make-vector 3scm 2020-04-18 "" "Scheme Programmer's Manual"
+.TH make-vector 3scm 2023-07-22 "" "Scheme Programmer's Manual"
 .SH NAME
-make-vector \-
+make-vector \- allocate a new vector
 .
 .SH LIBRARY
 .nf
@@ -14,27 +14,44 @@ make-vector \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(make-vector " number )
-.BI "(make-vector " number " " obj )
+.BI "(make-vector " k )
+.BI "(make-vector " k " " fill )
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+Returns a newly allocated vector of
+.I k
+elements. If a second
+argument is given, then each element is initialized to
+.IR fill .
+Otherwise the initial contents of each element is unspecified.
 .
 .SH "IMPLEMENTATION NOTES"
 .
+Implementations vary in how well they handle a large
+.I k
+argument. Vectors typically need approximately four or eight
+bytes per element and a large
+.I k
+means that the system can run out of memory. If this happens then some
+implementations will crash while others raise
+.BR &implementation-restriction .
+.
 .SH "RETURN VALUES"
 .
+Returns a single value; a freshly allocated vector.
 .SH EXAMPLES
 .
 .EX
+(make-vector 3 #f)  =>  #(#f #f #f)
 .EE
 .
-.SH "APPLICATION USAGE"
-.
-.SH RATIONALE
-.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
 .SH COMPATIBILITY
+.
+This procedure works the same everywhere apart from error handling.
 .
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
@@ -50,6 +67,9 @@ or fail catastrophically.
 .
 .SH "SEE ALSO"
 .
+.BR make-list (3scm),
+.BR vector (3scm)
+.
 .SH STANDARDS
 R4RS,
 IEEE Scheme,
@@ -59,6 +79,8 @@ R7RS
 .
 .SH HISTORY
 .
+This procedure first appeared in R2RS.
+.
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages
@@ -67,6 +89,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

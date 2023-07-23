@@ -1,0 +1,123 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH get-string-n! 3scm 2023-07-23 "" "Scheme Programmer's Manual"
+.SH NAME
+get-string-n! \- read characters into a string
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(get-string-n! " textual-port " " string " " start " " count )
+.
+.SH DESCRIPTION
+Reads from
+.I textual-input-port
+in the same manner as
+.IR get-string-n .
+.PP
+If
+.I count
+characters are available before an end of file, they
+are written into
+.I string
+starting at index
+.IR start ,
+and
+.I count
+is returned.
+.PP
+If fewer characters are available before an end
+of file, but one or more can be read, those characters are
+written into
+.I string
+starting at index
+.I start
+and the number
+of characters actually read is returned as an exact integer
+object.
+.PP
+If no characters can be read before an end of file, the end-of-file
+object is returned and
+.\" This is not explicit in R6RS
+the end-of-file condition is consumed.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; an exact positive integer object, or
+the end of file object.
+.
+.SH EXAMPLES
+.
+.EX
+(define s (make-string 10 #\\space))
+(call-with-port (open-input-file "/etc/hostname")
+  (lambda (p)
+    (get-string-n! p s 0 10)))
+   => 9
+s => "darkstar\n "
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Application usage is rare in practice.
+\" .SH RATIONALE
+.
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I start
+and
+.I count
+must be exact, non-negative integer objects,
+.I string
+must be a string with at least
+.IR start + count
+characters.
+.
+.TP
+.BR &i/o-read " (R6RS)"
+A read error occurred during an I/O operation.
+.
+.TP
+.BR &i/o-decoding " (R6RS)"
+The
+.I textual-input-port
+is associated with a transcoder in the \[CR]raise\fP error
+handling mode and a invalid byte sequence was encountered.
+.
+.SH "SEE ALSO"
+.
+.BR get-string-n (3scm),
+.BR get-bytevector-n (3scm)
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS as part of the reworked I/O system.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

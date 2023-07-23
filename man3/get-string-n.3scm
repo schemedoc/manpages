@@ -1,0 +1,140 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH get-string-n 3scm 2023-07-23 "" "Scheme Programmer's Manual"
+.SH NAME
+get-string-n, read-string \- read characters from a port, returning a string
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+;; R6RS
+.BI "(get-string-n " textual-port " " count )
+
+;; R7RS
+.BI "(read-string " count )
+.BI "(read-string " count " " textual-input-port )
+.
+.SH DESCRIPTION
+Reads from
+.IR textual-input-port ,
+blocking as necessary, until
+.I count
+characters are available, or until an end of file is reached.
+.PP
+If
+.I count
+characters are available before end of file,
+returns a string consisting of those
+.I count
+characters.
+.PP
+If fewer characters are available before an
+end of file, but one or more characters can be read,
+returns a string containing those characters.
+.PP
+If no characters can be read before an end of file, the end-of-file
+object is returned.
+.PP
+The input port is updated to point just past
+the characters read, if any.
+.\" XXX: This is not explicit in the R6RS entry
+If the end-of-file object is returned then
+the end of file condition is consumed.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a newly allocated string or an end of
+file object.
+.TP
+.B R6RS
+There may be a single empty string object, so it does not need to be
+newly allocated. There is also a single end of file object.
+.TP
+.B R7RS
+There may be multiple end of file objects, in the sense of
+.BR eq?(3scm) .
+.SH EXAMPLES
+.
+.EX
+(call-with-port (open-input-file "/etc/os-release")
+  (lambda (p)
+    (get-string-n p 20)))
+   => "PRETTY_NAME=\"Debian "
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The R7RS version of this procedure does not specify how multiple end
+of file conditions are handled; only the ASCII characters (except NUL)
+need to be supported and attempting to read an unsupported character
+is an error; and the error handling when passing wrong arguments is
+unspecified; and there is no way to catch a read or transcoding error.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I count
+must be an exact, non-negative integer object and
+.I textual-input-port
+must be an open textual input port.
+.
+.TP
+.BR &i/o-read " (R6RS)"
+A read error occurred during an I/O operation.
+.
+.TP
+.BR &i/o-decoding " (R6RS)"
+The
+.I textual-input-port
+is associated with a transcoder in the \[CR]raise\fP error
+handling mode and a invalid byte sequence was encountered.
+.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR get-string-n! (3scm),
+.BR get-bytevector-some (3scm)
+.
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS as part of the reworked I/O system.
+The similar
+.I read-string
+procedure later appeared in R7RS. These procedures are not part of earlier
+RnRS revisions.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

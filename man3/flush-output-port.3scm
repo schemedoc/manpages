@@ -1,0 +1,108 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH flush-output-port 3scm 2023-07-24 "" "Scheme Programmer's Manual"
+.SH NAME
+flush-output-port \- flush buffered data from a port to its sink
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS"
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(flush-output-port " output-port )
+.
+.SH DESCRIPTION
+Flushes any buffered output from the buffer of
+.I output-port
+to the underlying file, device, or object.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+.TP
+.B Vicare Scheme
+The standard output port is block buffered and it is not closed on
+exit. A manual flush is needed before exiting the program.
+.
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns an unspecified value.
+.SH EXAMPLES
+.
+.EX
+(display "Enter your name: ")
+(flush-output-port (current-output-port))
+(define name (get-line (current-input-port)))
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Used to manually flush a port's internal buffers. The port is
+automatically flushed when the port is closed, so there is no need for
+a manual flush before closing a port.
+.
+.SH RATIONALE
+.
+Output ports are line buffered, block buffered or unbuffered.
+Buffering is typically good for performance, but sometimes
+applications need to write data immediately.
+.
+.SH COMPATIBILITY
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+.\" XXX: Is it specified if &i/o-encoding can happen this late?
+.TP
+.BR &i/o-encoding " (R6RS)"
+The port's transcoder is in raise mode and it encountered an invalid
+byte sequence.
+.TP
+.BR &i/o-write " (R6RS)"
+There was an I/O error during the write operation.
+.TP
+.BR &i/o-port " (R6RS)"
+This condition specifies the port object related to the
+.B &i/o-write
+condition.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR call-with-port (3scm),
+.BR close-port (3scm)
+.
+.SH STANDARDS
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS as part of the reworked I/O system.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

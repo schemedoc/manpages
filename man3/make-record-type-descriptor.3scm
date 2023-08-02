@@ -1,0 +1,359 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH make-record-type-descriptor 3scm 2023-08-02 "" "Scheme Programmer's Manual"
+.SH NAME
+make-record-type-descriptor, record-type-descriptor?, record-type-opaque?, record-type-parent, record-type-sealed?, record-type-field-names, record-type-generative?, record-type-name, record-type-uid, record-field-mutable? \- record-type construction and inspection
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs records procedural))" "  ;R6RS"
+.BR "(import (rnrs records inspection))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+; Procedural library
+.BI "(make-record-type-descriptor " name " " parent " " uid " " sealed? " " opaque? " " fields )
+.BI "(record-type-descriptor? " obj )
+
+; Inspection library
+.BI "(record-field-mutable? " rtd " " number )
+.BI "(record-type-field-names " rtd )
+.BI "(record-type-generative? " rtd )
+.BI "(record-type-name " rtd )
+.BI "(record-type-opaque? " rtd )
+.BI "(record-type-parent " rtd )
+.BI "(record-type-sealed? " rtd )
+.BI "(record-type-uid " rtd )
+.
+.SH DESCRIPTION
+The
+.B make-record-type-descriptor
+procedure returns a record-type descriptor, or rtd, representing a
+record type distinct from all built-in types and other record types.
+.TP
+.B Record names
+The
+.I name
+argument must be a symbol. It names the record type, and is intended
+purely for informational purposes and may be used for printing by the
+underlying Scheme system.
+.TP
+.B Record inheritance
+The
+.I parent
+argument must be either \f[CR]#f\fP or an rtd. If it is an rtd, the
+returned record type extends the record type represented by
+.IR parent .
+An exception with condition
+type
+.BR &assertion (7scm)
+is raised if
+.I parent
+is sealed.
+.TP
+.B Unique identifiers
+The
+.I uid
+argument must be either \f[CR]#f\fP or a symbol. If
+.I uid
+is a symbol,
+the record-creation operation is nongenerative, i.e., a new record type
+is created only if no previous call to
+.B make-record-type-descriptor
+was made with the
+.IR uid .
+.IP
+If
+.I uid
+is \f[CR]#f\fP, the record-creation operation is generative, i.e., a
+new record type is created even if a previous call to
+.B make-record-type-descriptor
+was made with the same arguments.
+.IP
+If
+.B make-record-type-descriptor
+is called twice with the same
+.I uid
+symbol, the
+.I parent
+arguments in the two calls must be
+.BR eqv? (3scm),
+the
+.I fields
+arguments
+.BR equal? (3scm),
+the
+.I sealed?
+arguments boolean-equivalent (both \f[CR]#f\fP or both true), and
+the
+.I opaque?
+arguments boolean-equivalent if the parents are not opaque.
+.
+If these conditions are not met, an exception with condition type
+.BR &assertion (7scm)
+is raised when the second call occurs. If they are met, the
+second call returns, without creating a new record type, the same
+record-type descriptor (in the sense of
+.BR eqv? (3scm))
+as the first call.
+.TP
+.B Sealed records
+The
+.I sealed?
+flag must be a boolean. If true, the returned
+record type is sealed, i.e., it cannot be used as a parent.
+.TP
+.B Opaque records
+The
+.I opaque?
+flag must be a boolean. If true, the record
+type is opaque. If passed an instance of the record type,
+.BR record? (3scm)
+returns \f[CR]#f\fP.
+Moreover, if
+.BR record-rtd (3scm)
+is called with an instance of the record type, an exception with
+condition type
+.BR &assertion (7scm)
+is raised.
+The record type is also opaque if an opaque parent is supplied.
+If
+.I opaque?
+is \f[CR]#f\fP and an opaque parent is not supplied, the record is not
+opaque.
+.TP
+.B Record fields
+The
+.I fields
+argument must be a vector of field specifiers.
+Each field specifier must be a list of the form
+\f[CR](mutable \f[CI]name\fP)\fR
+or a list of the form
+\f[CR](immutable \f[CI]name\fP)\fR.
+Each name must be a symbol and names the corresponding
+field of the record type. The names need not be distinct.
+.IP
+A field identified as mutable may be modified, whereas, when a program
+attempts to obtain a mutator with
+.BR record-mutator (3scm)
+for a field identified as immutable, an exception with condition type
+.BR &assertion (7scm)
+is raised.
+.IP
+Where field order is relevant, e.g., for record construction and field
+access, the fields are considered to be ordered as specified, although
+no particular order is required for the actual representation of a
+record instance.
+.IP
+The specified fields are added to the parent fields, if any, to
+determine the complete set of fields of the returned record type.
+.IP
+If
+.I fields
+is modified after
+.B make-record-type-descriptor
+has been called, the effect on the returned rtd is unspecified.
+.TP
+.B Generative records
+A generative record-type descriptor created by a call to
+.B make-record-type-descriptor
+is not
+.BR eqv? (3scm)
+to any record-type descriptor (generative or nongenerative) created by
+another call to
+.BR make-record-type-descriptor .
+A generative record-type descriptor is
+.BR eqv? (3scm)
+only to itself, i.e.,
+\f[CR](eqv? rtd1 rtd2)\fP iff \f[CR](eq? rtd1 rtd2)\fP.
+.IP
+Also, two nongenerative record-type descriptors are
+.BR eqv? (3scm)
+iff they were created by calls to make-record-type-descriptor with the
+same
+.I uid
+arguments.
+.PP
+The following procedures are used to inspect the rtd.
+.
+.TP
+.B record-type-name
+Returns the
+.I name
+of the record-type descriptor
+.IR rtd .
+.
+.TP
+.B record-type-parent
+Returns the
+.I parent
+of the record-type descriptor
+.IR rtd ,
+or \f[CR]\f[CR]#f\fP\fP if it has none.
+.
+.TP
+.B record-type-uid
+Returns the
+.I uid
+of the record-type descriptor
+.IR rtd ,
+or \f[CR]\f[CR]#f\fP\fP if
+it has none.
+.IP
+An implementation may assign a generated
+uid to a record type even if the type is generative, so the
+return of a uid does not necessarily imply that the type is
+nongenerative.
+.
+.TP
+.B record-type-generative?
+Returns \f[CR]#t\fP if
+.I rtd
+is generative, and \f[CR]#f\fP if not.
+.
+.TP
+.B record-type-sealed?
+Returns \f[CR]#t\fP if
+.I rtd
+is sealed, and \f[CR]#f\fP if not.
+.
+.TP
+.B record-type-opaque?
+Returns \f[CR]#t\fP if
+.I rtd
+is opaque, and \f[CR]#f\fP if not.
+.
+.TP
+.B record-type-field-names
+Returns a vector of symbols naming the fields of the
+type represented by
+.I rtd
+(not including the fields of parent types) where the fields are
+ordered as in the
+.I fields
+argument.
+.IP
+The returned vector may be immutable. If the returned vector is
+modified, the effect on
+.I rtd
+is unspecified.
+.TP
+.B record-field-mutable?
+Returns \f[CR]#t\fP if the field specified by
+.I k
+of the type represented by
+.I rtd
+is mutable, and \f[CR]#f\fP if not. The
+.I k
+argument is described in
+.BR record-accessor (3scm).
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+.TP
+.B make-record-type-descriptor
+Returns a single value; a record type descriptor.
+.
+.TP
+.B record-type-field-names
+Returns a single value; a vector of symbols.
+.
+.TP
+.B record-type-name
+Returns a single value; a symbol.
+.
+.TP
+.B record-type-parent
+Returns a single value; a record type descriptor or \f[CR]#f\fP.
+.
+.TP
+.B record-type-uid
+Returns a single value; a symbol or \f[CR]#f\fP.
+.
+.TP
+.B record-type-descriptor?, record-type-opaque?, record-type-sealed?, record-type-generative?, record-field-mutable?
+These procedures return a single value; a boolean.
+.
+.SH EXAMPLES
+.
+.EX
+(define rtd-user
+  (make-record-type-descriptor
+    'user #f #f #f #f
+    '#((immutable login) (immutable realname))))
+(define rcd-user
+  (make-record-constructor-descriptor
+    rtd-user #f
+    (lambda (p)
+      (lambda (login realname)
+        (p login realname)))))
+(define make-user (record-constructor rcd-user))
+
+(make-user 'lain "Lain Iwakura")
+  => #[user login: lain realname: "Lain Iwakura"]
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+The syntactic layer is more commonly used in applications, see
+.BR define-record-type (7scm).
+However, the procedural layer is needed to create new record types at
+runtime. The inspection layer is used to create, e.g., record
+printers.
+.PP
+A program that intends to use a record type descriptor to create a
+record also need to create a record constructor descriptor with
+.BR make-record-constructor-descriptor (7scm).
+.
+.PP
+.\" From R6RS
+Users are encouraged to use symbol names constructed using the UUID
+namespace (for example, using the record-type name as a prefix) for
+the
+.I uid
+argument.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to the R6RS record system. An equivalent
+procedure can be found in SRFI-237.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+The requirements on the arguments are described above.
+.
+.SH "SEE ALSO"
+.
+.BR define-record-type (7scm),
+.BR make-record-constructor-descriptor (7scm),
+.BR record-predicate (3scm),
+.BR record-accessor (3scm),
+.BR record-mutator (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS as part of the new record system.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

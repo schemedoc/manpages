@@ -1,0 +1,384 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH make-record-constructor-descriptor 3scm 2023-08-03 "" "Scheme Programmer's Manual"
+.SH NAME
+make-record-constructor-descriptor, record-constructor \- procedural record construction
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs records procedural))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(make-record-constructor-descriptor " rtd " " parent-rcd " " protocol )
+.BI "(record-constructor " rcd )
+.
+.SH DESCRIPTION
+Returns a record-constructor descriptor (or rcd for short)
+that specifies a record constructor (or constructor for short).
+The constructor can used to construct record
+values of the type specified by
+.I rtd
+and it can be obtained via
+.BR record-constructor .
+.
+.TP
+.B Record type descriptors
+The
+.I rtd
+argument must be a record-type descriptor created by
+.BR make-record-type-descriptor (3scm).
+.
+.TP
+.B Protocols and base record types
+The
+.I protocol
+argument must be a procedure or \f[CR]#f\fP.
+If it is \f[CR]#f\fP, a default protocol procedure is supplied.
+If
+.I protocol
+is a procedure, it is handled analogously to the protocol expression
+in a
+.BR define-record-type (7scm)
+form.
+.IP
+If
+.I rtd
+is a base record type
+then
+.I parent-rcd
+must be \f[CR]#f\fP.
+In this case, protocol is called by
+.B record-constructor
+with a single argument
+.IR p ,
+which is a procedure that expects one argument for every field of
+.I rtd
+and
+returns a record with the fields of
+.I rtd
+initialized to these
+arguments.
+.IP
+The procedure returned by
+.I protocol
+should call
+.I p
+once with the number of arguments
+.I p
+expects and return the resulting record as shown here:
+.IP
+.EX
+(lambda (p)
+  (lambda (v1 v2 v3)
+    (p v1 v2 v3)))
+.EE
+.IP
+Here, the call to
+.I p
+returns a record whose fields are
+initialized with the values of
+.IR v1 ,
+.IR v2 ,
+and
+.IR v3 .
+The expression
+above is equivalent to \f[CR](lambda (p) p)\fP.
+.IP
+Note that the procedure returned by
+.I protocol
+is otherwise unconstrained; specifically, it can take any number of
+arguments.
+.
+.TP
+.B Single inheritance of record types
+A constructor descriptor
+can also be used to create other constructor descriptors for
+subtypes of its own record type by passing it as
+.IR parent-rcd .
+.
+.IP
+If
+.I rtd
+is an extension of another record type
+.I parent-rtd
+and
+.I protocol
+is a procedure,
+.I parent-rcd
+must be a constructor descriptor of
+.I parent-rtd
+or \f[CR]#f\fP.
+.IP
+If
+.I parent-rcd
+is a constructor descriptor,
+.I protocol
+is called by
+.B record-constructor
+with a single argument
+.IR n ,
+which is a procedure that accepts the same number of arguments as the
+constructor of
+.I parent-rcd
+and returns a procedure
+.I p
+that, when called, constructs the record itself. The
+.I p
+procedure expects one argument for every field of
+.I rtd
+(not including parent fields) and returns a record with
+the fields of
+.I rtd
+initialized to these arguments, and the
+fields of
+.I parent-rtd
+and its parents initialized as specified
+by
+.IR parent-rcd .
+.IP
+The procedure returned by protocol should call
+.I n
+once with
+the number of arguments
+.I n
+expects, call the procedure
+.I p
+it
+returns once with the number of arguments
+.I p
+expects and return the resulting record. A simple protocol in this
+case might be written as follows:
+.IP
+.EX
+(lambda (n)
+  (lambda (v1 v2 v3 x1 x2 x3 x4)
+    (let ((p (n v1 v2 v3)))
+      (p x1 x2 x3 x4))))
+.EE
+.IP
+This passes arguments
+.IR v1 ,
+.IR v2 ,
+.IR v3
+to
+.I n
+for
+.I parent-rcd
+and calls
+.I p
+with
+.IR x1 ,
+.IR x2 ,
+.IR x3 ,
+.I x4
+to initialize the fields of
+.I rtd
+itself.
+.IP
+Thus, the constructor descriptors for a record type form a sequence of
+protocols parallel to the sequence of record-type parents. Each
+constructor descriptor in the chain determines the field values for
+the associated record type. Child record constructors need not know
+the number or contents of parent fields, only the number of arguments
+accepted by the parent constructor.
+.
+.TP
+.B The default protocol
+Protocol may be \f[CR]#f\fP, specifying a default constructor that
+accepts one argument for each field of
+.I rtd
+(including the fields of its parent type, if any).
+.IP
+Specifically, if
+.I rtd
+is a base type, the default protocol procedure behaves as if it
+were \f[CR](lambda (p) p)\fP.
+.IP
+If
+.I rtd
+is an extension of another type, then
+.I parent-rcd
+must be either \f[CR]#f\fP or itself specify a default constructor, and the
+default protocol procedure behaves as if it were:
+.IP
+.EX
+(lambda (n)
+  (lambda (v1 ... vj x1 ... xk)
+    (let ((p (n v1 ... vj)))
+      (p x1 ... xk))))
+.EE
+.IP
+The resulting constructor accepts one argument for each of the record
+type's complete set of fields (including those of the parent record
+type, the parent's parent record type, etc.) and returns a record with
+the fields initialized to those arguments, with the field values for
+the parent coming before those of the extension in the argument list.
+.IP
+In the example,
+.I j
+is the complete number of fields of the parent type, and
+.I k
+is the number of fields of
+.I rtd
+itself.
+.
+.TP
+.B The default parent rcd
+If
+.I rtd
+is an extension of another record type and
+.I parent-rcd
+is \f[CR]#f\fP,
+.I parent-rcd
+is treated as if it were a constructor descriptor for the parent rtd
+of
+.I rtd
+with a default protocol.
+.
+.TP
+.B Using record constructor descriptors
+The
+.B record-constructor
+procedure
+calls the protocol of
+.I rcd
+and returns
+the resulting constructor for records of the
+.IR rcd .
+The constructor is a procedure that takes as many arguments as are
+required by the protocol.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+Implementation responsibilities: If
+.I protocol
+is a procedure, the implementation must check the restrictions on it
+to the extent performed by applying it as described when the
+constructor is called. An implementation may check whether
+.I protocol
+is an appropriate argument before applying it.
+.SH "RETURN VALUES"
+.
+.TP
+.B make-record-constructor-descriptor
+Returns a single value; a record constructor descriptor.
+.
+.TP
+.B record-constructor
+Returns a single value; a procedure.
+.
+.SH EXAMPLES
+.
+.EX
+; This is a rather complex example from R6RS which
+; demonstrates inheritance and protocols. A simpler
+; example can be found in make-record-type-descriptor(3scm).
+(define rtd1
+  (make-record-type-descriptor
+   'rtd1 \f[CR]#f\fP \f[CR]#f\fP \f[CR]#f\fP \f[CR]#f\fP
+   '#((immutable x1) (immutable x2))))
+
+(define rtd2
+  (make-record-type-descriptor
+   'rtd2 rtd1 \f[CR]#f\fP \f[CR]#f\fP \f[CR]#f\fP
+   '#((immutable x3) (immutable x4))))
+
+(define rtd3
+  (make-record-type-descriptor
+   'rtd3 rtd2 \f[CR]#f\fP \f[CR]#f\fP \f[CR]#f\fP
+   '#((immutable x5) (immutable x6))))
+
+(define protocol1
+  (lambda (p)
+    (lambda (a b c)
+      (p (+ a b) (+ b c)))))
+
+(define protocol2
+  (lambda (n)
+    (lambda (a b c d e f)
+      (let ((p (n a b c)))
+        (p (+ d e) (+ e f))))))
+
+(define protocol3
+  (lambda (n)
+    (lambda (a b c d e f g h i)
+      (let ((p (n a b c d e f)))
+        (p (+ g h) (+ h i))))))
+
+(define cd1
+   (make-record-constructor-descriptor
+     rtd1 \f[CR]#f\fP protocol1))
+
+(define cd2
+   (make-record-constructor-descriptor
+     rtd2 cd1 protocol2))
+
+(define cd3
+  (make-record-constructor-descriptor
+     rtd3 cd2 protocol3))
+
+(define make-rtd1 (record-constructor cd1))
+
+(define make-rtd2 (record-constructor cd2))
+
+(define make-rtd3 (record-constructor cd3))
+
+(make-rtd3 1 2 3 4 5 6 7 8 9)
+   =>  #[rtd3 x1: 3 x2: 5 x3: 9 x4: 11 x5: 15 x6: 17]
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+See
+.BR make-record-type-descriptor (3scm).
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to the R6RS record system. An equivalent
+procedure can be found in SRFI-237.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I rtd
+must be a record-type descriptor,
+.I parent-rcd
+must be \f[CR]#f\fP or an appropriate record-constructor descriptor as described above.
+The
+.I protocol
+argument should be \f[CR]#f\fP or a procedure. However, see
+IMPLEMENTATION NOTES.
+.
+.SH "SEE ALSO"
+.
+.BR make-record-type-descriptor (3scm),
+.BR define-record-type (7scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS as part of the record system.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+.
+.SH BUGS
+.
+There is no
+.B record-constructor-descriptor?
+predicate in R6RS.

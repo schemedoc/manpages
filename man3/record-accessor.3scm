@@ -1,0 +1,237 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH record-accessor 3scm 2023-08-04 "" "Scheme Programmer's Manual"
+.SH NAME
+record-accessor, record-mutator \- record access and mutations
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs records procedural))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(record-accessor " rtd " " k )
+.BI "(record-mutator " rtd " " k )
+.
+.SH DESCRIPTION
+These procedures return accessors and mutators for field
+.I k
+of the record type
+.IR rtd .
+.
+.TP
+.B Record accessors
+The
+.B record-accessor
+procedure returns a one-argument procedure whose argument must be a
+record of the type represented by
+.IR rtd .
+This procedure returns the value of the selected field of that record.
+.
+.TP
+.B Record mutators
+The
+.B record-mutator
+procedure returns a two-argument procedure whose arguments must be a
+record
+.I r
+of the type represented by
+.I rtd
+and an object
+.IR obj .
+This procedure stores
+.I obj
+within
+the field of
+.I r
+specified by
+.IR k .
+.IP
+If
+.I k
+specifies an immutable field, an
+exception with condition type
+.BR &assertion (7scm)
+is raised.
+The mutator returns unspecified values.
+.
+.TP
+.B The field index
+The field selected corresponds to the
+.IR k th
+element (0-based) of the fields argument to
+the invocation of
+.BR make-record-type-descriptor (3scm)
+that created
+.IR rtd .
+.IP
+Note that
+.I k
+cannot be used to specify a field of any type
+.I rtd
+extends.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+These procedures return a single value; a procedure.
+.
+.SH EXAMPLES
+.
+.EX
+; Note that the colon prefix has no special meaning
+; in these examples. It is just part of the names.
+
+(define :point
+ (make-record-type-descriptor
+   'point #f
+   #f #f #f
+   '#((mutable x) (mutable y))))
+
+(define :point-cd
+  (make-record-constructor-descriptor :point #f #f)
+
+(define make-point (record-constructor :point-cd))
+(define point? (record-predicate :point))
+(define point-x (record-accessor :point 0))
+(define point-y (record-accessor :point 1))
+(define point-x-set! (record-mutator :point 0))
+(define point-y-set! (record-mutator :point 1))
+
+(define p1 (make-point 1 2))
+(point? p1)                 =>  #t
+(point-x p1)                =>  1
+(point-y p1)                =>  2
+(point-x-set! p1 5)         =>  unspecified
+(point-x p1)                =>  5
+
+(define :point2
+  (make-record-type-descriptor
+    'point2 :point
+    #f #f #f '#((mutable x) (mutable y))))
+
+(define make-point2
+  (record-constructor
+    (make-record-constructor-descriptor :point2
+      #f #f)))
+
+(define point2? (record-predicate :point2))
+(define point2-xx (record-accessor :point2 0))
+(define point2-yy (record-accessor :point2 1))
+
+(define p2 (make-point2 1 2 3 4))
+(point? p2)                 =>  #t
+(point-x p2)                =>  1
+(point-y p2)                =>  2
+(point2-xx p2)              =>  3
+(point2-yy p2)              =>  4
+
+(define :point-cd/abs
+  (make-record-constructor-descriptor
+   :point #f
+   (lambda (new)
+     (lambda (x y)
+       (new (abs x) (abs y))))))
+
+(define make-point/abs
+  (record-constructor :point-cd/abs))
+
+(point-x (make-point/abs -1 -2))
+          =>  1
+
+(point-y (make-point/abs -1 -2))
+          =>  2
+
+(define :cpoint
+  (make-record-type-descriptor
+   'cpoint :point
+   #f #f #f
+   '#((mutable rgb))))
+
+(define make-cpoint
+  (record-constructor
+   (make-record-constructor-descriptor
+    :cpoint :point-cd
+    (lambda (p)
+      (lambda (x y c)
+
+((p x y) (color->rgb c)))))))
+
+(define make-cpoint/abs
+  (record-constructor
+   (make-record-constructor-descriptor
+    :cpoint :point-cd/abs
+    (lambda (p)
+      (lambda (x y c)
+
+((p x y) (color->rgb c)))))))
+
+(define cpoint-rgb
+  (record-accessor :cpoint 0))
+
+(define (color->rgb c)
+  (cons 'rgb c))
+
+(cpoint-rgb (make-cpoint -1 -3 'red))
+          =>  (rgb . red)
+(point-x (make-cpoint -1 -3 'red))
+          =>  -1
+(point-x (make-cpoint/abs -1 -3 'red))
+          =>  1
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures are used together with the procedural record layer.
+It is more common for applications to use the syntactic layer, see
+.BR define-record-type (7scm).
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+These procedure are unique to the R6RS record system. Equivalent
+procedures can be found in SRFI-237.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I k
+must be a valid field index of
+.IR rtd ,
+which must be a record-type descriptor.
+The
+.B record-mutator
+procedure furthermore requires that the field specified by
+.I k
+be mutable.
+.
+.SH "SEE ALSO"
+.
+.BR define-record-type (7scm),
+.BR make-record-type-descriptor (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+These procedures first appeared in R6RS as part of the new record system.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

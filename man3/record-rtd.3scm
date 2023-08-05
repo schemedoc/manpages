@@ -1,0 +1,114 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH record-rtd 3scm 2023-08-15 "" "Scheme Programmer's Manual"
+.SH NAME
+record-rtd \- get the rtd for the type of a record
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs records inspection))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(record-rtd " record )
+.
+.SH DESCRIPTION
+Returns the rtd representing the type of
+.I record
+if the type is not opaque.
+.PP
+The rtd of the most precise type is returned;
+that is, the type
+.I t
+such that record is of type
+.I t
+but not of
+any type that extends
+.IR t .
+.PP
+.
+.SH "IMPLEMENTATION NOTES"
+.
+Most R6RS implementations define enumerations in terms of records.
+.
+.SH "RETURN VALUES"
+.
+Returns a single value; an rtd.
+.
+.SH EXAMPLES
+.
+.EX
+(define rtd-user
+  (make-record-type-descriptor
+    'user #f #f #f #f
+    '#((immutable login) (immutable realname))))
+(define rcd-user
+  (make-record-constructor-descriptor
+    rtd-user #f
+    (lambda (p)
+      (lambda (login realname)
+        (p login realname)))))
+(define make-user (record-constructor rcd-user))
+
+(define lain (make-user 'lain "Lain Iwakura"))
+
+(eqv? (record-rtd lain) rtd-user)  =>  #t
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+This procedure is an important part of the record inspection
+functionality and can be used to implement record printers, pattern
+matchers with record support, and other functionality that requires
+information about record types.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to the R6RS record system. An equivalent
+procedure can be found in SRFI-237.
+.PP
+Implementations often use records to define new types, even types that
+are not required to use records for their internal representation.
+There is generally no guarantee that you can use
+.B record-rtd
+on these types and doing so is not portable.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside
+its domain. In particular,
+.I record
+must be a record.
+.
+Also raised if the type of
+.I record
+is opaque.
+.
+.SH "SEE ALSO"
+.
+.BR define-record-type (7scm),
+.BR make-record-type-descriptor (3scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R6RS as part of the record system.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

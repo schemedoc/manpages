@@ -278,17 +278,17 @@ Returns a single value; a procedure.
 ; example can be found in make-record-type-descriptor(3scm).
 (define rtd1
   (make-record-type-descriptor
-   'rtd1 \f[CR]#f\fP \f[CR]#f\fP \f[CR]#f\fP \f[CR]#f\fP
+   'rtd1 #f #f #f #f
    '#((immutable x1) (immutable x2))))
 
 (define rtd2
   (make-record-type-descriptor
-   'rtd2 rtd1 \f[CR]#f\fP \f[CR]#f\fP \f[CR]#f\fP
+   'rtd2 rtd1 #f #f #f
    '#((immutable x3) (immutable x4))))
 
 (define rtd3
   (make-record-type-descriptor
-   'rtd3 rtd2 \f[CR]#f\fP \f[CR]#f\fP \f[CR]#f\fP
+   'rtd3 rtd2 #f #f #f
    '#((immutable x5) (immutable x6))))
 
 (define protocol1
@@ -309,16 +309,16 @@ Returns a single value; a procedure.
         (p (+ g h) (+ h i))))))
 
 (define cd1
-   (make-record-constructor-descriptor
-     rtd1 \f[CR]#f\fP protocol1))
+ (make-record-constructor-descriptor
+   rtd1 #f protocol1))
 
 (define cd2
-   (make-record-constructor-descriptor
-     rtd2 cd1 protocol2))
+ (make-record-constructor-descriptor
+   rtd2 cd1 protocol2))
 
 (define cd3
   (make-record-constructor-descriptor
-     rtd3 cd2 protocol3))
+    rtd3 cd2 protocol3))
 
 (define make-rtd1 (record-constructor cd1))
 

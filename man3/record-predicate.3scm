@@ -1,0 +1,95 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH record-predicate 3scm 2023-08-05 "" "Scheme Programmer's Manual"
+.SH NAME
+record-predicate \- create record predicates
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs records procedural))" "  ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(record-predicate " rtd )
+.
+.SH DESCRIPTION
+Returns a procedure that, given an object
+.IR obj ,
+returns \f[CR]#t\fP if
+.I obj
+is a record of the type represented by
+.IR rtd ,
+and \f[CR]#f\fP otherwise.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; a procedure.
+.
+.SH EXAMPLES
+.
+.EX
+(define rtd-user
+  (make-record-type-descriptor
+    'user #f #f #f #f
+    '#((immutable login) (immutable realname))))
+(define rcd-user
+  (make-record-constructor-descriptor
+    rtd-user #f
+    (lambda (p)
+      (lambda (login realname)
+        (p login realname)))))
+(define make-user (record-constructor rcd-user))
+(define user? (record-predicate rtd-user))
+
+(define lain (make-user 'lain "Lain Iwakura"))
+(user? lain)  =>  #t
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+These procedures are used together with the procedural record layer.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to the R6RS record system. An equivalent
+procedure can be found in SRFI-237.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I rtd
+must be a record-type descriptor.
+.
+.SH "SEE ALSO"
+.
+.BR record-accessor (3scm),
+.BR make-record-type-descriptor (3scm),
+.BR define-record-type (7scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+First appeared in R6RS as part of the new record system.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

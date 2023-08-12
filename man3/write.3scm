@@ -1,0 +1,219 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH write 3scm 2023-08-12 "" "Scheme Programmer's Manual"
+.SH NAME
+write, write-shared, write-simple \- write an object's external representation to a port
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs io ports))" "            ;R6RS, put-datum"
+.BR "(import (rnrs io simple))" "           ;R6RS"
+.BR "(import (scheme write))" "             ;R7RS"
+.BR "(import (scheme r5rs))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(write " obj )
+.BI "(write " obj " " textual-output-port )
+
+; (rnrs io ports)
+.BI "(put-datum " textual-output-port " " obj )
+
+; R7RS only:
+.BI "(write-shared " obj )
+.BI "(write-shared " obj " " textual-output-port )
+.BI "(write-simple " obj )
+.BI "(write-simple " obj " " textual-output-port )
+.
+.SH DESCRIPTION
+.
+Writes the external representation of
+.I obj
+to
+.IR textual-output-port .
+There is no trailing delimiter.
+.PP
+.
+If several subsequent external representations are written to an
+output port, care should be taken to delimit them properly so they can
+be read back in by subsequent calls to
+.BR get-datum (3scm).
+.
+.PP
+Any object can be written to a port, but only datums are expected to
+have an external representation that can be read back the same with
+.BR get-datum (3scm).
+.
+.TP
+.B Default output port
+If
+.I textual-output-port
+is omitted, it defaults to the value returned by
+.BR current-output-port (3scm).
+.
+.TP
+.B R7RS
+Symbols that contain non-ASCII characters are escaped with vertical
+lines.
+.IP
+The
+.B write
+uses datum labels in some situations.
+.
+If
+.I obj
+contains cycles which would cause an infinite loop using the normal
+written representation, then at least the objects that form part of
+the cycle must be represented using datum labels. Datum labels must
+not be used if there are no cycles.
+.IP
+The
+.B write-shared
+procedure is the same as
+.BR write ,
+except that shared structure must be represented using datum labels
+for all pairs and vectors that appear more than once in the output.
+.IP
+The
+.B write-simple
+procedure is the same as
+.BR write ,
+except that shared structure is never represented using datum labels.
+This can cause
+.B write-simple
+not to terminate if
+.I obj
+contains circular structure.
+.
+.
+.SH "IMPLEMENTATION NOTES"
+.
+The specific external representation is implementation-dependent.
+However, whenever possible, an implementation should produce a
+representation for which
+.BR get-datum (3scm),
+when reading the representation, will return an object equal, in the
+sense of
+.BR equal? (3scm),
+to datum.
+.PP
+Not all datums may allow producing an external representation
+for which
+.BR get-datum (3scm)
+will produce an object that is equal to the original. Specifically,
+NaNs contained in
+.I obj
+may make this impossible.
+.
+.TP
+.B Chez Scheme
+Cycles in the output are detected even in the R6RS variant of
+.BR write .
+.
+The
+.B print-graph
+parameter can be used to enable datum labels even for non-cyclic
+datums.
+.
+.TP
+.B Loko Scheme
+Cycles in the output are detected even in the R6RS variant of
+.BR write .
+.
+.SH "RETURN VALUES"
+.
+.TP
+.B R6RS
+Returns unspecified values.
+.TP
+.B R7RS
+Returns an unspecified value.
+.
+.SH EXAMPLES
+.
+.EX
+(call-with-string-output-port
+  (lambda (p)
+    (write '(lambda (x) x) p)))
+    =>  "(lambda (x) x)"
+
+(define x (list 1))
+(set-cdr! x x)
+(write x)
+  -> #0=(1 . #0#)
+
+(define quux "quux")
+(define x (list quux quux))
+(write-shared x)
+  -> (#0="quux" #0#)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Writing and reading external representations of datums is used for
+data interchange and as an alternative to formats such as JSON and
+XML.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+The external representations of datums vary subtly between RnRS
+revisions. Some differences: R6RS does not support datum labels, does
+not support vertical bars around symbols and uses the \f[CR]#vu8(\fP
+prefix for bytevectors instead of \f[CR]#u8(\fP as in R7RS.
+.PP
+Records have no standard representation in RnRS. SRFI-237 suggests
+are way to solve this.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I textual-output-port
+must be an open textual output port.
+.TP
+R7RS
+The assertions described above are errors.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR read (3scm),
+.BR display (3scm)
+.
+.SH STANDARDS
+R4RS,
+IEEE Scheme,
+R5RS,
+R6RS,
+R7RS
+.
+.SH HISTORY
+.
+The
+.B write
+procedure first appeared in R2RS.
+The
+.B write-shared
+and
+.B write-simple
+procedures are new in R7RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

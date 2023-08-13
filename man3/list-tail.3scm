@@ -1,9 +1,9 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright (c) 2020
+.\" Copyright (c) 2023 G. Weinholt
 .\" SPDX-License-Identifier: MIT
-.TH list-tail 3scm 2020-04-18 "" "Scheme Programmer's Manual"
+.TH list-tail 3scm 2023-08-13 "" "Scheme Programmer's Manual"
 .SH NAME
-list-tail \-
+list\-tail \- skip elements of a list
 .
 .SH LIBRARY
 .nf
@@ -14,32 +14,51 @@ list-tail \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(list-tail " obj " " number )
+.BI "(list\-tail " list " " k )
 .
 .SH DESCRIPTION
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-ligula mi, elementum at rutrum in, vestibulum vitae orci posuere.
+Returns the subchain of pairs of
+.I list
+obtained by omitting the first
+.I k
+elements.
 .
 .SH "IMPLEMENTATION NOTES"
 .
+Implementation responsibilities: The implementation must check that
+.I list
+is a chain of pairs whose length is at least
+.IR k .
+It should not check that it is a chain of pairs beyond this length.
+.
 .SH "RETURN VALUES"
+.
+Returns a single value; a subchain of pairs from
+.IR list .
 .
 .SH EXAMPLES
 .
 .EX
+(list\-tail \[aq](a b c d) 2)  =>  (c d)
 .EE
 .
-.SH "APPLICATION USAGE"
-.
-.SH RATIONALE
-.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
 .SH COMPATIBILITY
+.
+Apart from error conditions, this procedure works the same everywhere.
 .
 .SH ERRORS
 This procedure can raise exceptions with the following condition types:
 .TP
 .BR &assertion " (R6RS)"
 The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I list should
+be a list of size at least
+.IR k .
 .TP
 R7RS
 The assertions described above are errors.
@@ -48,6 +67,9 @@ domain of definition to include such arguments,
 or fail catastrophically.
 .
 .SH "SEE ALSO"
+.
+.BR list-ref (3scm),
+.BR cdr (3scm)
 .
 .SH STANDARDS
 R4RS,
@@ -58,6 +80,8 @@ R7RS
 .
 .SH HISTORY
 .
+This procedure first appeared in R2RS.
+.
 .SH AUTHORS
 This page is part of the
 .I scheme-manpages
@@ -66,6 +90,6 @@ It includes materials from the RnRS documents.
 More information can be found at
 .UR https://github.com/schemedoc/manpages/
 .UE .
-.
-.SH BUGS
-.
+\" .
+\" .SH BUGS
+\" .

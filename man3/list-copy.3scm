@@ -1,0 +1,87 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH list\-copy 3scm 2023-08-13 "" "Scheme Programmer's Manual"
+.SH NAME
+list\-copy \- copy a list
+.
+.SH LIBRARY
+.nf
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(list\-copy " obj )
+.
+.SH DESCRIPTION
+Returns a newly allocated copy of the given obj if it is a list.
+.
+Only the pairs themselves are copied; the cars of the result are the
+same (in the sense of
+.BR eqv? (3scm))
+as the cars of list.
+.
+If obj is an improper list, so is the result, and the final cdrs are
+the same in the sense of
+.BR eqv? (3scm).
+.
+An obj which is not a list is returned unchanged.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value
+.SH EXAMPLES
+.
+.EX
+(define a '(1 8 2 8))    ; a may be immutable
+(define b (list\-copy a))
+(set\-car! b 3)           ; b is mutable
+b  =>  (3 8 2 8)
+a  =>  (1 8 2 8)
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+This procedure is unique to R6RS. An alternative is to write
+\f[CR](map values obj)\fP.
+.
+.SH ERRORS
+It is an error if the wrong number of arguments
+was passed or an argument was outside its domain.
+It is an error if
+.I obj
+is a circular list.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR map (3scm),
+.BR vector\-copy (3scm)
+.
+.SH STANDARDS
+.
+R7RS
+.
+.SH HISTORY
+.
+This procedure is new in R7RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

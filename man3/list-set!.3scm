@@ -1,0 +1,89 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH list\-set! 3scm 2023-08-13 "" "Scheme Programmer's Manual"
+.SH NAME
+list\-set! \- modify an element in a list
+.
+.SH LIBRARY
+.nf
+.BR "(import (scheme base))" "              ;R7RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(list\-set! " list " " k " " obj )
+.
+.SH DESCRIPTION
+Stores
+.I obj
+in element
+.I k
+of
+.IR list .
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns an unspecified value.
+.
+.SH EXAMPLES
+.
+.EX
+(let ((ls (list \[aq]one \[aq]two \[aq]five!)))
+  (list\-set! ls 2 \[aq]three)
+  ls)
+          => (one two three)
+
+(list\-set! \[aq](0 1 2) 1 "oops")
+          error    ; constant list should not be mutated
+.EE
+.
+\" .SH "APPLICATION USAGE"
+\" .
+.SH RATIONALE
+.
+This procedure was added in R7RS to round out the sequence operations.
+.
+.SH COMPATIBILITY
+.
+This procedure is unique to R7RS. An alternative is to use
+.BR set\-car! (3scm)
+and
+.BR list\-tail (3scm).
+.
+.SH ERRORS
+.
+It is an error if the wrong number of arguments was passed or an
+argument was outside its domain.
+.
+In particular, it is an error if
+.I k
+is not a valid index of list.
+.
+Implementations may signal an error, extend the procedure's
+domain of definition to include such arguments,
+or fail catastrophically.
+.
+.SH "SEE ALSO"
+.
+.BR set\-car! (3scm)
+.
+.SH STANDARDS
+R7RS
+.
+.SH HISTORY
+.
+This procedure first appeared in R7RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

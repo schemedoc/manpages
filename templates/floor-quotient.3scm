@@ -3,7 +3,7 @@
 .\" SPDX-License-Identifier: MIT
 .TH floor-quotient 3scm 2020-04-18 "" "Scheme Programmer's Manual"
 .SH NAME
-floor-quotient \-
+floor/, floor-quotient, floor-remainder, truncate/, truncate-quotient, truncate-remainder \- integer division
 .
 .SH LIBRARY
 .nf
@@ -11,7 +11,12 @@ floor-quotient \-
 .
 .SH SYNOPSIS
 .nf
-.BI "(floor-quotient " ? )
+.BI "(floor/ " n1 " " n2 )
+.BI "(floor-quotient " n1 " " n2 )
+.BI "(floor-remainder " n1 " " n2 )
+.BI "(truncate/ " n1 " " n2 )
+.BI "(truncate-quotient " n1 " " n2 )
+.BI "(truncate-remainder " n1 " " n2 )
 .
 .SH DESCRIPTION
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla

@@ -1,0 +1,89 @@
+.\" -*- mode: nroff; coding: utf-8 -*-
+.\" Copyright (c) 2023 G. Weinholt
+.\" SPDX-License-Identifier: MIT
+.TH make-enumeration 3scm 2023-08-27 "" "Scheme Programmer's Manual"
+.SH NAME
+make-enumeration \- create a new enumeration type
+.
+.SH LIBRARY
+.nf
+.BR "(import (rnrs))" "                     ;R6RS"
+.BR "(import (rnrs enums))" "               ;R6RS"
+.
+.SH SYNOPSIS
+.nf
+.BI "(make-enumeration " symbol\-list )
+.
+.SH DESCRIPTION
+Creates a new enumeration type whose universe consists of the symbols
+in
+.I symbol\-list
+and returns that universe as an enumeration set whose universe is
+itself and whose enumeration type is the newly created enumeration
+type.
+.PP
+The canonical order of the symbols is according to their first
+appearance in the list.
+.
+\" .SH "IMPLEMENTATION NOTES"
+\" .
+.SH "RETURN VALUES"
+.
+Returns a single value; an enumeration set.
+.
+.SH EXAMPLES
+.
+.EX
+(enum-set\->list (make\-enumeration '(g a t t a c a)))
+    => (g a t c)
+.EE
+.
+.SH "APPLICATION USAGE"
+.
+Enumeration types are used for expressing sets of flags, as in,
+e.g.,
+.BR file\-options (7scm).
+The syntax
+.BR define\-enumeration (7scm)
+is more commonly used.
+.
+\" .SH RATIONALE
+\" .
+.SH COMPATIBILITY
+.
+Enumerations are unique to R6RS. The (r6rs enums) package at
+.UR https://snow-fort.org/
+.UE
+provides a compatible library.
+.
+.SH ERRORS
+This procedure can raise exceptions with the following condition types:
+.TP
+.BR &assertion " (R6RS)"
+The wrong number of arguments was passed or an argument was outside its domain.
+In particular,
+.I symbol\-list
+must be a list of symbols.
+.
+.SH "SEE ALSO"
+.
+.BR define\-enumeration (7scm)
+.
+.SH STANDARDS
+R6RS
+.
+.SH HISTORY
+.
+Enumerations first appeared in R6RS.
+.
+.SH AUTHORS
+This page is part of the
+.I scheme-manpages
+project.
+It includes materials from the RnRS documents.
+More information can be found at
+.UR https://github.com/schemedoc/manpages/
+.UE .
+\" .
+\" .SH BUGS
+\" .

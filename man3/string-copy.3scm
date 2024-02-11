@@ -1,5 +1,5 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright (c) 2022 G. Weinholt
+.\" Copyright (c) 2022 Gwen Weinholt
 .\" SPDX-License-Identifier: MIT
 .TH string-copy 3scm 2022-04-05 "" "Scheme Programmer's Manual"
 .SH NAME

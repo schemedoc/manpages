@@ -1,5 +1,5 @@
 .\" -*- mode: nroff; coding: utf-8 -*-
-.\" Copyright (c) 2021 G. Weinholt
+.\" Copyright (c) 2021 Gwen Weinholt
 .\" SPDX-License-Identifier: MIT
 .TH bitwise-bit-set? 3scm 2021-03-09 "" "Scheme Programmer's Manual"
 .SH NAME
